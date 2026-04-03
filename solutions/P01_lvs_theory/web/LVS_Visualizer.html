@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LVS Visualizer — Latent Vacuum Stationarity</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+:root {
+  --bg-deep: #06080f;
+  --bg-section: #0b0f1a;
+  --bg-card: #111827;
+  --bg-highlight: #1a1f35;
+  --text-primary: #e8e6e1;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+  --accent-gold: #d4a853;
+  --accent-blue: #60a5fa;
+  --accent-cyan: #22d3ee;
+  --accent-emerald: #34d399;
+  --accent-rose: #fb7185;
+  --accent-violet: #a78bfa;
+  --border-subtle: rgba(255,255,255,0.06);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ===== NAV ===== */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(6,8,15,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex; align-items: center; gap: 0;
+  padding: 0 1rem;
+  height: 52px;
+}
+nav .logo {
+  font-weight: 700; font-size: 1rem;
+  color: var(--accent-gold);
+  margin-right: 2rem;
+  white-space: nowrap;
+  letter-spacing: 0.05em;
+}
+nav a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.82rem;
+  padding: 0.9rem 0.8rem;
+  transition: color 0.2s;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+nav a:hover, nav a.active { color: var(--accent-gold); }
+
+/* ===== SECTIONS ===== */
+section {
+  min-height: 100vh;
+  padding: 72px 2rem 2rem;
+  position: relative;
+}
+section h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, var(--text-primary), var(--accent-gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+section .subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+  max-width: 700px;
+}
+.scene-container {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 180px);
+  min-height: 500px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--bg-section);
+  border: 1px solid var(--border-subtle);
+}
+.scene-container canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* ===== CONTROLS ===== */
+.controls {
+  position: absolute;
+  bottom: 1rem; left: 1rem; right: 1rem;
+  display: flex; flex-wrap: wrap; gap: 0.8rem;
+  align-items: center;
+  background: rgba(6,8,15,0.85);
+  backdrop-filter: blur(8px);
+  padding: 0.8rem 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--border-subtle);
+  z-index: 10;
+}
+.controls label {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+}
+.controls input[type="range"] {
+  -webkit-appearance: none;
+  height: 4px;
+  background: var(--bg-highlight);
+  border-radius: 2px;
+  outline: none;
+  width: 140px;
+}
+.controls input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--accent-gold);
+  cursor: pointer;
+}
+.controls button {
+  background: var(--bg-highlight);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  padding: 0.35rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.controls button:hover { background: rgba(212,168,83,0.2); }
+.controls button.active { background: rgba(212,168,83,0.3); border-color: var(--accent-gold); }
+
+/* ===== LEGEND ===== */
+.legend {
+  position: absolute;
+  top: 1rem; right: 1rem;
+  background: rgba(6,8,15,0.85);
+  backdrop-filter: blur(8px);
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+  z-index: 10;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+.legend-item {
+  display: flex; align-items: center; gap: 0.5rem;
+  margin: 0.25rem 0;
+}
+.legend-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ===== INFO OVERLAY ===== */
+.info-overlay {
+  position: absolute;
+  top: 1rem; left: 1rem;
+  background: rgba(6,8,15,0.85);
+  backdrop-filter: blur(8px);
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+  z-index: 10;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  max-width: 320px;
+}
+.info-overlay strong { color: var(--accent-gold); }
+.info-overlay .value {
+  font-family: 'Courier New', monospace;
+  color: var(--accent-cyan);
+}
+
+/* ===== HERO ===== */
+#hero {
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  text-align: center;
+  min-height: 100vh;
+  padding-top: 52px;
+}
+#hero h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1.15;
+  max-width: 800px;
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-gold) 50%, var(--text-primary) 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 6s ease infinite;
+  margin-bottom: 1rem;
+}
+#hero p {
+  color: var(--text-secondary);
+  max-width: 600px;
+  font-size: 1.05rem;
+}
+#hero .nav-hint {
+  margin-top: 3rem;
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem;
+}
+#hero .nav-hint a {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+#hero .nav-hint a:hover {
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+}
+
+@keyframes shimmer {
+  0%,100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="logo">LVS Visualizer</span>
+  <a href="#hero">Accueil</a>
+  <a href="#landscape">Paysage</a>
+  <a href="#rgflow">Flot RG</a>
+  <a href="#crystal">Cristallisation</a>
+  <a href="#time">Temps</a>
+  <a href="#dilation">Dilatation</a>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section id="hero">
+  <h1>Et si l'Univers etait un Point Fixe ?</h1>
+  <p>Exploration visuelle interactive du cadre LVS (Latent Vacuum Stationarity) — les points fixes du vide quantique, l'emergence du temps, et l'univers sur pause.</p>
+  <div class="nav-hint">
+    <a href="#landscape">1. Paysage Potentiel</a>
+    <a href="#rgflow">2. Flot RG</a>
+    <a href="#crystal">3. Cristallisation</a>
+    <a href="#time">4. Emergence du Temps</a>
+    <a href="#dilation">5. Dilatation</a>
+  </div>
+</section>
+
+<!-- ===== SCENE 1: POTENTIAL LANDSCAPE ===== -->
+<section id="landscape">
+  <h2>1. Paysage Potentiel du Vide</h2>
+  <p class="subtitle">Les vallees sont les points fixes — configurations stationnaires du vide quantique. Plus la vallee est profonde, plus le point fixe est stable (masse elevee).</p>
+  <div class="scene-container" id="landscape-container">
+    <div class="legend">
+      <div class="legend-item"><span class="legend-dot" style="background:#d4a853"></span> Proton (938 MeV) — tres profond</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#60a5fa"></span> Neutron (940 MeV) — profond</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#a78bfa"></span> Xicc+ (3620 MeV) — modere</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#fb7185"></span> Tcc+ (3875 MeV) — peu profond</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#22d3ee"></span> Bille exploratrice</div>
+    </div>
+    <div class="controls">
+      <label>Rotation <input type="range" id="landscape-rotate" min="0" max="6.28" step="0.01" value="0.8"></label>
+      <label>Inclinaison <input type="range" id="landscape-tilt" min="0.3" max="1.5" step="0.01" value="0.7"></label>
+      <button id="landscape-drop">Lacher la bille</button>
+      <button id="landscape-reset">Reset</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SCENE 2: RG FLOW ===== -->
+<section id="rgflow">
+  <h2>2. Flot du Groupe de Renormalisation</h2>
+  <p class="subtitle">Les constantes de couplage "courent" avec l'echelle d'energie. Les points fixes (beta = 0) sont les attracteurs — la ou la physique est stationnaire.</p>
+  <div class="scene-container" id="rgflow-container">
+    <div class="legend">
+      <div class="legend-item"><span class="legend-dot" style="background:#fb7185"></span> alpha_1 — U(1) electromagnetique</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#60a5fa"></span> alpha_2 — SU(2) faible</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#34d399"></span> alpha_3 — SU(3) forte</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#d4a853"></span> Point fixe GUT (~10^16 GeV)</div>
+    </div>
+    <div class="controls">
+      <label>Echelle d'energie (log GeV) <input type="range" id="rg-energy" min="1" max="17" step="0.05" value="2"></label>
+      <button id="rg-animate">Animer le flot</button>
+      <button id="rg-reset">Reset</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SCENE 3: CRYSTALLIZATION ===== -->
+<section id="crystal">
+  <h2>3. Front de Cristallisation Cosmique</h2>
+  <p class="subtitle">L'expansion cosmologique comme actualisation progressive — le vide non-manifeste "cristallise" en points fixes stables. L'inflation est une cascade rapide de stabilisation.</p>
+  <div class="scene-container" id="crystal-container">
+    <div class="legend">
+      <div class="legend-item"><span class="legend-dot" style="background:#06080f; border:1px solid #333"></span> Vide non-manifeste (potentialite)</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#d4a853"></span> Points fixes actualises (matiere)</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#60a5fa"></span> Front d'actualisation</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#a78bfa"></span> Structures emergentes (galaxies)</div>
+    </div>
+    <div class="controls">
+      <label>Vitesse <input type="range" id="crystal-speed" min="0.2" max="3" step="0.1" value="1"></label>
+      <button id="crystal-start">Demarrer</button>
+      <button id="crystal-inflate">Inflation !</button>
+      <button id="crystal-reset">Reset</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SCENE 4: TIME EMERGENCE ===== -->
+<section id="time">
+  <h2>4. Emergence du Temps (Page-Wootters)</h2>
+  <p class="subtitle">L'etat global est statique (H|Psi> = 0). Le temps emerge comme parametre relationnel entre sous-systemes — comme un lecteur parcourant un livre dont toutes les pages existent simultanement.</p>
+  <div class="scene-container" id="time-container">
+    <div class="info-overlay" id="time-info">
+      <strong>Etat global :</strong> statique (pas de temps)<br>
+      <strong>Sous-systeme A (horloge) :</strong> <span class="value" id="clock-a">--</span><br>
+      <strong>Sous-systeme B (systeme) :</strong> <span class="value" id="clock-b">--</span><br>
+      <strong>Temps relationnel :</strong> <span class="value" id="rel-time">--</span>
+    </div>
+    <div class="controls">
+      <label>Vitesse lecture <input type="range" id="time-speed" min="0.1" max="3" step="0.1" value="1"></label>
+      <button id="time-pause">Pause globale</button>
+      <button id="time-play">Lecture</button>
+      <button id="time-book">Vue livre</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SCENE 5: TIME DILATION ===== -->
+<section id="dilation">
+  <h2>5. Dilatation Temporelle = Profondeur du Point Fixe</h2>
+  <p class="subtitle">Plus on s'enfonce dans un point fixe profond (masse), plus le temps ralentit. Au trou noir (horizon), le temps s'arrete — retour au substrat atemporel.</p>
+  <div class="scene-container" id="dilation-container">
+    <div class="info-overlay" id="dilation-info">
+      <strong>Profondeur :</strong> <span class="value" id="depth-val">0%</span><br>
+      <strong>Dilatation :</strong> <span class="value" id="dilation-val">1.00x</span><br>
+      <strong>Regime :</strong> <span class="value" id="regime-val">Espace plat</span>
+    </div>
+    <div class="controls">
+      <label>Profondeur du point fixe <input type="range" id="dilation-depth" min="0" max="0.999" step="0.001" value="0"></label>
+      <button id="dilation-freefall">Chute libre</button>
+      <button id="dilation-reset">Reset</button>
+    </div>
+  </div>
+</section>
+
+<script>
+// ============================================================
+// SCENE 1: 3D POTENTIAL LANDSCAPE (Three.js)
+// ============================================================
+(function() {
+  const container = document.getElementById('landscape-container');
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 100);
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  container.insertBefore(renderer.domElement, container.firstChild);
+
+  // Potential function with multiple wells (fixed points)
+  const wells = [
+    { x: -1.5, z: -1.0, depth: 2.5, width: 0.8, label: 'Proton' },    // deep
+    { x: -1.2, z:  1.0, depth: 2.4, width: 0.75, label: 'Neutron' },   // deep
+    { x:  1.5, z: -0.5, depth: 1.5, width: 0.6, label: 'Ξcc+' },      // moderate
+    { x:  1.8, z:  1.2, depth: 0.7, width: 0.45, label: 'Tcc+' },     // shallow
+    { x:  0.0, z:  0.0, depth: 0.5, width: 0.35, label: 'Pc(4450)+' }, // shallow
+  ];
+
+  function potential(x, z) {
+    let v = 0.15 * (Math.sin(x * 0.7) * Math.cos(z * 0.5) + 0.5 * Math.sin(x * 1.3 + z * 0.8));
+    for (const w of wells) {
+      const dx = x - w.x, dz = z - w.z;
+      const r2 = (dx * dx + dz * dz) / (w.width * w.width);
+      v -= w.depth * Math.exp(-r2);
+    }
+    return v;
+  }
+
+  // Gradient for ball physics
+  function gradient(x, z) {
+    const eps = 0.01;
+    const dVdx = (potential(x + eps, z) - potential(x - eps, z)) / (2 * eps);
+    const dVdz = (potential(x, z + eps) - potential(x, z - eps)) / (2 * eps);
+    return { x: dVdx, z: dVdz };
+  }
+
+  // Build mesh
+  const gridSize = 120;
+  const extent = 4;
+  const geometry = new THREE.PlaneGeometry(extent * 2, extent * 2, gridSize, gridSize);
+  const positions = geometry.attributes.position.array;
+  const colors = new Float32Array(positions.length);
+
+  function updateSurface() {
+    for (let i = 0; i < positions.length / 3; i++) {
+      const x = positions[i * 3];
+      const z = positions[i * 3 + 1];
+      const y = potential(x, z);
+      positions[i * 3 + 2] = y;
+
+      // Color by height
+      const t = (y + 3) / 3;
+      const r = 0.04 + 0.8 * Math.max(0, 0.5 - t);
+      const g = 0.06 + 0.5 * t;
+      const b = 0.15 + 0.7 * t;
+      colors[i * 3] = r;
+      colors[i * 3 + 1] = g;
+      colors[i * 3 + 2] = b;
+    }
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    geometry.attributes.position.needsUpdate = true;
+    geometry.computeVertexNormals();
+  }
+  updateSurface();
+
+  const material = new THREE.MeshPhongMaterial({
+    vertexColors: true,
+    side: THREE.DoubleSide,
+    shininess: 40,
+    transparent: true,
+    opacity: 0.92,
+    wireframe: false,
+  });
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.rotation.x = -Math.PI / 2;
+  scene.add(mesh);
+
+  // Wireframe overlay
+  const wireMat = new THREE.MeshBasicMaterial({ color: 0x334466, wireframe: true, transparent: true, opacity: 0.12 });
+  const wireMesh = new THREE.Mesh(geometry, wireMat);
+  wireMesh.rotation.x = -Math.PI / 2;
+  scene.add(wireMesh);
+
+  // Lights
+  scene.add(new THREE.AmbientLight(0x334455, 0.6));
+  const dirLight = new THREE.DirectionalLight(0xd4a853, 0.8);
+  dirLight.position.set(5, 10, 5);
+  scene.add(dirLight);
+  const dirLight2 = new THREE.DirectionalLight(0x60a5fa, 0.3);
+  dirLight2.position.set(-5, 8, -3);
+  scene.add(dirLight2);
+
+  camera.position.set(6, 5, 6);
+  camera.lookAt(0, -1, 0);
+
+  // Ball
+  const ballGeo = new THREE.SphereGeometry(0.08, 16, 16);
+  const ballMat = new THREE.MeshPhongMaterial({ color: 0x22d3ee, emissive: 0x115566 });
+  const ball = new THREE.Mesh(ballGeo, ballMat);
+  ball.visible = false;
+  scene.add(ball);
+
+  // Ball trail
+  const trailPoints = [];
+  const trailMax = 200;
+  let trailLine = null;
+
+  let ballState = null;
+
+  // Well markers (glowing spheres at the bottom of each well)
+  const markerColors = [0xd4a853, 0x60a5fa, 0xa78bfa, 0xfb7185, 0x22d3ee];
+  wells.forEach((w, i) => {
+    const y = potential(w.x, w.z);
+    const markerGeo = new THREE.SphereGeometry(0.06, 12, 12);
+    const markerMat = new THREE.MeshPhongMaterial({ color: markerColors[i], emissive: markerColors[i], emissiveIntensity: 0.5 });
+    const marker = new THREE.Mesh(markerGeo, markerMat);
+    marker.position.set(w.x, y, w.z);
+    scene.add(marker);
+  });
+
+  document.getElementById('landscape-drop').addEventListener('click', () => {
+    // Drop ball from a random position on the rim
+    const angle = Math.random() * Math.PI * 2;
+    const r = 2.5 + Math.random();
+    ballState = {
+      x: r * Math.cos(angle),
+      z: r * Math.sin(angle),
+      vx: 0, vz: 0,
+      active: true
+    };
+    ball.visible = true;
+    trailPoints.length = 0;
+    if (trailLine) { scene.remove(trailLine); trailLine = null; }
+  });
+
+  document.getElementById('landscape-reset').addEventListener('click', () => {
+    ballState = null;
+    ball.visible = false;
+    trailPoints.length = 0;
+    if (trailLine) { scene.remove(trailLine); trailLine = null; }
+  });
+
+  // Mouse drag rotation
+  let isDragging = false, prevMouse = { x: 0, y: 0 };
+  let rotY = 0.8, rotX = 0.7;
+  renderer.domElement.addEventListener('mousedown', e => { isDragging = true; prevMouse = { x: e.clientX, y: e.clientY }; });
+  window.addEventListener('mouseup', () => { isDragging = false; });
+  renderer.domElement.addEventListener('mousemove', e => {
+    if (!isDragging) return;
+    rotY += (e.clientX - prevMouse.x) * 0.005;
+    rotX = Math.max(0.3, Math.min(1.5, rotX - (e.clientY - prevMouse.y) * 0.005));
+    prevMouse = { x: e.clientX, y: e.clientY };
+    document.getElementById('landscape-rotate').value = ((rotY % 6.28) + 6.28) % 6.28;
+    document.getElementById('landscape-tilt').value = rotX;
+  });
+
+  document.getElementById('landscape-rotate').addEventListener('input', e => { rotY = parseFloat(e.target.value); });
+  document.getElementById('landscape-tilt').addEventListener('input', e => { rotX = parseFloat(e.target.value); });
+
+  function animateLandscape() {
+    requestAnimationFrame(animateLandscape);
+
+    const dist = 8;
+    camera.position.set(
+      dist * Math.sin(rotY) * Math.cos(rotX),
+      dist * Math.sin(rotX),
+      dist * Math.cos(rotY) * Math.cos(rotX)
+    );
+    camera.lookAt(0, -1, 0);
+
+    // Ball physics
+    if (ballState && ballState.active) {
+      const dt = 0.016;
+      const damping = 0.97;
+      const g = gradient(ballState.x, ballState.z);
+      ballState.vx -= g.x * 3 * dt;
+      ballState.vz -= g.z * 3 * dt;
+      ballState.vx *= damping;
+      ballState.vz *= damping;
+      ballState.x += ballState.vx * dt * 3;
+      ballState.z += ballState.vz * dt * 3;
+
+      // Clamp
+      ballState.x = Math.max(-extent, Math.min(extent, ballState.x));
+      ballState.z = Math.max(-extent, Math.min(extent, ballState.z));
+
+      const y = potential(ballState.x, ballState.z);
+      ball.position.set(ballState.x, y + 0.1, ballState.z);
+
+      // Trail
+      trailPoints.push(new THREE.Vector3(ballState.x, y + 0.05, ballState.z));
+      if (trailPoints.length > trailMax) trailPoints.shift();
+      if (trailLine) scene.remove(trailLine);
+      if (trailPoints.length > 2) {
+        const trailGeo = new THREE.BufferGeometry().setFromPoints(trailPoints);
+        const trailMat = new THREE.LineBasicMaterial({ color: 0x22d3ee, transparent: true, opacity: 0.5 });
+        trailLine = new THREE.Line(trailGeo, trailMat);
+        scene.add(trailLine);
+      }
+    }
+
+    renderer.render(scene, camera);
+  }
+  animateLandscape();
+
+  window.addEventListener('resize', () => {
+    const w = container.clientWidth, h = container.clientHeight;
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+  });
+})();
+
+// ============================================================
+// SCENE 2: RG FLOW (Canvas 2D)
+// ============================================================
+(function() {
+  const container = document.getElementById('rgflow-container');
+  const canvas = document.createElement('canvas');
+  container.insertBefore(canvas, container.firstChild);
+  const ctx = canvas.getContext('2d');
+
+  function resize() {
+    canvas.width = container.clientWidth * devicePixelRatio;
+    canvas.height = container.clientHeight * devicePixelRatio;
+    canvas.style.width = container.clientWidth + 'px';
+    canvas.style.height = container.clientHeight + 'px';
+    ctx.scale(devicePixelRatio, devicePixelRatio);
+  }
+  resize();
+
+  const W = () => container.clientWidth;
+  const H = () => container.clientHeight;
+
+  // Running coupling constants (simplified 1-loop RG)
+  // alpha_i(mu) ~ alpha_i(mZ) / (1 - b_i * alpha_i(mZ) * ln(mu/mZ) / (2*pi))
+  const mZ = 91.2; // GeV
+  const alpha1_mZ = 0.0169; // U(1)
+  const alpha2_mZ = 0.0338; // SU(2)
+  const alpha3_mZ = 0.118;  // SU(3)
+  // 1-loop beta coefficients (SM)
+  const b1 = 41 / 10;
+  const b2 = -19 / 6;
+  const b3 = -7;
+
+  function alpha1(logE) {
+    const mu = Math.pow(10, logE);
+    const t = Math.log(mu / mZ) / (2 * Math.PI);
+    return alpha1_mZ / (1 - b1 * alpha1_mZ * t);
+  }
+  function alpha2(logE) {
+    const mu = Math.pow(10, logE);
+    const t = Math.log(mu / mZ) / (2 * Math.PI);
+    return alpha2_mZ / (1 - b2 * alpha2_mZ * t);
+  }
+  function alpha3(logE) {
+    const mu = Math.pow(10, logE);
+    const t = Math.log(mu / mZ) / (2 * Math.PI);
+    const val = alpha3_mZ / (1 + (-b3) * alpha3_mZ * t);
+    return Math.max(0.001, val);
+  }
+
+  let animating = false;
+  let animEnergy = 1;
+  let currentEnergy = 2;
+
+  document.getElementById('rg-energy').addEventListener('input', e => {
+    currentEnergy = parseFloat(e.target.value);
+    if (!animating) draw();
+  });
+
+  document.getElementById('rg-animate').addEventListener('click', () => {
+    animating = !animating;
+    if (animating) { animEnergy = 1; animateRG(); }
+  });
+
+  document.getElementById('rg-reset').addEventListener('click', () => {
+    animating = false;
+    currentEnergy = 2;
+    document.getElementById('rg-energy').value = 2;
+    draw();
+  });
+
+  function draw(energy) {
+    const e = energy || currentEnergy;
+    const w = W(), h = H();
+    ctx.clearRect(0, 0, w, h);
+
+    const padL = 80, padR = 40, padT = 40, padB = 80;
+    const plotW = w - padL - padR;
+    const plotH = h - padT - padB;
+
+    // Axes
+    ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(padL, padT);
+    ctx.lineTo(padL, padT + plotH);
+    ctx.lineTo(padL + plotW, padT + plotH);
+    ctx.stroke();
+
+    // Grid
+    ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+    for (let i = 0; i <= 16; i++) {
+      const x = padL + (i / 16) * plotW;
+      ctx.beginPath(); ctx.moveTo(x, padT); ctx.lineTo(x, padT + plotH); ctx.stroke();
+    }
+    for (let i = 0; i <= 5; i++) {
+      const y = padT + (i / 5) * plotH;
+      ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(padL + plotW, y); ctx.stroke();
+    }
+
+    // Labels
+    ctx.fillStyle = '#6b7280';
+    ctx.font = '11px system-ui';
+    ctx.textAlign = 'center';
+    for (let i = 0; i <= 16; i += 2) {
+      const x = padL + (i / 16) * plotW;
+      ctx.fillText(`10^${i + 1}`, x, padT + plotH + 20);
+    }
+    ctx.fillText('Echelle d\'energie (GeV)', padL + plotW / 2, padT + plotH + 50);
+
+    ctx.save();
+    ctx.translate(20, padT + plotH / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.textAlign = 'center';
+    ctx.fillText('Constante de couplage (alpha)', 0, 0);
+    ctx.restore();
+
+    // Alpha range for plot
+    const alphaMax = 0.12;
+    const alphaMin = 0;
+
+    function toX(logE) { return padL + ((logE - 1) / 16) * plotW; }
+    function toY(a) { return padT + plotH - ((a - alphaMin) / (alphaMax - alphaMin)) * plotH; }
+
+    // Draw curves
+    const curves = [
+      { fn: alpha1, color: '#fb7185', label: 'α₁ (U1)' },
+      { fn: alpha2, color: '#60a5fa', label: 'α₂ (SU2)' },
+      { fn: alpha3, color: '#34d399', label: 'α₃ (SU3)' },
+    ];
+
+    for (const curve of curves) {
+      ctx.beginPath();
+      ctx.strokeStyle = curve.color;
+      ctx.lineWidth = 2.5;
+      for (let logE = 1; logE <= 17; logE += 0.1) {
+        const a = curve.fn(logE);
+        const x = toX(logE), y = toY(Math.min(a, alphaMax));
+        if (logE === 1) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    }
+
+    // Near-convergence zone
+    ctx.fillStyle = 'rgba(212,168,83,0.08)';
+    ctx.fillRect(toX(15), padT, toX(17) - toX(15), plotH);
+    ctx.fillStyle = '#d4a853';
+    ctx.font = 'bold 11px system-ui';
+    ctx.textAlign = 'center';
+    ctx.fillText('Zone GUT', (toX(15) + toX(17)) / 2, padT + 20);
+    ctx.fillText('Point fixe ?', (toX(15) + toX(17)) / 2, padT + 35);
+
+    // Current energy marker
+    ctx.strokeStyle = 'rgba(212,168,83,0.6)';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([5, 5]);
+    const ex = toX(e);
+    ctx.beginPath(); ctx.moveTo(ex, padT); ctx.lineTo(ex, padT + plotH); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Values at current energy
+    const a1 = alpha1(e), a2 = alpha2(e), a3 = alpha3(e);
+    for (const curve of curves) {
+      const a = curve.fn(e);
+      const x = toX(e), y = toY(Math.min(a, alphaMax));
+      ctx.beginPath();
+      ctx.arc(x, y, 5, 0, Math.PI * 2);
+      ctx.fillStyle = curve.color;
+      ctx.fill();
+    }
+
+    // Energy label
+    ctx.fillStyle = '#d4a853';
+    ctx.font = 'bold 12px monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText(`E = 10^${e.toFixed(1)} GeV`, ex + 8, padT + 15);
+    ctx.fillStyle = '#fb7185'; ctx.fillText(`α₁ = ${a1.toFixed(4)}`, ex + 8, padT + 35);
+    ctx.fillStyle = '#60a5fa'; ctx.fillText(`α₂ = ${a2.toFixed(4)}`, ex + 8, padT + 50);
+    ctx.fillStyle = '#34d399'; ctx.fillText(`α₃ = ${Math.min(a3, 0.999).toFixed(4)}`, ex + 8, padT + 65);
+
+    // Fixed point indicator
+    const spread = Math.abs(a1 - a2) + Math.abs(a2 - Math.min(a3, alphaMax)) + Math.abs(a1 - Math.min(a3, alphaMax));
+    if (spread < 0.03) {
+      ctx.fillStyle = '#d4a853';
+      ctx.font = 'bold 14px system-ui';
+      ctx.textAlign = 'center';
+      ctx.fillText('CONVERGENCE → POINT FIXE', w / 2, padT + plotH + 65);
+    }
+  }
+
+  function animateRG() {
+    if (!animating) return;
+    animEnergy += 0.03;
+    if (animEnergy > 17) { animating = false; animEnergy = 17; }
+    document.getElementById('rg-energy').value = animEnergy;
+    currentEnergy = animEnergy;
+    draw(animEnergy);
+    requestAnimationFrame(animateRG);
+  }
+
+  draw();
+  window.addEventListener('resize', () => { resize(); draw(); });
+})();
+
+// ============================================================
+// SCENE 3: CRYSTALLIZATION FRONT (Canvas 2D)
+// ============================================================
+(function() {
+  const container = document.getElementById('crystal-container');
+  const canvas = document.createElement('canvas');
+  container.insertBefore(canvas, container.firstChild);
+  const ctx = canvas.getContext('2d');
+
+  let gridW, gridH, cellSize = 4;
+  let grid, nextGrid;
+  let running = false;
+  let speed = 1;
+  let inflating = false;
+  let inflateTimer = 0;
+
+  function resize() {
+    canvas.width = container.clientWidth;
+    canvas.height = container.clientHeight;
+    gridW = Math.floor(canvas.width / cellSize);
+    gridH = Math.floor(canvas.height / cellSize);
+    initGrid();
+  }
+
+  function initGrid() {
+    grid = new Float32Array(gridW * gridH);
+    nextGrid = new Float32Array(gridW * gridH);
+    // Seed: small activated region at center
+    const cx = Math.floor(gridW / 2), cy = Math.floor(gridH / 2);
+    for (let dy = -3; dy <= 3; dy++) {
+      for (let dx = -3; dx <= 3; dx++) {
+        if (dx * dx + dy * dy <= 9) {
+          grid[(cy + dy) * gridW + (cx + dx)] = 1.0;
+        }
+      }
+    }
+  }
+
+  resize();
+
+  function step() {
+    const s = inflating ? 8 : speed;
+    for (let iter = 0; iter < Math.ceil(s); iter++) {
+      for (let y = 1; y < gridH - 1; y++) {
+        for (let x = 1; x < gridW - 1; x++) {
+          const i = y * gridW + x;
+          const v = grid[i];
+          // Diffusion + reaction (Gray-Scott inspired but simplified)
+          const laplacian = (
+            grid[i - 1] + grid[i + 1] +
+            grid[i - gridW] + grid[i + gridW] - 4 * v
+          ) * 0.2;
+
+          // Growth at the front: if neighbors are activated, grow
+          let neighbors = 0;
+          if (grid[i - 1] > 0.5) neighbors++;
+          if (grid[i + 1] > 0.5) neighbors++;
+          if (grid[i - gridW] > 0.5) neighbors++;
+          if (grid[i + gridW] > 0.5) neighbors++;
+
+          let nv = v;
+          if (v < 0.1 && neighbors > 0) {
+            // Stochastic activation at front
+            const prob = inflating ? 0.3 : 0.02 * neighbors;
+            if (Math.random() < prob) {
+              nv = 0.3 + Math.random() * 0.3;
+            }
+          } else if (v > 0.1) {
+            // Stabilize toward fixed point
+            nv = v + (1.0 - v) * 0.02 + laplacian * 0.1;
+            // Random structure formation
+            if (v > 0.7 && Math.random() < 0.001) {
+              nv = Math.min(1.5, v + 0.3); // "Galaxy" formation
+            }
+          }
+          nextGrid[i] = Math.max(0, Math.min(1.5, nv));
+        }
+      }
+      [grid, nextGrid] = [nextGrid, grid];
+    }
+  }
+
+  function draw() {
+    const imageData = ctx.createImageData(canvas.width, canvas.height);
+    const data = imageData.data;
+
+    for (let y = 0; y < gridH; y++) {
+      for (let x = 0; x < gridW; x++) {
+        const v = grid[y * gridW + x];
+        // Render each cell as cellSize x cellSize pixels
+        for (let dy = 0; dy < cellSize; dy++) {
+          for (let dx = 0; dx < cellSize; dx++) {
+            const px = x * cellSize + dx;
+            const py = y * cellSize + dy;
+            if (px >= canvas.width || py >= canvas.height) continue;
+            const pi = (py * canvas.width + px) * 4;
+
+            if (v < 0.05) {
+              // Unmanifested void
+              data[pi] = 6; data[pi + 1] = 8; data[pi + 2] = 15; data[pi + 3] = 255;
+            } else if (v < 0.4) {
+              // Front of actualization (blue glow)
+              const t = v / 0.4;
+              data[pi] = Math.floor(20 + 76 * t);
+              data[pi + 1] = Math.floor(20 + 145 * t);
+              data[pi + 2] = Math.floor(40 + 210 * t);
+              data[pi + 3] = 255;
+            } else if (v < 1.0) {
+              // Stabilized fixed points (gold)
+              const t = (v - 0.4) / 0.6;
+              data[pi] = Math.floor(96 + 116 * t);
+              data[pi + 1] = Math.floor(100 + 68 * t);
+              data[pi + 2] = Math.floor(40 + 43 * t);
+              data[pi + 3] = 255;
+            } else {
+              // Dense structures (violet-white = galaxies)
+              const t = Math.min(1, (v - 1.0) / 0.5);
+              data[pi] = Math.floor(167 + 88 * t);
+              data[pi + 1] = Math.floor(139 + 116 * t);
+              data[pi + 2] = Math.floor(250);
+              data[pi + 3] = 255;
+            }
+          }
+        }
+      }
+    }
+    ctx.putImageData(imageData, 0, 0);
+  }
+
+  function loop() {
+    if (running) {
+      step();
+      if (inflating) {
+        inflateTimer--;
+        if (inflateTimer <= 0) inflating = false;
+      }
+    }
+    draw();
+    requestAnimationFrame(loop);
+  }
+
+  document.getElementById('crystal-start').addEventListener('click', function() {
+    running = !running;
+    this.textContent = running ? 'Pause' : 'Demarrer';
+  });
+  document.getElementById('crystal-inflate').addEventListener('click', () => {
+    inflating = true;
+    inflateTimer = 60; // frames
+    if (!running) {
+      running = true;
+      document.getElementById('crystal-start').textContent = 'Pause';
+    }
+  });
+  document.getElementById('crystal-reset').addEventListener('click', () => {
+    running = false;
+    inflating = false;
+    document.getElementById('crystal-start').textContent = 'Demarrer';
+    initGrid();
+    draw();
+  });
+  document.getElementById('crystal-speed').addEventListener('input', e => { speed = parseFloat(e.target.value); });
+
+  loop();
+  window.addEventListener('resize', () => { resize(); });
+})();
+
+// ============================================================
+// SCENE 4: TIME EMERGENCE (Canvas 2D)
+// ============================================================
+(function() {
+  const container = document.getElementById('time-container');
+  const canvas = document.createElement('canvas');
+  container.insertBefore(canvas, container.firstChild);
+  const ctx = canvas.getContext('2d');
+
+  function resize() {
+    canvas.width = container.clientWidth * devicePixelRatio;
+    canvas.height = container.clientHeight * devicePixelRatio;
+    canvas.style.width = container.clientWidth + 'px';
+    canvas.style.height = container.clientHeight + 'px';
+  }
+  resize();
+
+  let t = 0;
+  let paused = false;
+  let bookView = false;
+  let speed = 1;
+
+  document.getElementById('time-speed').addEventListener('input', e => { speed = parseFloat(e.target.value); });
+  document.getElementById('time-pause').addEventListener('click', () => { paused = true; });
+  document.getElementById('time-play').addEventListener('click', () => { paused = false; });
+  document.getElementById('time-book').addEventListener('click', () => { bookView = !bookView; });
+
+  function draw() {
+    const dpr = devicePixelRatio;
+    const w = container.clientWidth, h = container.clientHeight;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+
+    if (!paused) t += 0.01 * speed;
+
+    if (bookView) {
+      drawBookView(w, h);
+    } else {
+      drawWaveView(w, h);
+    }
+
+    // Update info
+    const phaseA = Math.sin(t * 2.3);
+    const phaseB = Math.cos(t * 1.7);
+    document.getElementById('clock-a').textContent = phaseA.toFixed(3);
+    document.getElementById('clock-b').textContent = phaseB.toFixed(3);
+    document.getElementById('rel-time').textContent = (t % (2 * Math.PI)).toFixed(3);
+
+    requestAnimationFrame(draw);
+  }
+
+  function drawWaveView(w, h) {
+    const cx = w / 2, cy = h / 2;
+
+    // Global state: a big static circle
+    ctx.strokeStyle = 'rgba(212,168,83,0.3)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(cx, cy, Math.min(w, h) * 0.35, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Label
+    ctx.fillStyle = '#d4a853';
+    ctx.font = 'bold 14px system-ui';
+    ctx.textAlign = 'center';
+    ctx.fillText('H|Ψ⟩ = 0 — Etat global statique', cx, cy - Math.min(w, h) * 0.35 - 15);
+
+    // Subsystem A: "clock" — orbiting point
+    const rA = Math.min(w, h) * 0.18;
+    const angleA = t * 2.3;
+    const axA = cx - w * 0.15 + rA * Math.cos(angleA);
+    const ayA = cy + rA * Math.sin(angleA);
+
+    // Subsystem A orbit
+    ctx.strokeStyle = 'rgba(96,165,250,0.2)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(cx - w * 0.15, cy, rA, 0, Math.PI * 2);
+    ctx.stroke();
+
+    ctx.fillStyle = '#60a5fa';
+    ctx.beginPath();
+    ctx.arc(axA, ayA, 8, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#60a5fa';
+    ctx.font = '12px system-ui';
+    ctx.fillText('Horloge A', cx - w * 0.15, cy + rA + 25);
+
+    // Subsystem B: "system" — oscillating
+    const rB = Math.min(w, h) * 0.15;
+    const angleB = t * 1.7;
+    const bxB = cx + w * 0.15 + rB * Math.cos(angleB);
+    const byB = cy + rB * Math.sin(angleB * 0.7);
+
+    ctx.strokeStyle = 'rgba(52,211,153,0.2)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.ellipse(cx + w * 0.15, cy, rB, rB * 0.7, 0, 0, Math.PI * 2);
+    ctx.stroke();
+
+    ctx.fillStyle = '#34d399';
+    ctx.beginPath();
+    ctx.arc(bxB, byB, 8, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.font = '12px system-ui';
+    ctx.fillText('Systeme B', cx + w * 0.15, cy + rB + 25);
+
+    // Correlation line
+    ctx.strokeStyle = 'rgba(212,168,83,0.4)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath();
+    ctx.moveTo(axA, ayA);
+    ctx.lineTo(bxB, byB);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Time emergence arrow at bottom
+    const timeBarY = h - 100;
+    const timeBarW = w * 0.6;
+    const timeBarX = (w - timeBarW) / 2;
+
+    ctx.fillStyle = 'rgba(255,255,255,0.05)';
+    ctx.fillRect(timeBarX, timeBarY, timeBarW, 6);
+
+    const progress = ((t * speed) % 10) / 10;
+    ctx.fillStyle = '#d4a853';
+    ctx.fillRect(timeBarX, timeBarY, timeBarW * progress, 6);
+
+    ctx.fillStyle = '#9ca3af';
+    ctx.font = '11px system-ui';
+    ctx.textAlign = 'center';
+    ctx.fillText('Temps relationnel emergeant des correlations A↔B', w / 2, timeBarY + 25);
+    ctx.fillText('(L\'etat global ne change pas — seule la "lecture" avance)', w / 2, timeBarY + 42);
+
+    // Draw the "frozen" global state indicator
+    if (paused) {
+      ctx.fillStyle = 'rgba(251,113,133,0.8)';
+      ctx.font = 'bold 24px system-ui';
+      ctx.textAlign = 'center';
+      ctx.fillText('⏸ UNIVERS SUR PAUSE', cx, cy);
+      ctx.font = '14px system-ui';
+      ctx.fillText('(Il l\'a toujours ete — H|Ψ⟩ = 0)', cx, cy + 25);
+    }
+  }
+
+  function drawBookView(w, h) {
+    const cx = w / 2, cy = h / 2;
+    const numPages = 20;
+    const pageW = w * 0.025;
+    const pageH = h * 0.5;
+    const startX = cx - (numPages * pageW) / 2;
+
+    ctx.fillStyle = '#d4a853';
+    ctx.font = 'bold 14px system-ui';
+    ctx.textAlign = 'center';
+    ctx.fillText('Le Livre de l\'Univers — toutes les pages existent simultanement', cx, cy - pageH / 2 - 30);
+
+    const currentPage = Math.floor((t * speed * 2) % numPages);
+
+    for (let i = 0; i < numPages; i++) {
+      const x = startX + i * pageW * 1.5;
+      const isCurrent = i === currentPage;
+
+      // Page
+      ctx.fillStyle = isCurrent ? 'rgba(212,168,83,0.3)' : 'rgba(255,255,255,0.05)';
+      ctx.strokeStyle = isCurrent ? '#d4a853' : 'rgba(255,255,255,0.1)';
+      ctx.lineWidth = isCurrent ? 2 : 1;
+      ctx.fillRect(x, cy - pageH / 2, pageW * 1.2, pageH);
+      ctx.strokeRect(x, cy - pageH / 2, pageW * 1.2, pageH);
+
+      // Content lines on page
+      const lineCount = 8;
+      for (let l = 0; l < lineCount; l++) {
+        const ly = cy - pageH / 2 + 15 + l * (pageH - 30) / lineCount;
+        const lw = (pageW * 0.8) * (0.5 + 0.5 * Math.sin(i * 3 + l * 2));
+        ctx.fillStyle = isCurrent ? 'rgba(212,168,83,0.6)' : 'rgba(255,255,255,0.08)';
+        ctx.fillRect(x + 3, ly, lw, 2);
+      }
+
+      // Page number
+      ctx.fillStyle = isCurrent ? '#d4a853' : '#6b7280';
+      ctx.font = '9px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(`t=${i}`, x + pageW * 0.6, cy + pageH / 2 + 15);
+    }
+
+    // Reader indicator
+    const readerX = startX + currentPage * pageW * 1.5 + pageW * 0.6;
+    ctx.fillStyle = '#22d3ee';
+    ctx.beginPath();
+    ctx.moveTo(readerX, cy + pageH / 2 + 25);
+    ctx.lineTo(readerX - 8, cy + pageH / 2 + 40);
+    ctx.lineTo(readerX + 8, cy + pageH / 2 + 40);
+    ctx.fill();
+    ctx.fillStyle = '#22d3ee';
+    ctx.font = '11px system-ui';
+    ctx.fillText('← Observateur (vous etes ici)', readerX + 70, cy + pageH / 2 + 38);
+
+    // Bottom text
+    ctx.fillStyle = '#9ca3af';
+    ctx.font = '12px system-ui';
+    ctx.textAlign = 'center';
+    ctx.fillText('Le livre entier existe. Le "temps" est juste votre position de lecture.', cx, cy + pageH / 2 + 65);
+  }
+
+  draw();
+  window.addEventListener('resize', resize);
+})();
+
+// ============================================================
+// SCENE 5: TIME DILATION (Canvas 2D)
+// ============================================================
+(function() {
+  const container = document.getElementById('dilation-container');
+  const canvas = document.createElement('canvas');
+  container.insertBefore(canvas, container.firstChild);
+  const ctx = canvas.getContext('2d');
+
+  function resize() {
+    canvas.width = container.clientWidth * devicePixelRatio;
+    canvas.height = container.clientHeight * devicePixelRatio;
+    canvas.style.width = container.clientWidth + 'px';
+    canvas.style.height = container.clientHeight + 'px';
+  }
+  resize();
+
+  let depth = 0;
+  let t = 0;
+  let freefalling = false;
+  let freefallDepth = 0;
+
+  document.getElementById('dilation-depth').addEventListener('input', e => {
+    depth = parseFloat(e.target.value);
+    freefalling = false;
+    updateInfo();
+  });
+
+  document.getElementById('dilation-freefall').addEventListener('click', () => {
+    freefalling = true;
+    freefallDepth = 0;
+  });
+
+  document.getElementById('dilation-reset').addEventListener('click', () => {
+    depth = 0;
+    freefalling = false;
+    document.getElementById('dilation-depth').value = 0;
+    updateInfo();
+  });
+
+  function updateInfo() {
+    const d = freefalling ? freefallDepth : depth;
+    const dilation = 1 / Math.sqrt(1 - d);
+    let regime = 'Espace plat';
+    if (d > 0.95) regime = 'Horizon (temps → ∞)';
+    else if (d > 0.7) regime = 'Trou noir proche';
+    else if (d > 0.4) regime = 'Etoile a neutrons';
+    else if (d > 0.1) regime = 'Naine blanche';
+    else if (d > 0.01) regime = 'Surface terrestre';
+
+    document.getElementById('depth-val').textContent = (d * 100).toFixed(1) + '%';
+    document.getElementById('dilation-val').textContent = dilation < 100 ? dilation.toFixed(2) + 'x' : '→ ∞';
+    document.getElementById('regime-val').textContent = regime;
+  }
+
+  function draw() {
+    const dpr = devicePixelRatio;
+    const w = container.clientWidth, h = container.clientHeight;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+
+    if (freefalling) {
+      freefallDepth += 0.002;
+      if (freefallDepth >= 0.999) { freefallDepth = 0.999; freefalling = false; }
+      document.getElementById('dilation-depth').value = freefallDepth;
+      updateInfo();
+    }
+
+    const d = freefalling ? freefallDepth : depth;
+    t += 0.02;
+
+    const cx = w / 2, cy = h / 2;
+
+    // Draw the potential well (cross-section)
+    const wellW = w * 0.7;
+    const wellH = h * 0.6;
+    const wellTop = cy - wellH * 0.2;
+    const wellBot = cy + wellH * 0.5;
+
+    // Well shape: parabolic funnel
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(212,168,83,0.5)';
+    ctx.lineWidth = 2;
+    const steps = 100;
+    for (let i = 0; i <= steps; i++) {
+      const frac = i / steps;
+      const x = cx - wellW / 2 + frac * wellW;
+      const dx = (frac - 0.5) * 2; // -1 to 1
+      const yFrac = 1 - dx * dx; // parabola opening downward → flip for well
+      const y = wellTop + yFrac * (wellBot - wellTop);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    // Fill the well with gradient
+    ctx.beginPath();
+    for (let i = 0; i <= steps; i++) {
+      const frac = i / steps;
+      const x = cx - wellW / 2 + frac * wellW;
+      const dx = (frac - 0.5) * 2;
+      const yFrac = 1 - dx * dx;
+      const y = wellTop + yFrac * (wellBot - wellTop);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.lineTo(cx + wellW / 2, wellBot + 50);
+    ctx.lineTo(cx - wellW / 2, wellBot + 50);
+    ctx.closePath();
+    const grad = ctx.createLinearGradient(cx, wellTop, cx, wellBot);
+    grad.addColorStop(0, 'rgba(6,8,15,0)');
+    grad.addColorStop(0.5, 'rgba(17,24,39,0.5)');
+    grad.addColorStop(1, 'rgba(96,165,250,0.15)');
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // Observer position on the well wall
+    // depth 0 = top, depth 1 = bottom center
+    const obsX = cx + (1 - d) * wellW * 0.35 * Math.cos(0);
+    const obsDx = (1 - d);
+    const obsY = wellTop + (1 - obsDx * obsDx) * (wellBot - wellTop);
+
+    // Observer dot
+    ctx.beginPath();
+    ctx.arc(obsX, obsY, 8, 0, Math.PI * 2);
+    ctx.fillStyle = '#22d3ee';
+    ctx.fill();
+
+    // Clock at observer position — speed depends on dilation
+    const dilation = 1 / Math.sqrt(Math.max(0.001, 1 - d));
+    const clockSpeed = 1 / dilation;
+    const clockRadius = 25;
+    const clockX = obsX + 40, clockY = obsY - 30;
+
+    ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.arc(clockX, clockY, clockRadius, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Clock hand
+    const clockAngle = t * clockSpeed;
+    ctx.strokeStyle = d > 0.95 ? '#fb7185' : '#22d3ee';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(clockX, clockY);
+    ctx.lineTo(
+      clockX + clockRadius * 0.8 * Math.sin(clockAngle),
+      clockY - clockRadius * 0.8 * Math.cos(clockAngle)
+    );
+    ctx.stroke();
+
+    // Reference clock at top
+    const refX = w - 100, refY = 100;
+    ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.arc(refX, refY, clockRadius, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.strokeStyle = '#d4a853';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(refX, refY);
+    ctx.lineTo(refX + clockRadius * 0.8 * Math.sin(t), refY - clockRadius * 0.8 * Math.cos(t));
+    ctx.stroke();
+    ctx.fillStyle = '#d4a853';
+    ctx.font = '11px system-ui';
+    ctx.textAlign = 'center';
+    ctx.fillText('Horloge ref.', refX, refY + clockRadius + 15);
+    ctx.fillText('(espace plat)', refX, refY + clockRadius + 30);
+
+    // Labels on well
+    ctx.fillStyle = '#6b7280';
+    ctx.font = '11px system-ui';
+    ctx.textAlign = 'center';
+    ctx.fillText('Surface', cx - wellW / 2 - 5, wellTop + 10);
+    ctx.fillText('(espace plat)', cx - wellW / 2 - 5, wellTop + 25);
+
+    ctx.fillStyle = '#fb7185';
+    ctx.fillText('Horizon', cx, wellBot + 20);
+    ctx.fillText('(temps → 0)', cx, wellBot + 35);
+    ctx.fillText('Substrat atemporel', cx, wellBot + 50);
+
+    // Horizon line
+    if (d > 0.9) {
+      ctx.strokeStyle = 'rgba(251,113,133,0.4)';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(cx - 50, wellBot - 5);
+      ctx.lineTo(cx + 50, wellBot - 5);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    // Near-horizon warning
+    if (d > 0.95) {
+      ctx.fillStyle = 'rgba(251,113,133,0.8)';
+      ctx.font = 'bold 18px system-ui';
+      ctx.textAlign = 'center';
+      ctx.fillText('APPROCHE DE L\'ATEMPORALITE', cx, cy - wellH * 0.35);
+      ctx.font = '13px system-ui';
+      ctx.fillText('Le temps cesse d\'emerger...', cx, cy - wellH * 0.35 + 22);
+    }
+
+    // Depth scale on left
+    const scaleX = 40;
+    const scaleTop = wellTop;
+    const scaleBot = wellBot;
+    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(scaleX, scaleTop);
+    ctx.lineTo(scaleX, scaleBot);
+    ctx.stroke();
+
+    const markers = [
+      { d: 0, label: '0%' },
+      { d: 0.01, label: 'Terre' },
+      { d: 0.1, label: 'Naine bl.' },
+      { d: 0.4, label: 'Neutron*' },
+      { d: 0.7, label: 'TN proche' },
+      { d: 0.95, label: 'Horizon' },
+    ];
+    for (const m of markers) {
+      const my = scaleTop + m.d * (scaleBot - scaleTop);
+      ctx.fillStyle = '#6b7280';
+      ctx.font = '9px monospace';
+      ctx.textAlign = 'right';
+      ctx.fillText(m.label, scaleX - 5, my + 3);
+      ctx.beginPath();
+      ctx.moveTo(scaleX - 2, my);
+      ctx.lineTo(scaleX + 2, my);
+      ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+      ctx.stroke();
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  updateInfo();
+  draw();
+  window.addEventListener('resize', resize);
+})();
+
+// ============================================================
+// NAV ACTIVE STATE
+// ============================================================
+(function() {
+  const sections = document.querySelectorAll('section');
+  const navLinks = document.querySelectorAll('nav a');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    for (const section of sections) {
+      const top = section.offsetTop - 100;
+      if (window.scrollY >= top) current = section.id;
+    }
+    navLinks.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

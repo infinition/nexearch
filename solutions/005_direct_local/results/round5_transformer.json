@@ -1,0 +1,18 @@
+{
+  "solution_id": "005",
+  "experiment": "Round 5: DirectLocal Transformer on MNIST",
+  "date": "2026-04-03",
+  "dataset": "MNIST",
+  "type": "learning-rule",
+  "metric": "accuracy",
+  "unit": "%",
+  "best_value": 96.22,
+  "baseline_name": "Backprop Transformer (8 blocks)",
+  "baseline_value": 97.20,
+  "epochs": 15,
+  "stable": true,
+  "variants": [
+    {"name": "DirectLocal ViT 4-block", "accuracy": 96.21, "epochs": 15},
+    {"name": "DirectLocal ViT 8-block", "accuracy": 96.22, "epochs": 15}
+  ]
+}

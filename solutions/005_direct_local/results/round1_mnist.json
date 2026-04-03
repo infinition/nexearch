@@ -1,0 +1,21 @@
+{
+  "solution_id": "005",
+  "experiment": "Round 1-3: DirectLocal MLP on MNIST",
+  "date": "2026-04-03",
+  "dataset": "MNIST",
+  "type": "learning-rule",
+  "metric": "accuracy",
+  "unit": "%",
+  "best_value": 98.15,
+  "baseline_name": "Backprop MLP",
+  "baseline_value": 98.06,
+  "epochs": 20,
+  "total_params": 840000,
+  "stable": true,
+  "variants": [
+    {"name": "DirectLocal v1 (linear probe)", "accuracy": 97.71, "epochs": 10},
+    {"name": "DirectLocal v1 (20ep)", "accuracy": 97.94, "epochs": 20},
+    {"name": "DirectLocal v2 (MLP probe+dropout)", "accuracy": 98.15, "epochs": 20},
+    {"name": "DirectLocal Deep (5 layers)", "accuracy": 98.01, "epochs": 15}
+  ]
+}

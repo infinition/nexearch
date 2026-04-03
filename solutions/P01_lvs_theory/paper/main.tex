@@ -1,0 +1,70 @@
+% LVS Theory paper - Nexearch P01
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage[margin=1in]{geometry}
+\usepackage{braket}
+
+\title{Latent Vacuum Stationarity: Reality as Fixed Points of the Quantum Vacuum}
+\author{Fabien}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We propose that observable physical reality corresponds to the stationary configurations
+(fixed points) of the quantum vacuum landscape. This meta-interpretive framework,
+\textbf{Latent Vacuum Stationarity} (LVS), unifies the fine-tuning problem, the measurement
+problem, and the problem of time through a single principle: \emph{stability is the criterion
+of existence}. We show compatibility with 9 empirical tests (6 confirmed, 3 supported) and
+demonstrate that the Shaposhnikov-Wetterich fixed-point condition naturally predicts
+$m_H \approx 126$ GeV, within 1 GeV of the measured value.
+\end{abstract}
+
+\section{Introduction}
+% See LVS_Paper_v2.md sections 1-3
+
+\section{The LVS Framework}
+The core postulate:
+\begin{equation}
+\text{Observable reality} \longleftrightarrow \text{Fixed points of } \mathcal{V}
+\end{equation}
+where $\mathcal{V}$ is the quantum vacuum configuration space.
+
+The Wheeler-DeWitt equation establishes the atemporal substrate:
+\begin{equation}
+\hat{H}\ket{\Psi} = 0
+\end{equation}
+
+Time emerges via Page-Wootters mechanism:
+\begin{equation}
+\ket{\psi(t)}_S = C\braket{t|\Psi}
+\end{equation}
+
+\section{Higgs Mass from Stationarity}
+% See LVS_Formalization.ipynb
+The fixed-point condition at the Planck scale:
+\begin{align}
+\lambda(M_{Pl}) &= 0 \\
+\beta_\lambda(M_{Pl}) &= 0
+\end{align}
+Running the SM RG equations down to the electroweak scale yields:
+\begin{equation}
+m_H \approx 126 \text{ GeV} \quad (\text{measured: } 125.25 \pm 0.17 \text{ GeV})
+\end{equation}
+
+\section{Empirical Validation}
+% See LVS_Validation.ipynb - 9 tests
+
+\section{Discussion}
+% See discussion.md
+
+\section{Conclusion}
+
+\bibliographystyle{plain}
+\bibliography{refs}
+\end{document}

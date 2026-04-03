@@ -1,0 +1,30 @@
+{
+  "solution_id": "004",
+  "experiment": "NoProp-Reservoir V2 - Scaled Up",
+  "date": "2026-04-03",
+  "dataset": "MNIST",
+  "type": "learning-rule",
+  "metric": "accuracy",
+  "unit": "%",
+  "best_value": 95.04,
+  "baseline_name": "Backprop MLP",
+  "baseline_value": 98.04,
+  "epochs": 0,
+  "total_params": 0,
+  "notes": "Zero trainable parameters in forward path. Only ridge regression readouts. 8 blocks, 1500-dim reservoirs.",
+  "config": {
+    "n_blocks": 8,
+    "reservoir_size": 1500,
+    "noise_schedule": "linear 2.0 to 0.05",
+    "spectral_radii": "0.80 to 0.95",
+    "sparsity": "0.02 to 0.05",
+    "projection_dims": [600, 500, 400, 600, 500, 400, 600, 500],
+    "regularization": 0.05,
+    "n_train": 30000,
+    "n_test": 10000
+  },
+  "history": [
+    {"version": "V1", "accuracy": 91.80, "n_blocks": 6, "res_size": 1000},
+    {"version": "V2", "accuracy": 95.04, "n_blocks": 8, "res_size": 1500}
+  ]
+}

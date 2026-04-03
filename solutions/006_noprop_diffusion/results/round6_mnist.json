@@ -1,0 +1,30 @@
+{
+  "solution_id": "006",
+  "experiment": "Round 6: NoProp Diffusion on MNIST",
+  "date": "2026-04-03",
+  "dataset": "MNIST",
+  "type": "learning-rule",
+  "metric": "accuracy",
+  "unit": "%",
+  "best_value": 97.89,
+  "baseline_name": "Backprop MLP",
+  "baseline_value": 98.22,
+  "epochs": 15,
+  "total_params": 550000,
+  "stable": true,
+  "config": {
+    "n_blocks": 4,
+    "hidden_dim": 256,
+    "label_dim": 32,
+    "lr": 0.001,
+    "noise_schedule": "cosine"
+  },
+  "reference_paper": {
+    "title": "NoProp: Training Neural Networks without Full Back-propagation or Full Forward-propagation",
+    "arxiv": "2503.24322",
+    "year": 2025,
+    "reported_mnist": 99.47,
+    "reported_cifar10": 79.25,
+    "reported_cifar100": 45.93
+  }
+}

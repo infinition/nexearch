@@ -1,0 +1,22 @@
+{
+  "solution_id": "003",
+  "experiment": "Phase 3 - Research-Informed + Scaling + Novel Architectures",
+  "date": "2026-04-03",
+  "type": "learning-rule",
+  "metric": "accuracy",
+  "unit": "%",
+  "results": [
+    {"method": "Difference Target Propagation", "script": "24", "dataset": "MNIST", "accuracy": 8.5, "notes": "simplified impl; paper reports 99.2%"},
+    {"method": "Counter-Current Learning", "script": "25", "dataset": "MNIST", "accuracy": null, "notes": "timeout; paper reports ~98%"},
+    {"method": "Dendritic Local Learning", "script": "26", "dataset": "MNIST", "accuracy": 12.5, "notes": "simplified impl; paper reports ~98%"},
+    {"method": "Three-Factor Neuromodulated", "script": "27", "dataset": "MNIST", "accuracy": 11.7},
+    {"method": "NoProp (Diffusion)", "script": "28", "dataset": "MNIST", "accuracy": 80.0, "time_s": 63.4},
+    {"method": "Mono-Forward", "script": "29", "dataset": "MNIST", "accuracy": 88.5, "time_s": 20.4},
+    {"method": "Prospective Configuration", "script": "30", "dataset": "MNIST", "accuracy": 36.0, "time_s": 77.6},
+    {"method": "Ultra Reservoir", "script": "31", "dataset": "Fashion-MNIST", "accuracy": 88.65, "time_s": 722.8},
+    {"method": "Ultra Reservoir", "script": "31", "dataset": "CIFAR-10", "accuracy": 46.43, "time_s": 503.0},
+    {"method": "v-PuNN (p-adic)", "script": "32", "dataset": "MNIST", "accuracy": 16.55, "notes": "simplified impl; paper reports 99.96% on hierarchical data"},
+    {"method": "NoProp+Reservoir V1", "script": "33", "dataset": "MNIST", "accuracy": 91.8, "time_s": 133.1, "original": true},
+    {"method": "NoProp+Reservoir V2", "script": "35", "dataset": "MNIST", "accuracy": 95.04, "original": true, "best_novel": true}
+  ]
+}

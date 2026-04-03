@@ -1,0 +1,18 @@
+{
+  "solution_id": "003",
+  "experiment": "Phase 2 - Exotic Methods + Hybrids + Scaled Reservoir",
+  "date": "2026-04-03",
+  "dataset": "MNIST",
+  "type": "learning-rule",
+  "metric": "accuracy",
+  "unit": "%",
+  "results": [
+    {"method": "Tropical Geometry Network", "script": "13", "accuracy": 12.6, "time_s": 39.2, "gradient_free": true, "paradigm": false},
+    {"method": "Entropy-Gated Local", "script": "14", "accuracy": 17.2, "time_s": 21.3, "gradient_free": true, "paradigm": false},
+    {"method": "Fractal/Chaos Attractor", "script": "15", "accuracy": 17.9, "time_s": 107.5, "gradient_free": true, "paradigm": false},
+    {"method": "Mega Reservoir (4 diverse + HD + entropy)", "script": "20", "accuracy": 94.1, "time_s": 29.6, "gradient_free": true, "paradigm": true},
+    {"method": "Direct Feedback Alignment", "script": "21", "accuracy": 89.0, "time_s": 34.0, "gradient_free": "partial", "paradigm": true},
+    {"method": "Local Contrastive", "script": "22", "accuracy": 85.3, "time_s": 26.0, "gradient_free": true, "paradigm": true},
+    {"method": "ULTRA RESERVOIR (8 + stacking)", "script": "23", "accuracy": 97.28, "time_s": 319.4, "gradient_free": true, "paradigm": true, "best": true}
+  ]
+}

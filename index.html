@@ -13,6 +13,8 @@
 <!-- Highlight.js for code -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/github-dark.min.css">
 <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+<!-- Writeup content (regenerate with: python build_writeups.py) -->
+<script src="writeups_data.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/python.min.js"></script>
 <style>
 :root{--bg:#0a0e14;--bg2:#111820;--bg3:#1a2030;--border:#252d3a;--text:#d4dce8;--text2:#6b7d96;--accent:#4facfe;--green:#43e97b;--red:#f5576c;--orange:#f6d365;--purple:#a18cd1;--cyan:#38f9d7;--glow:rgba(79,172,254,.08)}
@@ -453,11 +455,41 @@ W += cosine_lr(step) * momentum`
      {v:'MLP',arch:'Dense(3072->500)',acc:41.16,dataset:'CIFAR-10',ep:80,stable:true,change:'No spatial bias',status:'limited'},
    ],
   },
+  {id:'P01',name:'LVS Theory',abbr:'LVS',category:'physics-inspired',type:'theory',
+   status:'promising',date:'2024',
+   domains:['physics','math'],
+   arxiv:null, paperStatus:'draft',
+   crossRefs:{builds_on:[],enables:['002'],related_to:['001']},
+   github:null,
+   principle:'Observable reality = fixed points of the quantum vacuum. Stability IS existence. "It from Fix." 6/9 empirical tests confirmed. Higgs mass predicted at 126 GeV.',
+   nextStep:'Falsifiable prediction beyond Standard Model',
+   bestResults:{'Validation':{metric:'tests_confirmed',value:6,unit:'/9'},'Higgs':{metric:'prediction',value:126,unit:' GeV (vs 125.25)'}},
+   params:null,
+   equation:{
+     latex:'\\hat{H}|\\Psi\\rangle = 0 \\quad \\land \\quad \\lambda(M_{Pl})=0,\\; \\beta_\\lambda(M_{Pl})=0 \\;\\Rightarrow\\; m_H \\approx 126\\,\\text{GeV}',
+     components:[
+       {symbol:'\\hat{H}|\\Psi\\rangle = 0',desc:'Wheeler-DeWitt: timeless universal state'},
+       {symbol:'\\lambda(M_{Pl})=0',desc:'Higgs self-coupling vanishes at Planck scale'},
+       {symbol:'\\beta_\\lambda=0',desc:'Beta function fixed point'},
+       {symbol:'|\\psi(t)\\rangle_S = C\\langle t|\\Psi\\rangle',desc:'Page-Wootters: time emergence from static state'},
+     ],
+     code:`# LVS is a theoretical framework, not a ML model.\n# Key computational results in notebooks:\n#   LVS_Formalization.ipynb  -> m_H = 126 GeV prediction\n#   LVS_Validation.ipynb     -> 9 empirical tests\n#   LVS_Experiments.ipynb    -> RG flows, Page-Wootters\n\nHIGGS_PREDICTED = 126.0   # GeV\nHIGGS_MEASURED  = 125.25  # GeV\nVALIDATION_CONFIRMED = 6\nVALIDATION_SUPPORTED = 3`
+   },
+   versions:[
+     {v:'Spark',arch:'Photon question',acc:0,dataset:'-',ep:'-',stable:true,change:'ds^2=0 for photon -> atemporality insight',status:'promising'},
+     {v:'Paper v1',arch:'13-section paper',acc:6,dataset:'Validation (6/9)',ep:'-',stable:true,change:'Framework formalized: AS + PW + CW synthesis',status:'promising'},
+     {v:'Validation',arch:'9-test scorecard',acc:6,dataset:'Multi-physics',ep:'-',stable:true,change:'6 confirmed, 3 supported. But = minimum bar.',status:'promising'},
+     {v:'Formalization',arch:'RG + fixed-point',acc:126,dataset:'Higgs (GeV)',ep:'-',stable:true,change:'Shaposhnikov-Wetterich m_H=126 GeV',status:'breakthrough'},
+     {v:'Self-critique',arch:'Honest assessment',acc:0,dataset:'-',ep:'-',stable:true,change:'Acknowledged: not falsifiable beyond SM yet',status:'limited'},
+     {v:'v3 Reformulation',arch:'Network of interactions',acc:0,dataset:'-',ep:'-',stable:true,change:'Mass=frequency, gravity=desync, dark energy=latent space',status:'promising'},
+     {v:'Essay FR',arch:'20-chapter journal',acc:0,dataset:'-',ep:'-',stable:true,change:'Du Point Fixe au Point de Rupture (56K chars)',status:'promising'},
+   ],
+  },
   {id:'002',name:'Fixed-Point Substrate',abbr:'FPS',category:'physics-inspired',type:'learning-rule',
    status:'promising',date:'2026-04-03',
    domains:['ml','physics'],
    arxiv:null, paperStatus:'draft',
-   crossRefs:{builds_on:['LVS theory'],enables:['F02'],related_to:['001']},
+   crossRefs:{builds_on:['P01'],enables:['F02'],related_to:['001']},
    github:null,
    principle:'Intelligence emerges from fixed points in a learnable medium. Input perturbs the medium, which collapses to equilibrium Z*=f(Z*). Zero backprop, constant memory. Inspired by LVS theory: It from Fix.',
    nextStep:'Multi-resolution substrate for CIFAR-10',
@@ -516,17 +548,163 @@ dW_mix = lr * (Z_avg.T @ err_avg) / B  # channel Hebbian`
    equation:{latex:'\\hat{s}_{t+1} = f_\\theta(s_t, a_t)',code:'# World Model: state + action -> next state\n# See FluidWorld repo for architecture'},
    versions:[],
   },
-  {id:'F03',name:'FluidLM',abbr:'FLM',category:'llm',type:'llm',
-   status:'wip',date:'2025',
+  {id:'F03',name:'FluidLM',abbr:'FLM',category:'transformer-alt',type:'llm',
+   status:'promising',date:'2025',
    domains:['ml'],
-   arxiv:null, paperStatus:'none',
-   crossRefs:{builds_on:[],enables:[],related_to:[]},
+   arxiv:null, paperStatus:'submitted',
+   crossRefs:{builds_on:['P01'],enables:[],related_to:['F02','002']},
    github:'https://github.com/infinition/FluidLM',
-   principle:'Language model with fluid/continuous representations.',
-   nextStep:'Benchmark perplexity on standard datasets',
-   bestResults:{},
-   equation:{latex:'P(x_t | x_{<t}) = \\text{FluidLM}_\\theta(x_{<t})',code:'# LM: context -> next token distribution\n# See FluidLM repo for architecture'},
-   versions:[],
+   principle:'Transformer-free LM: O(N^2) attention replaced by O(N) reaction-diffusion PDEs. Tokens = concentrations, multi-scale diffusion + Mamba SSM + SwiGLU. Zero KV-cache, GPU-free inference, adaptive computation. 44.2M params, V4.5.0.',
+   nextStep:'Scaling to 100M+ params, compare perplexity vs Transformer',
+   bestResults:{'TinyStories':{metric:'loss',value:10.76,unit:''}},
+   params:{total:44200000,core:18500000,embedding:25700000},
+   equation:{
+     latex:'\\frac{du}{dt} = \\sum_k D_k \\nabla^2 u + \\text{SSM}(u) + \\text{SwiGLU}(u) + \\alpha h',
+     components:[
+       {symbol:'D_k \\nabla^2 u',desc:'Multi-scale diffusion (dilations 1, 4, 16)'},
+       {symbol:'\\text{SSM}(u)',desc:'Selective State Space (Mamba): content-based routing'},
+       {symbol:'\\text{SwiGLU}(u)',desc:'Nonlinear reaction (8/3 expansion)'},
+       {symbol:'\\alpha h',desc:'Global memory pump (B,D), O(1) constant memory'},
+       {symbol:'\\text{turb} < \\epsilon \\Rightarrow \\text{HALT}',desc:'Adaptive computation (~30% savings)'},
+     ],
+     code:`# FluidLM V4.5.0 - PDE Language Model\n# Forward Euler integration:\nu_next = RMSNorm(u + dt * (\n    multi_scale_diffusion(u) +  # O(N) spatial coherence\n    selective_ssm(u) +           # Content-based routing\n    swiglu(u) +                  # Semantic reaction\n    alpha * h +                  # Global memory\n    alpha_local * local_mem      # Local context\n))\n# Halt when turbulence < epsilon (~30% compute saved)`
+   },
+   versions:[
+     {v:'V4.2',arch:'PoC: Euler+learned PE',acc:0,dataset:'TinyStories',ep:'-',stable:true,change:'Proof of concept',status:'promising'},
+     {v:'V4.3',arch:'+RoPE +MLP 4x',acc:0,dataset:'TinyStories',ep:'-',stable:true,change:'Improved architecture',status:'promising'},
+     {v:'V4.4.0',arch:'+LongConv +sinPE +mem(B,L,D)',acc:0,dataset:'TinyStories',ep:'-',stable:true,change:'Major upgrade',status:'promising'},
+     {v:'V4.4.4-7',arch:'+ForgetGate +GradClip +LocalMem',acc:0,dataset:'TinyStories',ep:'-',stable:true,change:'Stability fixes',status:'promising'},
+     {v:'V4.4.8',arch:'+LaplacianGradLoss +Curriculum',acc:0,dataset:'TinyStories',ep:'-',stable:true,change:'From FluidWorld cross-pollination',status:'promising'},
+     {v:'V4.5.0',arch:'SwiGLU+Mamba+MultiHead+RMSNorm',acc:10.76,dataset:'TinyStories (loss)',ep:851,stable:true,change:'Current: loss 10.76',status:'promising'},
+   ],
+  },
+  {id:'003', name:'Gradient-Free Reservoir Lab', abbr:'GFRL', category:'gradient-free', type:'learning-rule',
+   status:'breakthrough', date:'2026-04-03',
+   domains:['ml','neuro','math'],
+   crossRefs:{builds_on:['001'], enables:['004'], related_to:['002']},
+   principle:'Diverse random reservoir dynamics + stacking + closed-form readout achieves near-backprop accuracy with zero gradients.',
+   nextStep:'Convolutional reservoir for CIFAR-10 (PyTorch)',
+   bestResults:{MNIST:{metric:'accuracy',value:97.28,unit:'%'},'Fashion-MNIST':{metric:'accuracy',value:88.65,unit:'%'},'CIFAR-10':{metric:'accuracy',value:46.43,unit:'%'}},
+   paperStatus:'draft',
+   equation:{
+     latex:'W_{out} = (H^T H + \\lambda I)^{-1} H^T Y',
+     code:'W_out = solve(H.T @ H + lam * I, H.T @ Y)',
+     components:[
+       {symbol:'H',desc:'Concatenated states from 8 diverse reservoirs'},
+       {symbol:'\\lambda',desc:'Ridge regularization (0.01)'},
+       {symbol:'Y',desc:'One-hot target labels'},
+     ]
+   },
+   versions:[
+     {v:'ESN',arch:'1 reservoir (2000)',acc:92.3,dataset:'MNIST',ep:0,stable:true,change:'Single echo state network',status:'promising'},
+     {v:'Mega',arch:'4 reservoirs + HD + entropy',acc:94.1,dataset:'MNIST',ep:0,stable:true,change:'Diversity matters!',status:'promising'},
+     {v:'Ultra',arch:'8 reservoirs + 3 input reps + stacking',acc:97.28,dataset:'MNIST',ep:0,stable:true,change:'BEST: 8 diverse + meta-reservoir',status:'breakthrough'},
+     {v:'Ultra-Fashion',arch:'Same, Fashion-MNIST',acc:88.65,dataset:'Fashion-MNIST',ep:0,stable:true,change:'Generalizes to clothing',status:'breakthrough'},
+     {v:'Ultra-CIFAR',arch:'Same, CIFAR-10',acc:46.43,dataset:'CIFAR-10',ep:0,stable:true,change:'Needs spatial features',status:'limited'},
+   ],
+  },
+  {id:'004', name:'NoProp-Reservoir', abbr:'NPR', category:'gradient-free', type:'learning-rule',
+   status:'promising', date:'2026-04-03',
+   domains:['ml','neuro'],
+   crossRefs:{builds_on:['003'], enables:[], related_to:['001','002']},
+   principle:'Chain of reservoir-based denoisers where each block trains independently in closed form. ORIGINAL INVENTION.',
+   nextStep:'Fashion-MNIST (fix OOM) + PyTorch GPU impl',
+   bestResults:{MNIST:{metric:'accuracy',value:95.04,unit:'%'}},
+   paperStatus:'none',
+   equation:{
+     latex:'W_{out,b} = (H_b^T H_b + \\lambda I)^{-1} H_b^T y',
+     code:'W_out_b = solve(H_b.T @ H_b + lam * I, H_b.T @ y)',
+     components:[
+       {symbol:'H_b',desc:'Reservoir state of block b (fixed random dynamics)'},
+       {symbol:'b',desc:'Block index in denoising chain (1..8)'},
+       {symbol:'\\sigma_b',desc:'Noise level (decreasing schedule)'},
+     ]
+   },
+   versions:[
+     {v:'V1',arch:'6 blocks, 1000-dim',acc:91.80,dataset:'MNIST',ep:0,stable:true,change:'Proof of concept',status:'promising'},
+     {v:'V2',arch:'8 blocks, 1500-dim',acc:95.04,dataset:'MNIST',ep:0,stable:true,change:'Scaled up: +3.2%',status:'promising'},
+   ],
+  },
+  {id:'005',name:'Direct Local Learning',abbr:'DLL',category:'local-learning',type:'learning-rule',
+   status:'breakthrough',date:'2026-04-03',
+   domains:['ml','neuro'],
+   crossRefs:{builds_on:['001'],enables:[],related_to:['006','007','003']},
+   principle:'Each layer has its own classifier probe and optimizer. Gradient NEVER flows between layers (h.detach()). 3.3x faster on CPU for deep nets.',
+   nextStep:'GPT-2 scale language modeling',
+   bestResults:{MNIST:{metric:'accuracy',value:98.15,unit:'%'},['CIFAR-10']:{metric:'accuracy',value:56.47,unit:'%'}},
+   paperStatus:'draft',
+   equation:{
+     latex:'h = \\text{layer}(h);\\; \\mathcal{L} = \\text{CE}(\\text{probe}(h), y);\\; h \\leftarrow h.\\text{detach}()',
+     code:`for layer, probe, opt in zip(layers, probes, optimizers):
+    h = layer(h)                    # Forward local
+    loss = CE(probe(h), y)          # Local loss
+    loss.backward()                 # Gradient LOCAL only
+    opt.step()
+    h = h.detach()                  # CUT gradient`,
+     components:[
+       {symbol:'\\text{probe}',desc:'Per-layer MLP classifier (128 hidden)',latex:'\\text{probe}_l: \\mathbb{R}^{d_l} \\to \\mathbb{R}^C'},
+       {symbol:'h.\\text{detach}()',desc:'Cuts gradient flow between layers'},
+       {symbol:'\\text{BN}',desc:'BatchNorm per layer (local normalization)'},
+     ]
+   },
+   versions:[
+     {v:'V1',arch:'MLP [500,300]+linear probe',acc:97.71,dataset:'MNIST',ep:10,stable:true,change:'First DirectLocal',status:'breakthrough'},
+     {v:'V1-20ep',arch:'same, 20 epochs',acc:97.94,dataset:'MNIST',ep:20,stable:true,change:'More training',status:'breakthrough'},
+     {v:'V2',arch:'MLP probe+dropout',acc:98.15,dataset:'MNIST',ep:20,stable:true,change:'BEST: MLP probes',status:'breakthrough'},
+     {v:'V2-CIFAR',arch:'[2000,1000,500]+MLP probe',acc:56.47,dataset:'CIFAR-10',ep:20,stable:true,change:'Beats BP on CIFAR-10!',status:'breakthrough'},
+     {v:'V2-Deep',arch:'[1000,500,300,100]',acc:98.01,dataset:'MNIST',ep:15,stable:true,change:'5-layer deep',status:'breakthrough'},
+     {v:'V2-TF-4',arch:'ViT 4 blocks d=64',acc:96.21,dataset:'MNIST',ep:15,stable:true,change:'Transformer works!',status:'promising'},
+     {v:'V2-TF-8',arch:'ViT 8 blocks d=64',acc:96.22,dataset:'MNIST',ep:15,stable:true,change:'Deep Transformer',status:'promising'},
+   ],
+  },
+  {id:'006',name:'NoProp Diffusion',abbr:'NPD',category:'local-learning',type:'learning-rule',
+   status:'breakthrough',date:'2026-04-03',
+   domains:['ml','neuro'],
+   crossRefs:{builds_on:['004'],enables:[],related_to:['005','007']},
+   principle:'Each block independently denoises a noisy label embedding. No global forward OR backward pass. From DeepMind (arXiv:2503.24322, March 2025).',
+   nextStep:'Full flow-matching impl + CIFAR-10',
+   bestResults:{MNIST:{metric:'accuracy',value:97.89,unit:'%'}},
+   paperStatus:'draft',
+   equation:{
+     latex:'z_{\\text{pred}} = \\text{block}(\\text{features}, z_{\\text{noisy}}, t);\\; \\mathcal{L} = \\|z_{\\text{pred}} - z_0\\|^2',
+     code:`t = rand(0, 1)  # noise level
+z_noisy = cos(t*pi/2) * z_clean + sin(t*pi/2) * noise
+z_pred = block(features, z_noisy, t)
+loss = MSE(z_pred, z_clean) + CE(proj(z_pred), y)`,
+     components:[
+       {symbol:'z_0',desc:'Clean label embedding'},
+       {symbol:'t',desc:'Noise level in [0,1], cosine schedule'},
+       {symbol:'\\text{block}',desc:'Independent denoiser (MLP)'},
+     ]
+   },
+   versions:[
+     {v:'V1',arch:'4 blocks, hidden=256, label_dim=32',acc:97.89,dataset:'MNIST',ep:15,stable:true,change:'First implementation',status:'breakthrough'},
+   ],
+  },
+  {id:'007',name:'Mono-Forward',abbr:'MF',category:'local-learning',type:'learning-rule',
+   status:'breakthrough',date:'2026-04-03',
+   domains:['ml','neuro'],
+   crossRefs:{builds_on:[],enables:[],related_to:['005','006']},
+   principle:'Each layer classifies via learned projection matrix M. Simplest local learning rule. Paper (arXiv:2501.09238) reports BEATING backprop on CIFAR-10.',
+   nextStep:'CNN version to reproduce CIFAR-10 result',
+   bestResults:{MNIST:{metric:'accuracy',value:98.12,unit:'%'}},
+   paperStatus:'draft',
+   equation:{
+     latex:'G = h \\cdot M^T;\\; \\mathcal{L} = \\text{CE}(G, y)',
+     code:`h = relu(bn(linear(x_norm)))  # Forward
+logits = M(h)                  # Project to classes
+loss = CE(logits, y)           # Local loss
+h = h.detach()                 # CUT`,
+     components:[
+       {symbol:'M',desc:'Per-layer projection matrix (out_dim x n_classes)'},
+       {symbol:'G',desc:'Goodness: per-class activation scores'},
+       {symbol:'x_{\\text{norm}}',desc:'Input normalized by L2 norm'},
+     ]
+   },
+   versions:[
+     {v:'V1',arch:'MLP [500,300], lr=0.01',acc:97.95,dataset:'MNIST',ep:15,stable:true,change:'First implementation',status:'breakthrough'},
+     {v:'V1-Wide',arch:'MLP [1000,500,200], lr=0.005',acc:98.12,dataset:'MNIST',ep:15,stable:true,change:'Wider = better',status:'breakthrough'},
+   ],
   },
 ];
 
@@ -559,6 +737,21 @@ const EXPERIMENTS = [
   {phase:7,sol:'001',solName:'Entropy-Gated',name:'EG-MLP (flatten)',cat:'local-learning',type:'learning-rule',dataset:'CIFAR-10',metric:'accuracy',val:41.16,unit:'%',ep:80,stable:true,verdict:'Limited'},
   {phase:7,sol:'001',solName:'Entropy-Gated',name:'EG-Conv V1 (Sigmoid)',cat:'local-learning',type:'learning-rule',dataset:'CIFAR-10',metric:'accuracy',val:10.00,unit:'%',ep:4,stable:true,verdict:'Dead-end'},
   // 002 - Fixed-Point Substrate
+  // P01 - LVS Theory
+  // P01 LVS Theory - all computational/validation experiments
+  {phase:0,sol:'P01',solName:'LVS Theory',name:'9-test empirical validation',cat:'physics-inspired',type:'theory',dataset:'Multi-physics',metric:'tests_confirmed',val:6,unit:'/9',ep:'-',stable:true,verdict:'6 confirmed, 3 supported, 0 tension'},
+  {phase:0,sol:'P01',solName:'LVS Theory',name:'Higgs mass (Shaposhnikov-Wetterich)',cat:'physics-inspired',type:'theory',dataset:'LHC',metric:'prediction',val:126,unit:' GeV',ep:'-',stable:true,verdict:'Measured 125.25 - within 1 GeV'},
+  {phase:0,sol:'P01',solName:'LVS Theory',name:'Hadron mass fit (lattice QCD)',cat:'physics-inspired',type:'theory',dataset:'PDG',metric:'R2',val:99.9998,unit:'%',ep:'-',stable:true,verdict:'6 decimal place agreement'},
+  {phase:0,sol:'P01',solName:'LVS Theory',name:'Top quark quasi-fixed-point',cat:'physics-inspired',type:'theory',dataset:'Tevatron/LHC',metric:'deviation',val:97.3,unit:'%',ep:'-',stable:true,verdict:'y_t^2 ~ (8/9)g_3^2 within 2.7%'},
+  {phase:0,sol:'P01',solName:'LVS Theory',name:'Lambda prediction (Fisher-KPP)',cat:'physics-inspired',type:'theory',dataset:'Cosmology',metric:'ratio',val:1.08,unit:'x',ep:'-',stable:true,verdict:'Tautological - equals Friedmann. Dead end.'},
+  {phase:0,sol:'P01',solName:'LVS Theory',name:'d=3 uniqueness analysis',cat:'physics-inspired',type:'theory',dataset:'Theory',metric:'constraints',val:4,unit:'/4',ep:'-',stable:true,verdict:'Ehrenfest+quantum+Huygens+knots all select d=3'},
+  {phase:0,sol:'P01',solName:'LVS Theory',name:'Page-Wootters simulation (32-level)',cat:'physics-inspired',type:'theory',dataset:'Simulation',metric:'emergence',val:100,unit:'%',ep:'-',stable:true,verdict:'Time emerges from static state correctly'},
+  // F03 - FluidLM
+  {phase:0,sol:'F03',solName:'FluidLM',name:'FluidLM V4.2 PoC',cat:'transformer-alt',type:'llm',dataset:'TinyStories',metric:'loss',val:0,unit:'',ep:'-',stable:true,verdict:'Proof of concept: PDE trains'},
+  {phase:0,sol:'F03',solName:'FluidLM',name:'FluidLM V4.4.0 Major',cat:'transformer-alt',type:'llm',dataset:'TinyStories',metric:'loss',val:0,unit:'',ep:'-',stable:true,verdict:'LongConv + memory pump'},
+  {phase:0,sol:'F03',solName:'FluidLM',name:'FluidLM V4.4.8 +FluidWorld',cat:'transformer-alt',type:'llm',dataset:'TinyStories',metric:'loss',val:0,unit:'',ep:'-',stable:true,verdict:'Laplacian grad_loss from FluidWorld'},
+  {phase:0,sol:'F03',solName:'FluidLM',name:'FluidLM V4.5.0 (current)',cat:'transformer-alt',type:'llm',dataset:'TinyStories',metric:'loss',val:10.76,unit:'',ep:851,stable:true,verdict:'SwiGLU+Mamba+RMSNorm. Best loss 10.76'},
+  // 002 - Fixed-Point Substrate
   {phase:8,sol:'002',solName:'Fixed-Point Substrate',name:'FPS v0.1 PDE Temporal',cat:'physics-inspired',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:9.80,unit:'%',ep:5,stable:true,verdict:'PDE = random'},
   {phase:8,sol:'002',solName:'Fixed-Point Substrate',name:'FPS v0.2 PDE + pool',cat:'physics-inspired',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:19.80,unit:'%',ep:10,stable:true,verdict:'Diffusion destroys info'},
   {phase:8,sol:'002',solName:'Fixed-Point Substrate',name:'FPS v0.4a Fixed-Point',cat:'physics-inspired',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:76.20,unit:'%',ep:40,stable:true,verdict:'Paradigm shift works'},
@@ -567,6 +760,46 @@ const EXPERIMENTS = [
   {phase:8,sol:'002',solName:'Fixed-Point Substrate',name:'FPS v0.5 Full Power',cat:'physics-inspired',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:96.44,unit:'%',ep:50,stable:true,verdict:'All levers - 1.6% gap'},
   {phase:8,sol:'002',solName:'Fixed-Point Substrate',name:'FPS v0.5 Fashion-MNIST',cat:'physics-inspired',type:'learning-rule',dataset:'Fashion-MNIST',metric:'accuracy',val:77.15,unit:'%',ep:50,stable:true,verdict:'Promising'},
   {phase:8,sol:'002',solName:'Fixed-Point Substrate',name:'FPS v0.5 CIFAR-10',cat:'physics-inspired',type:'learning-rule',dataset:'CIFAR-10',metric:'accuracy',val:42.24,unit:'%',ep:60,stable:true,verdict:'Limited - needs multi-res'},
+  // 003 - Gradient-Free Reservoir Lab
+  {phase:9,sol:'003',solName:'Reservoir Lab',name:'Echo State Network (single)',cat:'gradient-free',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:92.3,unit:'%',ep:0,stable:true,verdict:'Baseline champion, 2.5s'},
+  {phase:9,sol:'003',solName:'Reservoir Lab',name:'Thermodynamic (CD)',cat:'gradient-free',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:88.9,unit:'%',ep:15,stable:true,verdict:'Strong physics-based'},
+  {phase:9,sol:'003',solName:'Reservoir Lab',name:'Direct Feedback Alignment',cat:'gradient-free',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:89.0,unit:'%',ep:20,stable:true,verdict:'Partial gradient-free'},
+  {phase:9,sol:'003',solName:'Reservoir Lab',name:'Local Contrastive',cat:'gradient-free',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:85.3,unit:'%',ep:20,stable:true,verdict:'SimCLR-like local'},
+  {phase:9,sol:'003',solName:'Reservoir Lab',name:'Mono-Forward (2025)',cat:'gradient-free',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:88.5,unit:'%',ep:20,stable:true,verdict:'Local classifiers per layer'},
+  {phase:9,sol:'003',solName:'Reservoir Lab',name:'NoProp Diffusion (2025)',cat:'gradient-free',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:80.0,unit:'%',ep:25,stable:true,verdict:'Block-independent'},
+  {phase:9,sol:'003',solName:'Reservoir Lab',name:'Mega Reservoir (4 diverse)',cat:'gradient-free',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:94.1,unit:'%',ep:0,stable:true,verdict:'Diversity is key'},
+  {phase:9,sol:'003',solName:'Reservoir Lab',name:'ULTRA RESERVOIR (8+stacking)',cat:'gradient-free',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:97.28,unit:'%',ep:0,stable:true,verdict:'BEST: -1.2% from backprop'},
+  {phase:9,sol:'003',solName:'Reservoir Lab',name:'Ultra Reservoir Fashion-MNIST',cat:'gradient-free',type:'learning-rule',dataset:'Fashion-MNIST',metric:'accuracy',val:88.65,unit:'%',ep:0,stable:true,verdict:'Breakthrough: -0.4% from BP'},
+  {phase:9,sol:'003',solName:'Reservoir Lab',name:'Ultra Reservoir CIFAR-10',cat:'gradient-free',type:'learning-rule',dataset:'CIFAR-10',metric:'accuracy',val:46.43,unit:'%',ep:0,stable:true,verdict:'Limited: needs spatial features'},
+  // 004 - NoProp-Reservoir (ORIGINAL)
+  {phase:9,sol:'004',solName:'NoProp-Reservoir',name:'NoProp+Reservoir V1',cat:'gradient-free',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:91.8,unit:'%',ep:0,stable:true,verdict:'ORIGINAL: reservoir denoiser chain'},
+  {phase:9,sol:'004',solName:'NoProp-Reservoir',name:'NoProp+Reservoir V2 (scaled)',cat:'gradient-free',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:95.04,unit:'%',ep:0,stable:true,verdict:'ORIGINAL: 8 blocks 1500-dim'},
+  // 005 - Direct Local Learning (Session 2)
+  {phase:10,sol:'005',solName:'DirectLocal',name:'DirectLocal v1 (linear probe)',cat:'local-learning',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:97.71,unit:'%',ep:10,stable:true,verdict:'First DirectLocal - matches BP'},
+  {phase:10,sol:'005',solName:'DirectLocal',name:'DirectLocal v2 (MLP probe)',cat:'local-learning',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:98.15,unit:'%',ep:20,stable:true,verdict:'BEST: beats BP (98.06%)'},
+  {phase:10,sol:'005',solName:'DirectLocal',name:'DirectLocal Deep (5 layers)',cat:'local-learning',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:98.01,unit:'%',ep:15,stable:true,verdict:'Scales to depth'},
+  {phase:10,sol:'005',solName:'DirectLocal',name:'DirectLocal v2 CIFAR-10',cat:'local-learning',type:'learning-rule',dataset:'CIFAR-10',metric:'accuracy',val:56.47,unit:'%',ep:20,stable:true,verdict:'Beats BP (56.38%) on CIFAR-10'},
+  {phase:10,sol:'005',solName:'DirectLocal',name:'DirectLocal ViT 4-block',cat:'local-learning',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:96.21,unit:'%',ep:15,stable:true,verdict:'Transformer works: -0.8% gap'},
+  {phase:10,sol:'005',solName:'DirectLocal',name:'DirectLocal ViT 8-block',cat:'local-learning',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:96.22,unit:'%',ep:15,stable:true,verdict:'Deep Transformer: -0.98% gap'},
+  // 005 - Failed gradient-free attempts
+  {phase:10,sol:'005',solName:'DirectLocal',name:'ProtoLocal (gradient-free)',cat:'gradient-free',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:44.26,unit:'%',ep:10,stable:true,verdict:'Gradient-free barrier: prototypes fail'},
+  {phase:10,sol:'005',solName:'DirectLocal',name:'ContrastLocal (gradient-free)',cat:'gradient-free',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:35.57,unit:'%',ep:10,stable:true,verdict:'Contrastive signal too weak'},
+  {phase:10,sol:'005',solName:'DirectLocal',name:'HebbFF (gradient-free)',cat:'gradient-free',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:10.54,unit:'%',ep:10,stable:true,verdict:'Hebbian FF diverges'},
+  {phase:10,sol:'005',solName:'DirectLocal',name:'HSIC pure (gradient-free)',cat:'gradient-free',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:38.97,unit:'%',ep:15,stable:true,verdict:'Linear kernel insufficient'},
+  {phase:10,sol:'005',solName:'DirectLocal',name:'HSIC+Probe hybrid',cat:'hybrid',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:42.06,unit:'%',ep:15,stable:true,verdict:'HSIC features unhelpful'},
+  // 005 - Round 1-2 failed algorithms
+  {phase:10,sol:'005',solName:'DirectLocal',name:'EqProp+Momentum',cat:'local-learning',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:87.49,unit:'%',ep:10,stable:true,verdict:'Local Hebbian - surpassed by DLL'},
+  {phase:10,sol:'005',solName:'DirectLocal',name:'EqProp-Tuned',cat:'local-learning',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:70.07,unit:'%',ep:10,stable:true,verdict:'Too slow to converge'},
+  {phase:10,sol:'005',solName:'DirectLocal',name:'NOVA belief diffusion',cat:'local-learning',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:48.90,unit:'%',ep:5,stable:true,verdict:'Belief diffusion too slow'},
+  {phase:10,sol:'005',solName:'DirectLocal',name:'HESP Hybrid',cat:'hybrid',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:49.40,unit:'%',ep:10,stable:true,verdict:'EqProp+error clash'},
+  {phase:10,sol:'005',solName:'DirectLocal',name:'Thermodynamic LL',cat:'local-learning',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:70.0,unit:'%',ep:5,stable:true,verdict:'Backprop in disguise'},
+  // 006 - NoProp Diffusion
+  {phase:10,sol:'006',solName:'NoProp Diffusion',name:'NoProp 4-block (cosine)',cat:'local-learning',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:97.89,unit:'%',ep:15,stable:true,verdict:'Block-independent: -0.33% gap'},
+  // 007 - Mono-Forward
+  {phase:10,sol:'007',solName:'Mono-Forward',name:'Mono-Forward [500,300]',cat:'local-learning',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:97.95,unit:'%',ep:15,stable:true,verdict:'Simplest local rule'},
+  {phase:10,sol:'007',solName:'Mono-Forward',name:'Mono-Forward Wide [1000,500,200]',cat:'local-learning',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:98.12,unit:'%',ep:15,stable:true,verdict:'Wider = closer to BP'},
+  // 006 - SCFF failed implementation
+  {phase:10,sol:'006',solName:'NoProp Diffusion',name:'SCFF (implementation failed)',cat:'gradient-free',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:10.49,unit:'%',ep:15,stable:true,verdict:'Paper: 98.7%, our impl: 10.49%'},
 ];
 
 const FAILED = [
@@ -588,6 +821,35 @@ const FAILED = [
   {name:'FPS scalar input projection',cat:'physics-inspired',acc:'92.7%',fail:'Channel diversity too low',lesson:'Each channel needs unique spatial receptive field, not just a scalar',revisit:'No'},
   {name:'FPS single-scale Laplacian',cat:'physics-inspired',acc:'85.2%',fail:'No long-range coupling',lesson:'Multi-scale (3+5+7) needed for spatial interactions',revisit:'No'},
   {name:'FPS linear readout',cat:'physics-inspired',acc:'85.2%',fail:'Saturates early',lesson:'Nonlinear Hebbian readout recovers 11% more from same features',revisit:'No'},
+  // 003 - Gradient-Free Reservoir Lab failed approaches
+  {name:'Forward-Forward (003 reimpl)',cat:'gradient-free',acc:'17.4%',fail:'Simplified impl, goodness threshold',lesson:'Paper reports 98.5% with full architecture',revisit:'Yes (Self-Contrastive FF)'},
+  {name:'Hebbian + WTA',cat:'gradient-free',acc:'8.8%',fail:'No error signal',lesson:'Finds features but cant discriminate',revisit:'No'},
+  {name:'Simulated Annealing',cat:'gradient-free',acc:'14.4%',fail:'Weight space too large',lesson:'Global random search needs structure',revisit:'No'},
+  {name:'Tropical Geometry',cat:'gradient-free',acc:'12.6%',fail:'Max-plus not discriminative',lesson:'Beautiful theory, weak practice alone',revisit:'Maybe (+ reservoir)'},
+  {name:'Entropy-Gated standalone',cat:'gradient-free',acc:'17.2%',fail:'Good regulator, bad teacher',lesson:'Works as component not standalone',revisit:'No standalone'},
+  {name:'Fractal/Chaos Attractor',cat:'gradient-free',acc:'17.9%',fail:'Attractor basins dont separate classes',lesson:'Perturbation search too noisy',revisit:'Low'},
+  {name:'Simplified DTP',cat:'gradient-free',acc:'8.5%',fail:'Inverse mapping didnt learn',lesson:'Paper reports 99.2% with proper impl',revisit:'Yes (PyTorch)'},
+  {name:'Simplified DLL (ICML 2025)',cat:'gradient-free',acc:'12.5%',fail:'Apical-basal interaction too crude',lesson:'Paper reports ~98%',revisit:'Yes (from GitHub)'},
+  {name:'Three-Factor Neuromodulated',cat:'gradient-free',acc:'11.7%',fail:'Reward signal too sparse',lesson:'Needs per-neuron eligibility',revisit:'Maybe'},
+  {name:'Prospective Configuration',cat:'gradient-free',acc:'36.0%',fail:'Target inference doesnt converge',lesson:'Needs proper variational inference',revisit:'Yes'},
+  {name:'v-PuNN (p-adic)',cat:'gradient-free',acc:'16.55%',fail:'No native p-adic arithmetic',lesson:'Ultrametric structure essential. Paper: 99.96%',revisit:'YES - high priority'},
+  {name:'Ultra Reservoir CIFAR-10',cat:'gradient-free',acc:'46.4%',fail:'No spatial features',lesson:'Flat reservoir cant see 2D patterns',revisit:'Yes (conv reservoir)'},
+  {name:'Conv Reservoir CIFAR-10',cat:'gradient-free',acc:'OOM',fail:'50k images * patches * reservoirs',lesson:'Need PyTorch + GPU batching',revisit:'Yes'},
+  // Session 2 - Local Learning Paradigm Search
+  {name:'Thermodynamic LL (S2)',cat:'local-learning',acc:'~70%',fail:'Target propagation = backprop light',lesson:'Back-projection of targets is just backprop in disguise',revisit:'No'},
+  {name:'Predictive Coding (S2)',cat:'local-learning',acc:'NaN',fail:'Numerical instability',lesson:'Inference iterations unstable without careful tuning',revisit:'Maybe'},
+  {name:'FF + InfoGeom (S2)',cat:'local-learning',acc:'NaN',fail:'Numerical instability',lesson:'Natural gradient + FF needs careful Fisher estimation',revisit:'Maybe'},
+  {name:'Reaction-Diffusion NN (S2)',cat:'physics-inspired',acc:'~40%',fail:'PDE convergence too slow',lesson:'Same PDE dead-end confirmed again',revisit:'No'},
+  {name:'Cellular Automata NN (S2)',cat:'novel-arch',acc:'~85%*',fail:'Readout needs backprop',lesson:'Not truly local if readout uses global gradient',revisit:'No'},
+  {name:'NOVA belief diffusion (S2)',cat:'local-learning',acc:'48.9%',fail:'Diffusion too slow',lesson:'Belief propagation needs many steps, convergence uncertain',revisit:'Maybe'},
+  {name:'EqProp-Tuned (S2)',cat:'local-learning',acc:'70.1%',fail:'Gap too large',lesson:'2 relaxation phases = 2x compute for mediocre results',revisit:'No'},
+  {name:'HESP Hybrid (S2)',cat:'hybrid',acc:'49.4%',fail:'EqProp+error clash',lesson:'Mixing physical equilibrium with error signals = conflict',revisit:'No'},
+  {name:'ProtoLocal (S2)',cat:'gradient-free',acc:'44.3%',fail:'Prototypes not discriminative',lesson:'Class prototypes too coarse for deep feature learning',revisit:'Maybe (RBF kernel)'},
+  {name:'HebbFF (S2)',cat:'gradient-free',acc:'10.5%',fail:'Hebbian FF diverges',lesson:'Hebbian gating of goodness is numerically unstable',revisit:'No'},
+  {name:'ContrastLocal (S2)',cat:'gradient-free',acc:'35.6%',fail:'Signal degrades over epochs',lesson:'Without gradient, contrastive push/pull loses discrimination',revisit:'No'},
+  {name:'HSIC pure (S2)',cat:'gradient-free',acc:'39.0%',fail:'Linear kernel insufficient',lesson:'HSIC needs RBF kernel for nonlinear features (O(B^2) cost)',revisit:'Maybe'},
+  {name:'HSIC+Probe (S2)',cat:'hybrid',acc:'42.1%',fail:'HSIC features unhelpful for probe',lesson:'HSIC-learned features dont help downstream classifier',revisit:'No'},
+  {name:'SCFF impl (S2)',cat:'gradient-free',acc:'10.5%',fail:'Implementation incomplete',lesson:'Paper reports 98.7% - needs full augmentation pipeline',revisit:'Yes (full reimpl)'},
 ];
 
 const LESSONS = [
@@ -605,6 +867,19 @@ const LESSONS = [
   'Anderson acceleration cuts fixed-point iterations from 11 to 7 for free.',
   'Multi-scale Laplacian (3+5+7) is essential - single-scale misses long-range spatial coupling.',
   'Learnable spatial filters (retinal receptors) give each channel a unique view - massive improvement over scalar projection.',
+  // From 003 Gradient-Free Reservoir Lab
+  'Reservoir computing is the gradient-free king. Random fixed dynamics + ridge readout beats all complex local rules.',
+  'Diversity > depth for gradient-free. 8 diverse shallow reservoirs >> 1 deep network.',
+  'HD encoding is a free lunch. Random bipolar projection adds robustness with zero trainable params.',
+  'Simplified paper implementations are misleading. DTP/DLL/FF/v-PuNN report 98%+ but need exact framework.',
+  'CIFAR needs spatial features. No flat/global approach works on 2D data without conv preprocessing.',
+  'Block independence + reservoir = powerful combo. NoProp+Reservoir 95.04% exceeds both individually.',
+  // Session 2 - Local Learning Paradigm
+  'The gradient-free barrier is real. All attempts (Hebbian, prototypes, HSIC, contrastive) cap at ~44% MNIST.',
+  'Per-layer probes are the winning pattern. DirectLocal/MonoForward/NoProp all use per-layer classifiers with h.detach().',
+  'CPU advantage grows with depth. DirectLocal 3.3x faster than backprop on CPU for 12 layers.',
+  'DirectLocal works on Transformers. 96.22% vs 97.20% BP on ViT-8 proves it extends beyond MLPs.',
+  'Local gradient (1-layer) is necessary. Zero-gradient approaches all fail. The minimum viable gradient is intra-layer only.',
 ];
 
 const ROADMAP = [
@@ -620,8 +895,76 @@ const ROADMAP = [
   {sol:'F01',p:2,text:'Integrate EG local learning into VLA encoder'},
   {sol:'F02',p:1,text:'Benchmark FluidWorld prediction accuracy (MSE, FID)'},
   {sol:'F02',p:2,text:'Compare to Dreamer, IRIS, other world models'},
-  {sol:'F03',p:1,text:'Benchmark FluidLM perplexity on standard corpora'},
-  {sol:'F03',p:2,text:'Test local learning for LM pre-training'},
+  {sol:'F03',p:1,text:'Compare perplexity to same-size Transformer on TinyStories (fair baseline)'},
+  {sol:'F03',p:1,text:'Confirm V4.5.0 (SwiGLU+Mamba) breaks through loss plateau'},
+  {sol:'F03',p:1,text:'Train on larger corpus (OpenWebText ~40GB)'},
+  {sol:'F03',p:2,text:'100M and 300M parameter variants - establish scaling laws'},
+  {sol:'F03',p:2,text:'Needle-in-Haystack test at 4K/16K/64K context length'},
+  {sol:'F03',p:2,text:'Formal proof: adaptive compute correlates with input difficulty'},
+  {sol:'F03',p:3,text:'Persistent h-state across segments (cross-document memory)'},
+  {sol:'F03',p:3,text:'Extended dilations [1, 4, 16, 64, 256, 1024]'},
+  {sol:'F03',p:3,text:'RK4 integrator (higher-order stability vs Forward Euler)'},
+  {sol:'F03',p:3,text:'Adjoint backprop for VRAM reduction'},
+  {sol:'F03',p:4,text:'ONNX export + INT8 quantization'},
+  {sol:'F03',p:4,text:'Rust inference engine (~5MB binary)'},
+  {sol:'F03',p:4,text:'Explore EG (001) entropy-gated plasticity for FluidLM training'},
+  {sol:'F03',p:4,text:'Unified PDE foundation with FluidWorld (language + vision)'},
+  // 003 - Gradient-Free Reservoir Lab
+  {sol:'003',p:1,text:'Convolutional Reservoir for CIFAR-10 - PyTorch impl with patches + Gabor + spatial pooling'},
+  {sol:'003',p:1,text:'Proper v-PuNN implementation with native p-adic arithmetic (paper: 99.96%)'},
+  {sol:'003',p:2,text:'Scale Ultra Reservoir to ImageNet (PyTorch + GPU)'},
+  {sol:'003',p:2,text:'Combine with EG (001): entropy-gated reservoir selection'},
+  {sol:'003',p:2,text:'Combine with FPS (002): fixed-point dynamics as reservoir'},
+  {sol:'003',p:3,text:'p-Adic VAPO + Reservoir: ultrametric encoding of reservoir states'},
+  {sol:'003',p:3,text:'Write paper on diverse multi-reservoir ensemble paradigm'},
+  // 004 - NoProp-Reservoir (ORIGINAL)
+  {sol:'004',p:1,text:'Fix OOM for Fashion-MNIST (chunked ridge regression)'},
+  {sol:'004',p:1,text:'PyTorch implementation for GPU acceleration'},
+  {sol:'004',p:1,text:'Cosine noise schedule (from diffusion models literature)'},
+  {sol:'004',p:2,text:'Convolutional variant for CIFAR-10 (patch-level reservoirs)'},
+  {sol:'004',p:2,text:'Theoretical analysis: why does the denoising chain converge?'},
+  {sol:'004',p:3,text:'Write NeurIPS/ICML paper on NoProp-Reservoir architecture'},
+  {sol:'004',p:3,text:'Online version with recursive least squares for streaming data'},
+  {sol:'004',p:4,text:'Neuromorphic implementation on SpiNNaker/Loihi'},
+  // 005 - Direct Local Learning
+  {sol:'005',p:1,text:'Test DirectLocal on GPT-2 scale language modeling'},
+  {sol:'005',p:1,text:'Multi-threaded C++ implementation (1 thread per layer) for true parallelism'},
+  {sol:'005',p:2,text:'ImageNet with ResNet/ViT architectures'},
+  {sol:'005',p:2,text:'Combine with NoProp denoising for fully decoupled blocks'},
+  {sol:'005',p:3,text:'FPGA/neuromorphic hardware benchmark'},
+  {sol:'005',p:3,text:'Pipeline parallelism integration for distributed training'},
+  // 006 - NoProp Diffusion
+  {sol:'006',p:1,text:'Full flow-matching objective from DeepMind paper'},
+  {sol:'006',p:1,text:'CIFAR-10 and CIFAR-100 benchmarks'},
+  {sol:'006',p:2,text:'Continuous-time variant (NoProp-CT) for memory savings'},
+  {sol:'006',p:2,text:'Compare memory usage vs backprop at scale'},
+  {sol:'006',p:3,text:'Apply to Transformer blocks (NoProp-Transformer)'},
+  // 007 - Mono-Forward
+  {sol:'007',p:1,text:'CNN version to reproduce paper CIFAR-10 result (56.99% beating BP)'},
+  {sol:'007',p:1,text:'Compare with DirectLocal on identical architectures'},
+  {sol:'007',p:2,text:'Test on Transformer blocks'},
+  {sol:'007',p:2,text:'Investigate why MF converges to better minima than BP (paper claim)'},
+  {sol:'007',p:3,text:'Energy/compute measurement vs backprop (reproduce 41% energy reduction)'},
+  // P01 Roadmap - from discussion.md exhaustive analysis
+  {sol:'P01',p:1,text:'Rewrite paper v3: LVS = synthesis of AS+PW+CW, cite Shaposhnikov/Eichhorn/Connes/Barbour/Rovelli'},
+  {sol:'P01',p:1,text:'Derive ONE falsifiable prediction beyond Standard Model (best candidate: dt_min ~ hbar/(m_nu c^2))'},
+  {sol:'P01',p:1,text:'Restructure paper: open with Wheeler-DeWitt core, not photon argument (which is pedagogical only)'},
+  {sol:'P01',p:1,text:'Grade every assertion: (a) established+formalized, (b) coherent not formalized, (c) speculative'},
+  {sol:'P01',p:2,text:'Build toy model: config space + stationarity + emergent time + determined constants'},
+  {sol:'P01',p:2,text:'Implement full 2-loop Shaposhnikov-Wetterich (reproduce m_H = 126 GeV exactly)'},
+  {sol:'P01',p:2,text:'Attempt m_top prediction from gravitational irrelevance (Eichhorn-Held approach)'},
+  {sol:'P01',p:2,text:'Predict hadron mass ratios from stationarity first-principles'},
+  {sol:'P01',p:2,text:'Track DESI BAO (2024-2025): w != -1 hints -> variable Lambda -> LVS testable prediction'},
+  {sol:'P01',p:3,text:'Formalize crystallization cosmology: derive expansion rate, compare to Lambda'},
+  {sol:'P01',p:3,text:'Derive N_gen = 3 from fixed point (follow Eichhorn et al.)'},
+  {sol:'P01',p:3,text:'Derive gauge group SU(3)xSU(2)xU(1) from stationarity (connect Connes NCG)'},
+  {sol:'P01',p:3,text:'Formalize LVS -> FPS bridge (vacuum fixed point -> computational substrate)'},
+  {sol:'P01',p:3,text:'Submit to FQXi / PhilSci-Archive / arXiv (hep-th or gr-qc)'},
+  {sol:'P01',p:4,text:'Contact Eichhorn, Hoehn, or Rovelli for expert feedback'},
+  {sol:'P01',p:4,text:'LVS implications for quantum error correction'},
+  {sol:'P01',p:4,text:'Fixed-point structure in lattice-based PQC cryptography'},
+  {sol:'P01',p:4,text:'Explore non-dimensional framework (causal sets, spin networks, amplituhedron)'},
+  {sol:'P01',p:4,text:'Track Euclid results (2025-2030): confirms/refutes variable Lambda'},
   {sol:'global',p:1,text:'Transformer alternatives - local competition instead of attention'},
   {sol:'global',p:2,text:'Gradient-free at scale - evolutionary + entropy gating'},
   {sol:'global',p:3,text:'Cross-pollinate: EG features in VLA/LM pipelines'},
@@ -723,7 +1066,9 @@ function filterSolutions(){
 }
 
 function showSolution(id){
-  const s=SOLUTIONS.find(x=>x.id===id);if(!s)return;
+  const s=SOLUTIONS.find(x=>x.id===id);
+  if(!s){console.error('Solution not found:',id);return}
+  try{
   const p=document.getElementById('detailPanel');p.classList.remove('hidden');
 
   // === KPI ROW ===
@@ -747,7 +1092,7 @@ function showSolution(id){
     if(s.equation.components){
       eqHtml+=`<table style="margin:8px 0"><tr><th>Symbol</th><th>Description</th><th>Equation</th></tr>`;
       s.equation.components.forEach(c=>{
-        eqHtml+=`<tr><td><span class="katex-render" data-tex="${escapeAttr(c.symbol)}"></span></td><td>${c.desc}</td><td><span class="katex-render" data-tex="${escapeAttr(c.latex)}"></span></td></tr>`;
+        eqHtml+=`<tr><td><span class="katex-render" data-tex="${escapeAttr(c.symbol||'')}"></span></td><td>${c.desc||''}</td><td>${c.latex?`<span class="katex-render" data-tex="${escapeAttr(c.latex)}"></span>`:''}</td></tr>`;
       });
       eqHtml+=`</table>`;
     }
@@ -876,10 +1221,11 @@ function showSolution(id){
   // Init sort on dynamically generated tables in the detail panel
   initTableSort(p);
   p.scrollIntoView({behavior:'smooth',block:'start'});
+  }catch(err){console.error('showSolution error for',id,err);document.getElementById('detailPanel').innerHTML='<p style="color:var(--red)">Error rendering solution: '+err.message+'</p>';}
 }
 
 function escapeHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-function escapeAttr(s){return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function escapeAttr(s){if(!s)return '';return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 
 // ============================================================
 // GENERIC TABLE SORTING - works on any <table> in the page
@@ -1389,19 +1735,38 @@ function paperBadge(status){
 // status: draft | review | published
 // content: markdown string (embedded here, or fetched from file)
 const WRITEUPS = [
-  // Example - remove or replace with real writeups
-  // {
-  //   id:'wu-001-intro',
-  //   title:'The Entropy-Gated Learning Paradigm',
-  //   type:'article',
-  //   sol:'001',
-  //   solName:'Entropy-Gated Learning',
-  //   date:'2026-04-03',
-  //   status:'draft',
-  //   abstract:'How entropy-gated plasticity achieves 97.46% on MNIST without backpropagation.',
-  //   tags:['local-learning','entropy','no-backprop'],
-  //   content:`## Introduction\n\nWhat if neurons could decide for themselves when to learn?\n\n...`
-  // },
+  {id:'wu-P01-itfromfix',
+   title:'It from Fix: Why Reality Might Be a Fixed Point',
+   type:'essay', sol:'P01', solName:'LVS Theory', date:'2024', status:'draft',
+   abstract:'What if the universe doesn\'t evolve? What if reality is simply the stable configuration of something deeper?',
+   tags:['LVS','fixed-point','physics','philosophy','time-emergence','english'],
+   file:'solutions/P01_lvs_theory/writeups/it_from_fix.md',
+   content:null
+  },
+  {id:'wu-P01-dupointfixe',
+   title:'Du Point Fixe au Point de Rupture',
+   type:'book', sol:'P01', solName:'LVS Theory', date:'2026-04', status:'draft',
+   abstract:'Journal complet d\'une exploration intellectuelle. 20 chapitres, 63 000 caracteres. De l\'etincelle du photon a l\'epilogue.',
+   tags:['LVS','physics','french','intellectual-journal','photon','fixed-point','symmetry-breaking'],
+   file:'solutions/P01_lvs_theory/writeups/Du Point Fixe au Point de Rupture.md',
+   content:null
+  },
+  {id:'wu-P01-pause',
+   title:'Et si l\'Univers etait sur Pause ?',
+   type:'article', sol:'P01', solName:'LVS Theory', date:'2026-03', status:'draft',
+   abstract:'Comment les PDE, des exercices de pensee et des confirmations experimentales ont relie le photon, le vide quantique et l\'expansion en un seul principe.',
+   tags:['LVS','physics','french','vulgarisation','photon','vacuum','expansion','fixed-point'],
+   file:'solutions/P01_lvs_theory/writeups/Et_si_lunivers_etait_en_pause.md',
+   content:null
+  },
+  {id:'wu-001-neurons',
+   title:'What if Neurons Could Decide When to Learn?',
+   type:'article', sol:'001', solName:'Entropy-Gated Learning', date:'2026-04-03', status:'draft',
+   abstract:'The story of how entropy-gated plasticity achieved 97.46% on MNIST without backpropagation - and what it means for the future of AI training.',
+   tags:['local-learning','entropy','no-backprop','paradigm-shift','english'],
+   file:'solutions/001_entropy_gated_learning/writeups/overview.md',
+   content:null
+  },
 ];
 
 // Minimal markdown to HTML (no external dep)
@@ -1501,29 +1866,43 @@ function openWriteup(id){
   const solInfo=w.sol?`<span style="color:var(--accent)">${solLabel(w.sol)}</span> | `:'';
   const tagHtml=(w.tags||[]).map(t=>`<code style="font-size:11px">${t}</code>`).join(' ');
 
-  reader.innerHTML=`
-    <div class="wu-reader-head">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px">
-        <div>
-          <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px">
-            <span class="wu-type-badge wu-type-${w.type}">${w.type}</span>
-            <span class="badge badge-${w.status==='published'?'breakthrough':w.status==='review'?'promising':'limited'}">${w.status}</span>
+  function renderBody(md){
+    reader.innerHTML=`
+      <div class="wu-reader-head">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px">
+          <div>
+            <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px">
+              <span class="wu-type-badge wu-type-${w.type}">${w.type}</span>
+              <span class="badge badge-${w.status==='published'?'breakthrough':w.status==='review'?'promising':'limited'}">${w.status}</span>
+            </div>
+            <h2 style="border:none;padding:0;margin:0;font-size:24px">${w.title}</h2>
+            <div style="color:var(--text2);font-size:13px;margin-top:6px">${solInfo}${w.date} | ${tagHtml}</div>
           </div>
-          <h2 style="border:none;padding:0;margin:0;font-size:24px">${w.title}</h2>
-          <div style="color:var(--text2);font-size:13px;margin-top:6px">${solInfo}${w.date} | ${tagHtml}</div>
+          <button class="filter-btn" onclick="document.getElementById('wuReader').classList.add('hidden')" style="font-size:16px;padding:4px 10px">&times;</button>
         </div>
-        <button class="filter-btn" onclick="document.getElementById('wuReader').classList.add('hidden')" style="font-size:16px;padding:4px 10px">&times;</button>
       </div>
-    </div>
-    <div class="wu-reader-body">${mdToHtml(w.content)}</div>`;
+      <div class="wu-reader-body">${mdToHtml(md)}</div>`;
+    reader.querySelectorAll('.katex-render').forEach(el=>{
+      try{katex.render(el.dataset.tex,el,{throwOnError:false,displayMode:el.dataset.display==='true'})}catch(e){el.textContent=el.dataset.tex}
+    });
+    reader.querySelectorAll('pre code').forEach(b=>hljs.highlightElement(b));
+    reader.scrollIntoView({behavior:'smooth',block:'start'});
+  }
 
-  // Render KaTeX in writeup
-  reader.querySelectorAll('.katex-render').forEach(el=>{
-    try{katex.render(el.dataset.tex,el,{throwOnError:false,displayMode:el.dataset.display==='true'})}catch(e){el.textContent=el.dataset.tex}
-  });
-  // Highlight code
-  reader.querySelectorAll('pre code').forEach(b=>hljs.highlightElement(b));
-  reader.scrollIntoView({behavior:'smooth',block:'start'});
+  // Priority: 1) WRITEUP_CONTENT (built from .md), 2) fetch file, 3) embedded content
+  const builtContent = (typeof WRITEUP_CONTENT !== 'undefined') && WRITEUP_CONTENT[id];
+  if(builtContent){
+    renderBody(builtContent);
+  } else if(w.file){
+    reader.innerHTML='<div style="padding:40px;text-align:center;color:var(--text2)">Loading...</div>';
+    fetch(w.file).then(r=>{
+      if(!r.ok) throw new Error(r.status);
+      return r.text();
+    }).then(md=>renderBody(md))
+    .catch(()=>renderBody(w.content||'*Could not load. Run:* `python build_writeups.py` *to rebuild.*'));
+  } else {
+    renderBody(w.content||'*No content.*');
+  }
 }
 
 // ============================================================

@@ -1,0 +1,26 @@
+{
+  "solution_id": "007",
+  "experiment": "Round 6: Mono-Forward on MNIST",
+  "date": "2026-04-03",
+  "dataset": "MNIST",
+  "type": "learning-rule",
+  "metric": "accuracy",
+  "unit": "%",
+  "best_value": 98.12,
+  "baseline_name": "Backprop MLP",
+  "baseline_value": 98.22,
+  "epochs": 15,
+  "stable": true,
+  "variants": [
+    {"name": "Mono-Forward (784-500-300-10)", "accuracy": 97.95, "lr": 0.01, "epochs": 15},
+    {"name": "Mono-Forward Wide (784-1000-500-200-10)", "accuracy": 98.12, "lr": 0.005, "epochs": 15}
+  ],
+  "reference_paper": {
+    "title": "Mono-Forward: Backpropagation-Free Algorithm for Efficient Neural Network Training",
+    "arxiv": "2501.09238",
+    "year": 2025,
+    "reported_cifar10_mf": 56.99,
+    "reported_cifar10_bp": 54.25,
+    "note": "Paper reports MF BEATS backprop on CIFAR-10 CNN"
+  }
+}

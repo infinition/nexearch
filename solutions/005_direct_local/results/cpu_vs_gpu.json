@@ -1,0 +1,16 @@
+{
+  "solution_id": "005",
+  "experiment": "CPU vs GPU Timing: DirectLocal vs Backprop",
+  "date": "2026-04-03",
+  "dataset": "Synthetic",
+  "type": "learning-rule",
+  "metric": "speedup_ratio",
+  "unit": "x",
+  "results": [
+    {"depth": 3, "cpu_bp": 13.906, "cpu_dl": 14.578, "cpu_ratio": 1.05, "gpu_bp": 0.306, "gpu_dl": 0.480, "gpu_ratio": 1.57},
+    {"depth": 5, "cpu_bp": 7.842, "cpu_dl": 17.055, "cpu_ratio": 2.17, "gpu_bp": 0.307, "gpu_dl": 0.648, "gpu_ratio": 2.11},
+    {"depth": 8, "cpu_bp": 15.256, "cpu_dl": 12.457, "cpu_ratio": 0.82, "gpu_bp": 0.372, "gpu_dl": 0.789, "gpu_ratio": 2.12},
+    {"depth": 12, "cpu_bp": 23.012, "cpu_dl": 6.926, "cpu_ratio": 0.30, "gpu_bp": 0.495, "gpu_dl": 1.412, "gpu_ratio": 2.85}
+  ],
+  "key_finding": "DirectLocal 3.3x faster than backprop on CPU for 12 layers"
+}

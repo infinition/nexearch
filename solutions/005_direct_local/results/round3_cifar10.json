@@ -1,0 +1,15 @@
+{
+  "solution_id": "005",
+  "experiment": "Round 3: DirectLocal on CIFAR-10",
+  "date": "2026-04-03",
+  "dataset": "CIFAR-10",
+  "type": "learning-rule",
+  "metric": "accuracy",
+  "unit": "%",
+  "best_value": 56.47,
+  "baseline_name": "Backprop MLP",
+  "baseline_value": 56.38,
+  "epochs": 20,
+  "stable": true,
+  "note": "DirectLocal v2 slightly beats backprop on CIFAR-10 MLP"
+}

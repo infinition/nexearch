@@ -1,0 +1,46 @@
+{
+  "solution_id": "008",
+  "experiment": "Phase 2 - SymBa Optimization (d128, 4 layers, cosine LR)",
+  "date": "2026-04-03",
+  "dataset": "Sequential MNIST (28 rows x 28 pixels)",
+  "type": "learning-rule",
+  "metric": "accuracy",
+  "unit": "%",
+  "note": "Run interrupted at epoch 19/30 due to GPU OOM (concurrent processes). Curve still climbing.",
+  "results": [
+    {
+      "name": "Mamba-FF V2 SymBa (d128, 4L, cosine LR)",
+      "best_value": 95.39,
+      "final_value": 95.39,
+      "epochs_completed": 19,
+      "epochs_planned": 30,
+      "d_model": 128,
+      "d_state": 32,
+      "n_layers": 4,
+      "expand": 2,
+      "batch_size": 128,
+      "lr": 0.003,
+      "lr_schedule": "cosine_annealing",
+      "lr_min": 1e-5,
+      "optimizer": "AdamW",
+      "weight_decay": 1e-4,
+      "grad_clip": 1.0,
+      "loss_type": "symba",
+      "neg_type": "hybrid",
+      "total_params": 521088,
+      "backprop": false,
+      "bptt": false,
+      "status": "best_so_far",
+      "history": [83.24,86.94,88.37,89.93,89.60,90.70,92.42,92.79,92.77,93.90,93.66,94.39,93.31,92.40,94.16,94.21,95.37,94.41,95.39],
+      "loss_history": [0.7146,0.3416,0.3076,0.2951,0.2780,0.2400,0.2197,0.2146,0.2011,0.1976,0.1811,0.1818,0.1652,0.1655,0.1553,0.1476,0.1415,0.1403,0.1294],
+      "lr_history": ["2.99e-03","2.97e-03","2.93e-03","2.87e-03","2.80e-03","2.71e-03","2.62e-03","2.51e-03","2.38e-03","2.25e-03","2.11e-03","1.97e-03","1.82e-03","1.66e-03","1.51e-03","1.35e-03","1.19e-03","1.04e-03","8.97e-04"]
+    }
+  ],
+  "key_findings": [
+    "SymBa loss converges faster than threshold-based FF (92.4% at ep7 vs 87.7% for V1)",
+    "Larger model (d128 vs d64) gives +4% at same epoch count",
+    "Cosine LR annealing critical for late-epoch gains",
+    "Loss still decreasing at cutoff (0.129) - more epochs would improve further",
+    "Accuracy oscillates +/-1.5% between epochs (FF characteristic) but trend is upward"
+  ]
+}

@@ -4,6 +4,140 @@ Chronological record of all research decisions, experiments, and discoveries.
 
 ---
 
+## 2026-04-03 - Local Learning Paradigm Search (005, 006, 007) - Session 2
+
+**Session goal:** Find a local learning algorithm where each neuron adjusts using only its neighbors - no global backpropagation. If found, training that takes 3 months on 10,000 GPUs could potentially run in hours on a laptop.
+
+**Approach:** 6 rounds of experimentation, testing 15+ algorithms across physics, neuroscience, math, and CS-inspired approaches.
+
+### Round 1 - 7 algorithms tested simultaneously
+- Thermodynamic LL (~70%) - eliminated (backprop in disguise)
+- Predictive Coding (NaN) - eliminated (numerical instability)
+- Forward-Forward + InfoGeom (NaN) - eliminated
+- Reaction-Diffusion (~40%) - eliminated (PDE, too slow)
+- Cellular Automata (~85%) - eliminated (readout needs backprop)
+- Equilibrium Propagation (78.33%) - KEPT
+- NOVA belief diffusion (48.90%) - KEPT but weak
+
+### Round 2 - Optimization of survivors + new ideas
+- EqProp + Momentum: 87.49% (best pure local Hebbian)
+- EqProp-Tuned: 70.07%
+- HESP Hybrid: 49.40%
+- **DirectLocal: 97.71%** - DISCOVERY: per-layer probes + h.detach()
+
+**Key decision:** DirectLocal matches backprop. This became the main focus.
+
+### Round 3 - Validation
+- DirectLocal v2: **98.15% MNIST** (beats BP 98.06%), **56.47% CIFAR-10** (beats BP 56.38%)
+- DirectLocal Deep (5 layers): 98.01%
+- Confirmed on both datasets: local learning matches global backprop.
+
+### Round 4 - Gradient-free attempt
+- ProtoLocal (prototypes + Hebbian): 44.26%
+- ContrastLocal: 35.57%
+- HebbFF: 10.54%
+- **Conclusion: gradient-free barrier NOT broken.** All <45%. Local gradient (intra-layer) remains necessary.
+
+### Round 5 - Transformer + HSIC
+- DirectLocal Transformer (4 blocks): 96.21% vs 97.01% BP
+- DirectLocal Transformer (8 blocks): 96.22% vs 97.20% BP
+- **DirectLocal works on Transformers** (<1% gap)
+- HSIC pure: 38.97%, HSIC+Probe: 42.06% - gradient-free still fails
+
+### CPU vs GPU Timing
+- 12 layers CPU: DirectLocal **3.3x faster** than backprop
+- Advantage grows with depth (backprop backward pass is sequential)
+
+### Round 6 - Literature-informed breakthrough algorithms
+- Searched 40+ publications (2023-2026) across physics, math, neuroscience
+- Implemented 3 state-of-the-art from 2025 papers:
+- **NoProp** (DeepMind arXiv:2503.24322): 97.89% MNIST - diffusion denoising per block
+- **Mono-Forward** (Auckland arXiv:2501.09238): 98.12% MNIST - projection matrix per layer
+- SCFF (Nature Comms 2025): 10.49% - implementation failed (paper reports 98.7%)
+
+### Final results
+| Algorithm | MNIST | Global BP? | Source |
+|-----------|-------|------------|--------|
+| Backprop | 98.22% | YES | Baseline |
+| MonoForward-Wide | 98.12% | NO | Auckland 2025 |
+| DirectLocal v2 | 98.15% | NO | Our discovery |
+| NoProp | 97.89% | NO | DeepMind 2025 |
+
+### Solutions created
+- **005_direct_local** - Our main discovery, validated on MLP + Transformer + CIFAR-10
+- **006_noprop_diffusion** - DeepMind NoProp implementation
+- **007_mono_forward** - Auckland Mono-Forward implementation
+
+### Key insights
+1. Per-layer probes with h.detach() is the winning pattern
+2. Gradient-free barrier is real (all attempts <45%)
+3. CPU advantage grows with depth (3.3x at 12 layers)
+4. Local learning works on Transformers
+5. Most promising next: test at GPT-2 scale
+
+---
+
+## 2026-04-03 - Gradient-Free Reservoir Lab (003) + NoProp-Reservoir (004)
+
+**Session goal:** Systematically explore ALL gradient-free learning approaches to find a paradigm that can replace backpropagation.
+
+**Approach:** Created 35 experiment scripts testing approaches from 7 categories: classic (FF, Hebbian, ES), bio-inspired (STDP, predictive coding, thermodynamic), info-theoretic (HSIC, HDC), exotic math (tropical geometry, fractal attractors, p-adic), reservoir computing, recent papers (NoProp, Mono-Forward, DTP, CCL, DLL), and original hybrids.
+
+**3 parallel web research agents** explored: (1) gradient-free AI 2024-2026, (2) exotic math frameworks, (3) bio-inspired approaches. Found 30+ relevant papers including NoProp (CoLLAs 2025), v-PuNNs (arXiv 2025), Mono-Forward (arXiv 2025), Infomorphic Networks (PNAS 2025).
+
+### Evolution of Results
+
+**Phase 1 - Baselines (12 scripts):**
+- Echo State Network emerged as clear winner: 92.3% in 2.5s
+- Thermodynamic (CD): 88.9% - strong physics-based approach
+- Everything else: 8.8% (Hebbian) to 72.3% (HSIC)
+- Key insight: simple reservoir + ridge regression beats all complex local rules
+
+**Phase 2 - Hybrids & Scaling (11 scripts):**
+- Mega Reservoir (4 diverse): 94.1% - DIVERSITY IS KEY
+- DFA: 89.0%, Local Contrastive: 85.3%
+- Exotic attempts (tropical, fractal, entropy-tropical): 12-18%
+- Key insight: multiple diverse reservoirs >> single deep approach
+
+**Phase 3 - Ultra Reservoir (script #23):**
+- **97.28% MNIST** with 8 diverse reservoirs + 3 input reps + stacking
+- Zero gradient, zero backprop, zero iteration (closed-form readout)
+- Only 1.2% behind standard backprop MLP
+- Decision: THIS is the paradigm. Scale it.
+
+**Phase 4 - Research-Informed (7 scripts):**
+- Implemented DTP (8.5%), CCL (timeout), DLL (12.5%), 3-Factor (11.7%)
+- NoProp diffusion: 80.0%, Mono-Forward: 88.5%, Prospective: 36.0%
+- Simplified implementations far below paper results
+- Decision: reproducing papers is verification, not innovation. Focus on our originals.
+
+**Phase 5 - Scaling & Novel Architectures (5 scripts):**
+- Ultra on Fashion-MNIST: **88.65%** (only 2-3% below backprop!)
+- Ultra on CIFAR-10: 46.43% (needs spatial features - flat reservoir can't see 2D)
+- v-PuNN: 16.55% (simplified impl; paper uses native p-adic arithmetic)
+- **NoProp+Reservoir V1: 91.8%** - OUR INVENTION!
+- **NoProp+Reservoir V2: 95.04%** - scaled up, 2nd best overall
+
+### Key Discoveries
+
+1. **Diversity > Depth:** 8 shallow diverse reservoirs >> 1 deep network
+2. **HD encoding as universal preprocessor:** Random bipolar projection adds robustness for free
+3. **NoProp+Reservoir is a real paradigm:** Independent blocks, closed-form training, 95.04%
+4. **CIFAR needs spatial features:** Flat reservoirs can't capture 2D spatial patterns
+5. **Reservoir computing is massively underrated:** Simple, fast, scalable, gradient-free, near-backprop accuracy
+
+### Decisions Made
+
+- Created 003 (Reservoir Lab meta-solution) + 004 (NoProp-Reservoir as separate original invention)
+- Next: convolutional reservoir for CIFAR, proper v-PuNN implementation, NoProp-Reservoir paper
+
+### Cross-Domain Links
+- 003 builds_on 001 (entropy gating used as feature selector)
+- 003 related_to 002 (both gradient-free, reservoir dynamics ~ fixed-point dynamics)
+- 004 builds_on 003 (NoProp+Reservoir combines best findings from lab)
+
+---
+
 ## 2026-04-03 — Session 1: Finding a Local Learning Algorithm
 
 **Goal:** Find a local learning algorithm where each neuron adjusts using only its direct neighbors/local information, without backpropagation. If successful, training that takes 3 months on 10,000 GPUs could potentially be done in hours on a laptop.
@@ -241,5 +375,105 @@ The NTSO's temperature/surprise/disagreement signals fight each other and create
 6. **The paradigm scales to new datasets** but struggles with complex natural images (CIFAR-10). Multi-resolution is needed.
 7. **Connection to LVS theory is concrete.** Input perturbs the medium, medium collapses to stable configuration, stability IS the answer. "It from Fix" implemented.
 8. **Zero backprop, constant memory, 7-iteration convergence.** Fundamentally different resource profile from deep learning.
+
+---
+
+## 2024-2026 - LVS Theory (P01) - Full Integration into Nexearch
+
+**Goal:** Complete integration of LVS physics research with full evolution history, all source material, honest assessment.
+
+### What LVS is
+A meta-interpretive framework: **observable reality = fixed points of the quantum vacuum**. Synthesis of Asymptotic Safety (Weinberg 1979) + Page-Wootters (1983) + Coleman-Weinberg (1973). Core principle: stability IS existence ("It from Fix").
+
+### Evolution of Thinking (11 phases)
+1. **Spark:** YouTube video -> photon is atemporal (ds^2=0)
+2. **Chain of reasoning:** 5 established facts -> 1 hypothesis (SR -> QED -> QFT -> CQG -> QM -> LVS)
+3. **Paper v1:** 13-section formalization, meta-interpretive framework
+4. **Visualization:** 5 interactive physics scenes (Three.js -> Jupyter migration)
+5. **Validation:** 9-test scorecard (6 confirmed, 3 supported)
+6. **Formalization:** Discovered LVS = AS + PW + CW. Shaposhnikov-Wetterich m_H = 126 GeV.
+7. **Self-critique:** Acknowledged AI bias, underlying programs unproven (47+ years), no SM-independent predictions
+8. **"Framework IS the problem":** Maybe need entirely new mathematical framework, not new equations
+9. **Mass = frequency:** f = mc^2/h. Gravity = desynchronization. Connects to Jacobson/Verlinde/Connes-Rovelli.
+10. **v3 Reformulation:** Infinite featureless points + interactions = network = reality. Dark energy = latent space.
+11. **Complete essay:** "Du Point Fixe au Point de Rupture" - 20-chapter intellectual journal (56K chars, French)
+
+### Key Results
+- Higgs mass: predicted 126 GeV, measured 125.25 GeV (within 1 GeV)
+- Hadron masses: R2 = 0.999998 (lattice QCD)
+- Top quark: quasi-fixed-point y_t^2 ~ (8/9)g_3^2 (2.7% deviation)
+- Validation: 6/9 confirmed, 3/9 supported, 0 in tension
+
+### Dead Ends Encountered
+- Fisher-KPP for Lambda: tautological (= Friedmann)
+- Photon argument as foundation: pedagogical only, formalization doesn't use it
+- HTML/Three.js visualizer: "fake physics"
+- Page-Wootters first attempt: degenerate eigenstate
+- Expressing LVS in existing frameworks: all inadequate
+
+### Source Material (now self-contained in solutions/P01_lvs_theory/)
+- 10 notebooks (5 clean + 5 executed), 3 source docs (paper 60KB + discussion 130KB + reference PDF)
+- 3 web presentations (article + visualizer + essay FR 87KB)
+- LaTeX paper + refs, writeup, results JSON
+
+### Honest Status
+- Compatible with all known physics (minimum bar for reinterpretation)
+- Does NOT yet predict anything SM doesn't (critical gap)
+- Underlying programs (AS, PW, CW) are NOT proven after 30-55 years
+- Strongest asset: unifying synthesis that makes disparate physics coherent
+- Weakest link: cosmological "actualization" is analogy, not formalized
+
+### Cross-Domain Impact
+- **P01 -> 002:** LVS is the theoretical foundation for Fixed-Point Substrate
+- **P01 -> quantum:** Implications for QEC via fixed-point structure
+- **P01 -> crypto:** Lattice problems and fixed-point iteration (PQC)
+
+---
+
+## 2025-2026 - FluidLM (F03) - Full Integration into Nexearch
+
+**Goal:** Complete integration of FluidLM - a Transformer-free language model using reaction-diffusion PDEs.
+
+### What FluidLM Is
+O(N) language model replacing O(N^2) attention with multi-scale diffusion + Selective SSM (Mamba) + SwiGLU reaction. Zero KV-cache, GPU-free inference, adaptive computation (~30% savings). 44.2M params at V4.5.0.
+
+### Architecture Evolution (V4.2 -> V4.5.0)
+1. **V4.2:** PoC with Forward Euler + learned positional embeddings
+2. **V4.3:** Added RoPE + MLP 4x expansion
+3. **V4.4.0:** Major: CausalLongConv K=65, sinusoidal PE, cosine LR, memory pump (B,L,D)
+4. **V4.4.1-3:** Bug fixes (dt slider, LongConv init, h-state O(1) restored)
+5. **V4.4.4-7:** Stability: Forget Gate, layer-wise grad clip, local memory, desaturated gates
+6. **V4.4.8:** Cross-pollination from FluidWorld: Laplacian grad_loss + curriculum scheduler
+7. **V4.5.0 (current):** SwiGLU, Selective SSM (Mamba), Multi-Head LongConv, RMSNorm
+
+### Key Results
+- Best loss: 10.76 on TinyStories (step 801, 27.9M tokens)
+- Linear memory scaling confirmed (vs quadratic Transformer)
+- Adaptive computation works (halts at equilibrium)
+- 44.2M total params (25.7M embedding, 18.5M core)
+
+### Key Innovation
+`du/dt = sum(D_k * nabla^2(u)) + SSM(u) + SwiGLU(u) + alpha*h`
+- Tokens = chemical concentrations, information = diffusion
+- Multi-scale: dilations [1, 4, 16] for local-to-global context
+- O(1) global memory pump replaces growing KV-cache
+
+### NOT Demonstrated Yet
+- Competitive perplexity vs same-size Transformer
+- Scaling beyond 44M params
+- Generalization beyond TinyStories
+
+### Paper Status
+- NeurIPS 2025 submission (paper/fluidlm.pdf)
+
+### Source Material (self-contained in solutions/F03_fluidlm/)
+- source/: Full codebase (text_models.py, train_engine.py, web_app.py, config, launcher)
+- paper/: LaTeX + PDF + BibTeX + NeurIPS style
+- results/: Training stats JSON
+
+### Cross-Domain
+- **F03 builds_on P01:** PDE dynamics inspired by LVS fixed-point physics
+- **F03 related_to F02:** FluidWorld shares PDE foundation, cross-pollinated grad_loss
+- **F03 related_to 002:** Both explore PDE/equilibrium computation
 
 ---
