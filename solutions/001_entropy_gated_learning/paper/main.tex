@@ -1,0 +1,60 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage[margin=1in]{geometry}
+
+\title{Entropy-Gated Local Learning: Near-Backprop Accuracy Without Backpropagation}
+\author{Fabien}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We introduce Entropy-Gated Learning (EG), a local learning algorithm where each neuron
+controls its own plasticity based on its output entropy. Neurons with high entropy
+(uncertain) learn rapidly; neurons with low entropy (confident) stabilize. Combined with
+reconstruction error, decorrelation, and sparsity signals -- all computed locally -- EG
+achieves 97.46\% accuracy on MNIST, within 0.58\% of backpropagation (98.04\%), using
+zero gradient propagation through feature layers.
+\end{abstract}
+
+\section{Introduction}
+TODO: Problem statement -- backprop is non-local, biologically implausible, memory-intensive.
+Motivation -- local learning rules that scale.
+
+\section{Related Work}
+TODO: Forward-Forward (Hinton 2022), Predictive Coding, Equilibrium Propagation,
+Hebbian learning, Target Propagation. 16 approaches tested, most fail.
+
+\section{Method}
+
+The core update rule for neuron $i$:
+\begin{equation}
+\Delta W_i = \sigma\bigl(k(H_i - \theta)\bigr) \cdot \bigl(\alpha_1 R_i + \alpha_2 D_i + \alpha_3 S_i\bigr)
+\end{equation}
+where:
+\begin{align}
+H_i &= -\frac{1}{B}\sum_{b=1}^{B}\bigl[y_i^{(b)}\log y_i^{(b)} + (1-y_i^{(b)})\log(1-y_i^{(b)})\bigr] \\
+R_i &= y^\top(x - yW)/B \quad \text{(reconstruction)} \\
+D_i &= -(C_{\text{offdiag}} \cdot W) \quad \text{(decorrelation)} \\
+S_i &= -(\bar{y}_i - \tau)W \quad \text{(sparsity)}
+\end{align}
+
+\section{Experiments}
+TODO: MNIST results table (V1 through V4), CIFAR-10 results, comparison to backprop.
+
+\section{Analysis}
+TODO: Why entropy gating works (implicit curriculum), why 2 layers optimal,
+why data augmentation hurts, stability analysis.
+
+\section{Conclusion}
+TODO: Summary, 0.58\% gap on MNIST, open challenge on CIFAR-10, future directions.
+
+\bibliographystyle{plain}
+\bibliography{refs}
+
+\end{document}

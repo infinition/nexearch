@@ -1,0 +1,30 @@
+{
+  "dataset": "cifar10",
+  "architecture": "FPS-v0.5 96ch 384h 8x8reg",
+  "category": "physics-inspired",
+  "type": "learning-rule",
+  "metric": "accuracy",
+  "unit": "%",
+  "epochs": 60,
+  "total_params": 5225962,
+  "best_value": 42.24,
+  "baseline_value": 85.83,
+  "baseline_name": "Backprop Conv",
+  "gpu_hours": 0.93,
+  "convergence_iters": 7,
+  "history": [
+    {"epoch": 1, "test_acc": 23.9, "time": 67.1},
+    {"epoch": 5, "test_acc": 21.7, "time": 54.4},
+    {"epoch": 10, "test_acc": 28.2, "time": 55.0},
+    {"epoch": 15, "test_acc": 31.4, "time": 53.0},
+    {"epoch": 20, "test_acc": 34.5, "time": 54.1},
+    {"epoch": 25, "test_acc": 36.7, "time": 58.8},
+    {"epoch": 30, "test_acc": 38.5, "time": 56.4},
+    {"epoch": 35, "test_acc": 39.8, "time": 57.1},
+    {"epoch": 40, "test_acc": 40.4, "time": 63.8},
+    {"epoch": 45, "test_acc": 41.0, "time": 57.0},
+    {"epoch": 50, "test_acc": 41.6, "time": 55.5},
+    {"epoch": 55, "test_acc": 42.0, "time": 55.0},
+    {"epoch": 60, "test_acc": 42.24, "time": 52.8}
+  ]
+}

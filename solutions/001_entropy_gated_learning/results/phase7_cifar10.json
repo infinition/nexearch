@@ -1,0 +1,90 @@
+{
+  "experiment": "Phase 7 — CIFAR-10 (The Real Test)",
+  "date": "2026-04-03",
+  "dataset": "CIFAR-10",
+  "epochs": 100,
+  "device": "RTX 4070 Ti",
+  "purpose": "Test if EG paradigm transfers from MNIST to harder color images",
+  "backprop_reference": {
+    "name": "Backprop Conv Baseline",
+    "architecture": "Conv(3→64)→ReLU→Pool→Conv(64→128)→ReLU→Pool→FC(8192→500)→ReLU→Dropout(0.3)→FC(500→128)→ReLU→FC(128→10)",
+    "optimizer": "Adam lr=1e-3, cosine scheduler",
+    "best_accuracy": 0.8583,
+    "best_epoch": 43,
+    "time_per_epoch": "24-30s"
+  },
+  "results": [
+    {
+      "name": "EG-MLP (flatten CIFAR to 3072-dim vector)",
+      "architecture": "EG [3072 → 1000 → 500] + MLP probe [500 → 128 → 10]",
+      "activation": "sigmoid",
+      "best_accuracy": 0.4116,
+      "epochs_run": 80,
+      "time_per_epoch": "100-350s (very slow: 3072x1000 matrix)",
+      "trajectory": "Slow climb to 41%, then plateau",
+      "stable": true,
+      "verdict": "limited",
+      "failure_reason": "No spatial inductive bias. Flattening 32x32x3 images destroys spatial structure. Also 3072-dim input makes EG layers huge and slow.",
+      "lesson": "MLP on CIFAR-10 is fundamentally limited. Need convolutional architecture."
+    },
+    {
+      "name": "EG-Conv V1 (Sigmoid activation in conv layers)",
+      "architecture": "EGConv(3→64→128→256, sigmoid) + Pool + EGDense(4096→500) + MLP probe",
+      "activation": "sigmoid",
+      "best_accuracy": 0.10,
+      "epochs_run": 4,
+      "time_per_epoch": "97-183s",
+      "trajectory": "Stuck at 10% (random chance) from epoch 1",
+      "stable": true,
+      "history": [
+        {"epoch": 1, "accuracy": 0.10},
+        {"epoch": 2, "accuracy": 0.10},
+        {"epoch": 3, "accuracy": 0.10},
+        {"epoch": 4, "accuracy": 0.10}
+      ],
+      "verdict": "DEAD-END — killed after 4 epochs",
+      "failure_reason": "Sigmoid activation in conv layers causes saturation. All neurons output ~0.5, entropy is maximal everywhere, plasticity is uniform. No differentiation between neurons → no learning.",
+      "lesson": "CRITICAL: Sigmoid works for dense MNIST but KILLS conv layers. Sigmoid squashes spatial feature maps to uniform values. Must use ReLU for conv."
+    },
+    {
+      "name": "EG-Conv V2 (ReLU + Local Batch Normalization)",
+      "architecture": "EGConv(3→64→128→256, ReLU+LocalBN) + Pool + EGDense(4096→500, ReLU) + MLP probe",
+      "activation": "relu",
+      "local_batch_norm": true,
+      "hebbian_type": "channel-wise average correlation (simplified)",
+      "best_accuracy": 0.4822,
+      "best_epoch": 6,
+      "epochs_run": 100,
+      "time_per_epoch": "40-70s",
+      "trajectory": "Fast rise to 48% by ep 6, then plateau/slow decline to ~45%",
+      "stable": true,
+      "history": [
+        {"epoch": 1, "accuracy": 0.4119},
+        {"epoch": 3, "accuracy": 0.4643},
+        {"epoch": 6, "accuracy": 0.4822, "note": "PEAK"},
+        {"epoch": 10, "accuracy": 0.4674},
+        {"epoch": 20, "accuracy": 0.4702},
+        {"epoch": 30, "accuracy": 0.4611},
+        {"epoch": 50, "accuracy": 0.4545},
+        {"epoch": 70, "accuracy": 0.4426},
+        {"epoch": 100, "accuracy": 0.4546}
+      ],
+      "verdict": "Limited — significant learning but huge gap to backprop (85.83%)",
+      "failure_reason": "Channel-wise average Hebbian (average over spatial dims, then correlate) loses spatial information. The conv filters learn rough feature detectors but can't capture fine spatial patterns.",
+      "lesson": "Need PATCH-LEVEL Hebbian: correlate each output position with its specific receptive field, not channel means.",
+      "improvements_suggested": [
+        "Patch-level Hebbian: unfold input, correlate with output per position",
+        "Multi-scale features: skip connections between EG conv layers",
+        "Deeper with layer-wise pretraining: freeze layer 1, train layer 2, etc."
+      ]
+    }
+  ],
+  "gap_analysis": {
+    "backprop_reference": 0.8583,
+    "best_local": 0.4822,
+    "gap": 0.3761,
+    "gap_percent": "37.6%",
+    "reason": "Conv layers need spatial correlations that channel-average Hebbian can't provide"
+  },
+  "decision": "CIFAR-10 remains open challenge. MNIST is solved. Next: better spatial Hebbian for conv."
+}

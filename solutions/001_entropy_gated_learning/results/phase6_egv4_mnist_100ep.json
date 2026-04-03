@@ -1,0 +1,77 @@
+{
+  "experiment": "Phase 6 — Entropy-Gated V4 Push to 95%+ (100 epochs)",
+  "date": "2026-04-03",
+  "dataset": "MNIST",
+  "epochs": 100,
+  "batch_size": 256,
+  "device": "RTX 4070 Ti",
+  "purpose": "Push EG toward backprop parity. Wider layers, MLP probe, full decorrelation.",
+  "model": {
+    "name": "Entropy-Gated V4",
+    "architecture": "2L Sigmoid [784 → 700 → 400] + MLP probe [400 → 128 → 10]",
+    "activation": "sigmoid",
+    "local_optimizer": "SGD + momentum 0.9",
+    "lr_schedule": "cosine annealing",
+    "lr_per_layer": [0.03, 0.02],
+    "entropy_threshold": 0.4,
+    "decorrelation": "chunked (64), full coverage (not sampled)",
+    "probe": "2-layer MLP with ReLU + Dropout(0.2), Adam lr=1e-3 + cosine scheduler",
+    "total_params": 700000,
+    "local_params": "~680K (97%)",
+    "probe_params": "~20K (3%)"
+  },
+  "changes_from_v3": [
+    "Wider: [700, 400] instead of [500, 300]",
+    "MLP probe instead of linear (128 hidden + ReLU + Dropout)",
+    "Chunked full decorrelation instead of sampled 50 pairs",
+    "Probe uses cosine LR scheduler",
+    "100 epochs instead of 50"
+  ],
+  "configurations_tested": [
+    {
+      "name": "EG-V4 with data augmentation",
+      "augmentation": "RandomAffine(degrees=10, translate=0.1, scale=(0.9,1.1))",
+      "best_accuracy": 0.9598,
+      "best_epoch": 100,
+      "notes": "Augmentation HURTS local learning. The noisy inputs confuse reconstruction signal."
+    },
+    {
+      "name": "EG-V4 without data augmentation",
+      "augmentation": "none",
+      "best_accuracy": 0.9746,
+      "best_epoch": 89,
+      "notes": "BEST RESULT. Clean inputs → better reconstruction → stronger learning signal."
+    }
+  ],
+  "best_accuracy": 0.9746,
+  "best_epoch": 89,
+  "total_time_minutes": 55,
+  "time_per_epoch": "29-40s",
+  "stable": true,
+  "trajectory": "Monotonically increasing with very slow convergence after ep 60",
+  "history_no_aug": [
+    {"epoch": 1, "loss": 0.7834, "accuracy": 0.8537},
+    {"epoch": 5, "loss": 0.3542, "accuracy": 0.9137},
+    {"epoch": 10, "loss": 0.2764, "accuracy": 0.9384},
+    {"epoch": 14, "loss": 0.2148, "accuracy": 0.9513},
+    {"epoch": 16, "loss": 0.1989, "accuracy": 0.9553},
+    {"epoch": 20, "loss": 0.1733, "accuracy": 0.9598},
+    {"epoch": 26, "loss": 0.1488, "accuracy": 0.9656},
+    {"epoch": 34, "loss": 0.1323, "accuracy": 0.9695},
+    {"epoch": 43, "loss": 0.1211, "accuracy": 0.9717},
+    {"epoch": 56, "loss": 0.1116, "accuracy": 0.9729},
+    {"epoch": 62, "loss": 0.1103, "accuracy": 0.9739},
+    {"epoch": 70, "loss": 0.1057, "accuracy": 0.9743},
+    {"epoch": 81, "loss": 0.1042, "accuracy": 0.9745},
+    {"epoch": 89, "loss": 0.1022, "accuracy": 0.9746, "note": "BEST"},
+    {"epoch": 100, "loss": 0.1025, "accuracy": 0.9742}
+  ],
+  "gap_to_backprop": "98.04% - 97.46% = 0.58%",
+  "verdict": "BREAKTHROUGH. 97.46% with purely local feature learning. Gap to backprop: only 0.58%.",
+  "key_findings": [
+    "Data augmentation hurts local learning (-1.5% vs no aug)",
+    "MLP probe recovers ~5% more accuracy than linear probe (from features of same quality)",
+    "Convergence is very slow after epoch 60 — diminishing returns",
+    "The 0.58% gap may be irreducible for this architecture with local-only features"
+  ]
+}

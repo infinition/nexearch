@@ -1,0 +1,116 @@
+{
+  "experiment": "Phase 3 — Focused Benchmark of Top Candidates",
+  "date": "2026-04-03",
+  "dataset": "MNIST",
+  "epochs": 5,
+  "batch_size": 512,
+  "device": "RTX 4070 Ti",
+  "purpose": "Quick 5-epoch shootout to identify the 2 best local algorithms",
+  "results": [
+    {
+      "name": "Backprop (reference)",
+      "best_accuracy": 0.9804,
+      "history": [
+        {"epoch": 1, "accuracy": 0.9564},
+        {"epoch": 2, "accuracy": 0.9696},
+        {"epoch": 3, "accuracy": 0.9759},
+        {"epoch": 4, "accuracy": 0.9790},
+        {"epoch": 5, "accuracy": 0.9804}
+      ]
+    },
+    {
+      "name": "Forward-Forward (Hinton)",
+      "category": "local-learning",
+      "best_accuracy": 0.098,
+      "stable": false,
+      "history": [{"epoch": 1, "loss": "NaN", "accuracy": 0.098}],
+      "verdict": "failed — NaN from epoch 1"
+    },
+    {
+      "name": "NTSO (multi-signal plasticity)",
+      "category": "local-learning",
+      "core_equation": "plast = sigmoid(0.5*(surprise-1) + 0.3*(entropy-0.5) + 0.2*disagreement)",
+      "architecture": "NTSO [784, 500, 500, 250] + probe",
+      "best_accuracy": 0.7771,
+      "stable": true,
+      "history": [
+        {"epoch": 1, "loss": 2.3222, "accuracy": 0.4586},
+        {"epoch": 2, "loss": 2.0196, "accuracy": 0.4439},
+        {"epoch": 3, "loss": 1.6636, "accuracy": 0.6953},
+        {"epoch": 4, "loss": 1.2465, "accuracy": 0.7618},
+        {"epoch": 5, "loss": 0.8313, "accuracy": 0.7771}
+      ],
+      "verdict": "promising — strong progression, moved to Phase 4",
+      "notes": "Combines surprise + entropy + neighbor disagreement + temperature. Rising fast at epoch 5."
+    },
+    {
+      "name": "Learning by Disagreement",
+      "category": "gradient-free",
+      "core_equation": "dW = disagreement * sign(neighbor_mean - y) * x",
+      "architecture": "LBD [784, 500, 500, 250] + probe",
+      "best_accuracy": 0.098,
+      "stable": false,
+      "history": [{"epoch": 1, "loss": "NaN", "accuracy": 0.098}],
+      "failure_reason": "No reconstruction error signal → weights random-walk → NaN",
+      "verdict": "failed",
+      "lesson": "Topology-only signals (who disagrees with whom) are insufficient. Need SOME form of prediction error."
+    },
+    {
+      "name": "Entropy-Gated V1",
+      "category": "local-learning",
+      "core_equation": "dW = sigmoid(5*(H-0.5)) * (recon + decorr + variance)",
+      "architecture": "EG [784, 500, 500] + linear probe",
+      "best_accuracy": 0.8685,
+      "stable": true,
+      "history": [
+        {"epoch": 1, "loss": 1.8563, "accuracy": 0.7340},
+        {"epoch": 2, "loss": 1.0333, "accuracy": 0.8045},
+        {"epoch": 3, "loss": 0.7456, "accuracy": 0.8330},
+        {"epoch": 4, "loss": 0.6229, "accuracy": 0.8540},
+        {"epoch": 5, "loss": 0.5514, "accuracy": 0.8685}
+      ],
+      "verdict": "WINNER — best local algorithm in shootout. Moved to deep optimization.",
+      "notes": "86.85% in just 5 epochs with simple linear probe. Stable, every epoch improves. Clear winner."
+    },
+    {
+      "name": "Gradient-Free Contrastive Neighbors",
+      "category": "gradient-free",
+      "core_equation": "dW = pull*(y2-y1)*x1 + push*(y1-y2)*x1 (similarity preservation)",
+      "architecture": "GFCN [784, 500, 500] + probe",
+      "best_accuracy": 0.1135,
+      "stable": false,
+      "history": [
+        {"epoch": 1, "loss": 20.087, "accuracy": 0.1135},
+        {"epoch": 2, "loss": 92.080, "accuracy": 0.1032},
+        {"epoch": 3, "loss": 90.427, "accuracy": 0.1032},
+        {"epoch": 4, "loss": 87.907, "accuracy": 0.0974},
+        {"epoch": 5, "loss": 102.653, "accuracy": 0.1028}
+      ],
+      "failure_reason": "Loss explodes. Cosine similarity is too noisy as a learning signal. Weight norms diverge.",
+      "verdict": "failed",
+      "lesson": "Geometric neighborhood preservation alone can't drive learning. Needs error signal."
+    },
+    {
+      "name": "Spectral Resonance",
+      "category": "physics-inspired",
+      "core_equation": "response = drive * sigmoid(frequency), dW = hebb - frequency_competition",
+      "architecture": "SR [784, 500, 500] + probe",
+      "best_accuracy": 0.098,
+      "stable": false,
+      "history": [{"epoch": 1, "loss": "NaN", "accuracy": 0.098}],
+      "failure_reason": "Frequency parameters drift to extreme values → NaN",
+      "verdict": "failed",
+      "lesson": "Frequency specialization without anchoring diverges."
+    }
+  ],
+  "ranking": [
+    {"rank": 1, "name": "Backprop (reference)", "accuracy": 0.9804},
+    {"rank": 2, "name": "Entropy-Gated V1", "accuracy": 0.8685},
+    {"rank": 3, "name": "NTSO (multi-signal)", "accuracy": 0.7771},
+    {"rank": 4, "name": "Gradient-Free Contrastive", "accuracy": 0.1135},
+    {"rank": 5, "name": "Forward-Forward", "accuracy": 0.098},
+    {"rank": 5, "name": "Learning by Disagreement", "accuracy": 0.098},
+    {"rank": 5, "name": "Spectral Resonance", "accuracy": 0.098}
+  ],
+  "decision": "Promote Entropy-Gated and NTSO to Phase 4 deep optimization. Kill all others."
+}

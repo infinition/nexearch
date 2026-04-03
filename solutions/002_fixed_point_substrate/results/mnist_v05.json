@@ -1,0 +1,28 @@
+{
+  "dataset": "mnist",
+  "architecture": "FPS-v0.5 96ch 256h 7x7reg",
+  "category": "physics-inspired",
+  "type": "learning-rule",
+  "metric": "accuracy",
+  "unit": "%",
+  "epochs": 50,
+  "total_params": 2799210,
+  "best_value": 96.44,
+  "baseline_value": 98.04,
+  "baseline_name": "Backprop MLP",
+  "gpu_hours": 0.54,
+  "convergence_iters": 7,
+  "history": [
+    {"epoch": 1, "test_acc": 83.3, "time": 39.1},
+    {"epoch": 5, "test_acc": 89.0, "time": 32.8},
+    {"epoch": 10, "test_acc": 90.8, "time": 30.4},
+    {"epoch": 15, "test_acc": 91.5, "time": 29.2},
+    {"epoch": 20, "test_acc": 91.9, "time": 30.1},
+    {"epoch": 25, "test_acc": 92.1, "time": 30.8},
+    {"epoch": 30, "test_acc": 92.3, "time": 30.2},
+    {"epoch": 35, "test_acc": 92.6, "time": 29.8},
+    {"epoch": 40, "test_acc": 92.7, "time": 30.7},
+    {"epoch": 45, "test_acc": 96.2, "time": 39.0},
+    {"epoch": 50, "test_acc": 96.44, "time": 39.4}
+  ]
+}

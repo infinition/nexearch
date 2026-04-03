@@ -1,0 +1,74 @@
+{
+  "experiment": "Phase 4 — Deep Optimization of Top 2 + Hybrid",
+  "date": "2026-04-03",
+  "dataset": "MNIST",
+  "epochs": 20,
+  "batch_size": 256,
+  "device": "RTX 4070 Ti",
+  "purpose": "20 epochs on EG V2, NTSO V2, and EG+NTSO Hybrid to determine champion",
+  "results": [
+    {
+      "name": "Entropy-Gated V2",
+      "architecture": "EG [784, 600, 600, 300] + linear probe",
+      "changes_from_v1": "Kaiming init, adaptive LR per neuron, stronger decorrelation, 3 layers, wider",
+      "best_accuracy": 0.8791,
+      "best_epoch": 20,
+      "stable": true,
+      "trajectory": "monotonically increasing — never plateaued at 20 epochs",
+      "history": [
+        {"epoch": 1, "accuracy": 0.4723},
+        {"epoch": 5, "accuracy": 0.7755},
+        {"epoch": 10, "accuracy": 0.8388},
+        {"epoch": 15, "accuracy": 0.8616},
+        {"epoch": 20, "accuracy": 0.8791}
+      ],
+      "verdict": "STABLE WINNER — slower start than NTSO but never diverges",
+      "notes": "3-layer version. Still climbing at ep 20. With 50+ epochs could reach 90%+."
+    },
+    {
+      "name": "NTSO V2 (Neuro-Thermodynamic Self-Organization)",
+      "architecture": "NTSO [784, 600, 600, 300] + linear probe",
+      "changes_from_v1": "Better plasticity formula, leaky ReLU, stronger reconstruction",
+      "core_equation": "plast = sigmoid(0.4*(surprise-1) + 0.3*disagreement + 0.3*(T-0.5))",
+      "best_accuracy": 0.8890,
+      "best_epoch": 6,
+      "stable": false,
+      "trajectory": "fast rise to 88.9% at ep 6, then gradual decline, NaN at ep 19",
+      "history": [
+        {"epoch": 1, "accuracy": 0.8675},
+        {"epoch": 5, "accuracy": 0.8814},
+        {"epoch": 6, "accuracy": 0.8890, "note": "PEAK"},
+        {"epoch": 10, "accuracy": 0.8637},
+        {"epoch": 15, "accuracy": 0.8532},
+        {"epoch": 18, "accuracy": 0.8170},
+        {"epoch": 19, "loss": "NaN", "accuracy": 0.098},
+        {"epoch": 20, "loss": "NaN", "accuracy": 0.098}
+      ],
+      "failure_reason": "Temperature annealing creates positive feedback loop. Neurons cool → less plastic → can't correct errors → errors accumulate → NaN explosion at ep 19",
+      "verdict": "ABANDONED — higher peak but fatally unstable",
+      "lesson": "Multi-signal plasticity is powerful but fragile. Competing signals (surprise, disagreement, temperature) create oscillatory instability. SIMPLER IS BETTER."
+    },
+    {
+      "name": "EG+NTSO Hybrid",
+      "architecture": "Hybrid [784, 700, 700, 700, 350] + linear probe (4 layers)",
+      "changes": "Combined EG entropy gate + NTSO surprise + disagreement + temperature",
+      "best_accuracy": 0.8607,
+      "best_epoch": 6,
+      "stable": false,
+      "trajectory": "fast rise to 86% at ep 6, then slow decline to 83% at ep 20",
+      "history": [
+        {"epoch": 1, "accuracy": 0.1135},
+        {"epoch": 3, "accuracy": 0.7787},
+        {"epoch": 6, "accuracy": 0.8607, "note": "PEAK"},
+        {"epoch": 10, "accuracy": 0.8331},
+        {"epoch": 15, "accuracy": 0.8254},
+        {"epoch": 20, "accuracy": 0.8373}
+      ],
+      "failure_reason": "Too many competing signals + too deep (4 layers) = stagnation. Temperature damping fights entropy gating.",
+      "verdict": "ABANDONED — hybrid is WORSE than pure EG",
+      "lesson": "Hybridizing local learning rules doesn't help. Each rule has its own attractor, combining them creates conflict. Pure EG with one signal (entropy) is cleanest."
+    }
+  ],
+  "decision": "Pure Entropy-Gated wins. NTSO abandoned (unstable). Hybrid abandoned (weaker). Focus all effort on EG V3 with stabilization improvements.",
+  "key_insight": "Simplicity wins. One gating signal (entropy) > multiple competing signals. Stability > peak performance."
+}

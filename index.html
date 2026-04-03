@@ -1,0 +1,1537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexearch - Research Platform</title>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<!-- KaTeX for equations -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<!-- Highlight.js for code -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/github-dark.min.css">
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/python.min.js"></script>
+<style>
+:root{--bg:#0a0e14;--bg2:#111820;--bg3:#1a2030;--border:#252d3a;--text:#d4dce8;--text2:#6b7d96;--accent:#4facfe;--green:#43e97b;--red:#f5576c;--orange:#f6d365;--purple:#a18cd1;--cyan:#38f9d7;--glow:rgba(79,172,254,.08)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;font-size:14px}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+code{background:var(--bg3);padding:2px 6px;border-radius:4px;font-size:12px;font-family:'JetBrains Mono','Fira Code','Consolas',monospace}
+pre code{background:none;padding:0;border-radius:0}
+pre{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px;overflow-x:auto;margin:12px 0}
+h2{font-size:20px;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+h3{font-size:15px;margin:20px 0 10px;color:var(--text2)}
+
+/* KaTeX overrides */
+.katex{font-size:1.05em}.katex-display{margin:12px 0;overflow-x:auto;overflow-y:hidden}
+.eq-block{background:var(--bg3);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:16px 20px;margin:12px 0;overflow-x:auto}
+
+/* Layout */
+.header{background:linear-gradient(135deg,var(--bg2) 0%,#0d1520 100%);border-bottom:1px solid var(--border);padding:16px 0;position:relative;overflow:hidden}
+.header::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(90deg,transparent,var(--glow),transparent);pointer-events:none}
+.header-inner{max-width:1400px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;position:relative;z-index:1}
+.header h1{font-size:22px;font-weight:700;letter-spacing:2px}.header h1 span{background:linear-gradient(135deg,var(--accent),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.header-stats{display:flex;gap:16px;flex-wrap:wrap}
+.stat{text-align:center;min-width:64px}.stat-value{font-size:20px;font-weight:700;color:var(--accent)}.stat-label{font-size:9px;color:var(--text2);text-transform:uppercase;letter-spacing:1px}
+
+.nav{background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);background:rgba(17,24,32,.9)}
+.nav-inner{max-width:1400px;margin:0 auto;padding:0 24px;display:flex;gap:0;overflow-x:auto}
+.nav-tab{padding:10px 16px;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent;transition:all .2s;font-size:13px;font-weight:500;white-space:nowrap}
+.nav-tab:hover{color:var(--text)}.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+
+.content{max-width:1400px;margin:0 auto;padding:24px}
+.tab-panel{display:none}.tab-panel.active{display:block}
+
+/* Cards */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:16px;transition:border-color .2s}
+.card:hover{border-color:rgba(79,172,254,.2)}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.card-title{font-size:15px;font-weight:600}
+
+/* Badges */
+.badge{padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;white-space:nowrap;display:inline-block}
+.badge-breakthrough{background:rgba(67,233,123,.12);color:var(--green);border:1px solid rgba(67,233,123,.2)}
+.badge-promising{background:rgba(79,172,254,.12);color:var(--accent);border:1px solid rgba(79,172,254,.2)}
+.badge-limited{background:rgba(246,211,101,.12);color:var(--orange);border:1px solid rgba(246,211,101,.2)}
+.badge-failed{background:rgba(245,87,108,.12);color:var(--red);border:1px solid rgba(245,87,108,.2)}
+.badge-untested{background:rgba(107,125,150,.12);color:var(--text2);border:1px solid rgba(107,125,150,.2)}
+.badge-wip{background:rgba(161,140,209,.12);color:var(--purple);border:1px solid rgba(161,140,209,.2)}
+
+/* Tables */
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;padding:8px 10px;background:var(--bg3);color:var(--text2);font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;transition:color .15s;position:relative}
+th:hover{color:var(--text)}
+th .sort-arrow{font-size:8px;margin-left:3px;opacity:.4}
+th.sort-asc .sort-arrow,th.sort-desc .sort-arrow{opacity:1;color:var(--accent)}
+td{padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:top}
+tr:hover td{background:rgba(88,166,255,.04)}
+.acc-best{color:var(--green);font-weight:700}.acc-fail{color:var(--red)}.acc-mid{color:var(--orange)}
+
+/* Filters */
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.filter-bar label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px}
+.search-input{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:6px 12px;border-radius:6px;font-size:13px;min-width:200px;outline:none}
+.search-input:focus{border-color:var(--accent)}
+.search-input::placeholder{color:var(--text2)}
+.filter-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:4px 10px;border-radius:6px;font-size:11px;cursor:pointer;transition:all .15s}
+.filter-btn:hover{border-color:var(--text2);color:var(--text)}
+.filter-btn.active{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+select.filter-select{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:5px 8px;border-radius:6px;font-size:12px;outline:none}
+
+/* Charts */
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.chart-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px}
+.chart-card h3{font-size:13px;margin-bottom:10px;color:var(--text2)}
+@media(max-width:900px){.chart-grid{grid-template-columns:1fr}}
+
+/* Solution list */
+.sol-list{display:flex;flex-direction:column;gap:8px}
+.sol-item{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 18px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:14px}
+.sol-item:hover{border-color:var(--accent);background:var(--bg3);box-shadow:0 0 20px var(--glow)}
+.sol-id{font-size:11px;color:var(--text2);font-family:monospace;min-width:32px}
+.sol-name{font-weight:600;flex:1}.sol-desc{color:var(--text2);font-size:12px;flex:2}
+.sol-acc{font-size:16px;font-weight:700;min-width:80px;text-align:right}
+.sol-meta{display:flex;gap:6px;align-items:center}
+
+/* Detail panel */
+.detail-panel{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:24px;margin-top:16px;box-shadow:0 4px 24px rgba(0,0,0,.3)}
+.detail-panel.hidden{display:none}
+.kpi-row{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0}
+.kpi{background:var(--bg3);border-radius:10px;padding:14px 18px;text-align:center;min-width:100px;border:1px solid var(--border)}
+.kpi-value{font-size:22px;font-weight:700;letter-spacing:-.5px}.kpi-label{font-size:9px;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+
+/* Timeline */
+.timeline{position:relative;padding-left:24px}
+.timeline::before{content:'';position:absolute;left:6px;top:0;bottom:0;width:2px;background:var(--border)}
+.tl-item{position:relative;margin-bottom:16px}
+.tl-item::before{content:'';position:absolute;left:-21px;top:5px;width:10px;height:10px;border-radius:50%;border:2px solid var(--bg)}
+.tl-item.s::before{background:var(--green)}.tl-item.f::before{background:var(--red)}.tl-item.p::before{background:var(--orange)}.tl-item.i::before{background:var(--accent)}
+
+/* Global search */
+.search-wrap{position:relative;width:100%;max-width:500px}
+.global-search{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:9px 36px 9px 16px;border-radius:10px;font-size:14px;width:100%;outline:none;transition:all .2s}
+.global-search:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--glow),0 0 20px var(--glow)}
+.search-clear{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text2);font-size:16px;cursor:pointer;display:none;padding:2px 6px;border-radius:4px;line-height:1}
+.search-clear:hover{color:var(--text);background:var(--bg3)}
+.search-wrap.has-value .search-clear{display:block}
+.search-results{background:var(--bg2);border:1px solid var(--border);border-radius:8px;max-height:400px;overflow-y:auto;margin-top:8px}
+.search-results.hidden{display:none}
+.sr-item{padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer;display:flex;gap:12px;align-items:center;font-size:13px}
+.sr-item:hover{background:var(--bg3)}
+.sr-type{font-size:10px;color:var(--text2);text-transform:uppercase;min-width:70px}
+.sr-match{color:var(--accent)}
+/* Domain badges */
+.domain-badge{padding:1px 6px;border-radius:4px;font-size:10px;font-weight:600}
+.domain-ml{background:rgba(88,166,255,.15);color:var(--accent)}
+.domain-physics{background:rgba(188,140,255,.15);color:var(--purple)}
+.domain-quantum{background:rgba(57,211,83,.15);color:var(--cyan)}
+.domain-cybersec{background:rgba(248,81,73,.15);color:var(--red)}
+.domain-robotics{background:rgba(210,153,34,.15);color:var(--orange)}
+.domain-neuro{background:rgba(63,185,80,.15);color:var(--green)}
+.domain-math{background:rgba(139,148,158,.15);color:var(--text2)}
+/* Paper status */
+.paper-none{color:var(--text2)}.paper-draft{color:var(--orange)}.paper-submitted{color:var(--accent)}.paper-published{color:var(--green)}
+
+/* Writeup reader */
+.wu-list-item{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px 20px;cursor:pointer;transition:all .2s;margin-bottom:10px}
+.wu-list-item:hover{border-color:var(--accent);box-shadow:0 0 20px var(--glow)}
+.wu-type-badge{font-size:10px;text-transform:uppercase;letter-spacing:1px;padding:2px 8px;border-radius:4px;font-weight:700}
+.wu-type-article{background:rgba(79,172,254,.12);color:var(--accent);border:1px solid rgba(79,172,254,.2)}
+.wu-type-book{background:rgba(161,140,209,.12);color:var(--purple);border:1px solid rgba(161,140,209,.2)}
+.wu-type-chapter{background:rgba(161,140,209,.12);color:var(--purple);border:1px solid rgba(161,140,209,.15)}
+.wu-type-essay{background:rgba(67,233,123,.12);color:var(--green);border:1px solid rgba(67,233,123,.2)}
+.wu-type-tutorial{background:rgba(246,211,101,.12);color:var(--orange);border:1px solid rgba(246,211,101,.2)}
+.wu-reader{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:0;margin-top:16px;overflow:hidden}
+.wu-reader.hidden{display:none}
+.wu-reader-head{padding:24px 32px 16px;border-bottom:1px solid var(--border)}
+.wu-reader-body{padding:32px;overflow-y:auto;max-height:70vh}
+/* Article style */
+.wu-style-article .wu-reader-body{max-width:720px;margin:0 auto;font-size:15px;line-height:1.85;color:var(--text)}
+.wu-style-article .wu-reader-body h2{font-size:22px;margin:32px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border);color:var(--text)}
+.wu-style-article .wu-reader-body h3{font-size:17px;margin:24px 0 8px;color:var(--text)}
+.wu-style-article .wu-reader-body p{margin:12px 0}
+.wu-style-article .wu-reader-body blockquote{border-left:3px solid var(--accent);padding:8px 16px;margin:16px 0;color:var(--text2);font-style:italic;background:var(--bg3);border-radius:0 8px 8px 0}
+/* Book style - wider margins, serif feel, chapter numbers */
+.wu-style-book .wu-reader-body,.wu-style-chapter .wu-reader-body{max-width:680px;margin:0 auto;font-size:16px;line-height:1.95;color:var(--text)}
+.wu-style-book .wu-reader-body h2,.wu-style-chapter .wu-reader-body h2{font-size:26px;margin:40px 0 16px;text-align:center;letter-spacing:1px}
+.wu-style-book .wu-reader-body h3,.wu-style-chapter .wu-reader-body h3{font-size:18px;margin:28px 0 10px}
+.wu-style-book .wu-reader-body p,.wu-style-chapter .wu-reader-body p{margin:14px 0;text-align:justify}
+.wu-style-book .wu-reader-body blockquote,.wu-style-chapter .wu-reader-body blockquote{border-left:3px solid var(--purple);padding:12px 20px;margin:20px 0;font-style:italic;background:var(--bg3);border-radius:0 8px 8px 0}
+/* Essay style - narrow, contemplative */
+.wu-style-essay .wu-reader-body{max-width:600px;margin:0 auto;font-size:16px;line-height:2;color:var(--text)}
+.wu-style-essay .wu-reader-body h2{font-size:20px;margin:36px 0 12px;font-style:italic;color:var(--text2)}
+.wu-style-essay .wu-reader-body p{margin:16px 0}
+/* Tutorial style - wider, code-friendly */
+.wu-style-tutorial .wu-reader-body{max-width:800px;margin:0 auto;font-size:14px;line-height:1.75;color:var(--text)}
+.wu-style-tutorial .wu-reader-body h2{font-size:20px;margin:28px 0 10px;color:var(--accent)}
+.wu-style-tutorial .wu-reader-body h3{font-size:16px;margin:20px 0 8px}
+.wu-style-tutorial .wu-reader-body pre{margin:16px 0}
+/* Shared writeup elements */
+.wu-reader-body hr{border:none;border-top:1px solid var(--border);margin:32px 0}
+.wu-reader-body ul,.wu-reader-body ol{padding-left:24px;margin:12px 0}
+.wu-reader-body li{margin:6px 0}
+.wu-reader-body img{max-width:100%;border-radius:8px;margin:16px 0}
+.wu-reader-body code{background:var(--bg3);padding:2px 6px;border-radius:4px;font-size:13px}
+.wu-reader-body pre code{background:none;padding:0}
+/* Cross-ref links */
+.xref{display:inline-block;padding:1px 6px;border-radius:4px;font-size:11px;background:var(--bg3);color:var(--accent);cursor:pointer;margin:1px}
+.xref:hover{background:var(--accent);color:var(--bg)}
+/* Todo items */
+.todo-item{padding:8px 12px;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start;font-size:13px}
+.todo-check{min-width:18px;height:18px;border:2px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px}
+.todo-check.done{background:var(--green);border-color:var(--green);color:var(--bg)}
+
+/* Roadmap */
+.rm-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+.rm-p{min-width:22px;height:22px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.p1{background:rgba(248,81,73,.2);color:var(--red)}.p2{background:rgba(210,153,34,.2);color:var(--orange)}.p3{background:rgba(88,166,255,.2);color:var(--accent)}.p4{background:rgba(188,140,255,.2);color:var(--purple)}
+
+/* Lessons */
+.lesson{background:var(--bg3);border-radius:6px;padding:10px 14px;margin-bottom:6px;display:flex;gap:10px;align-items:flex-start;font-size:12px}
+.lesson-n{min-width:20px;height:20px;border-radius:50%;background:var(--accent);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+
+.footer{text-align:center;padding:32px 24px;color:var(--text2);font-size:11px;border-top:1px solid var(--border);margin-top:40px}
+.footer span{background:linear-gradient(135deg,var(--accent),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:600}
+@media(max-width:768px){.header-stats{gap:10px}.stat-value{font-size:16px}.sol-item{flex-wrap:wrap}.kpi-row{gap:8px}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <h1 style="cursor:pointer" onclick="showTab('overview')"><span>Nex</span>earch</h1>
+    <div class="search-wrap" id="searchWrap">
+      <input type="text" class="global-search" id="globalSearch" placeholder="Search everything..." oninput="globalSearchHandler()" onfocus="globalSearchHandler()" onblur="setTimeout(()=>document.getElementById('globalResults').classList.add('hidden'),200)">
+      <button class="search-clear" id="searchClear" onclick="clearGlobalSearch()">&times;</button>
+    </div>
+    <div class="header-stats" id="headerStats"></div>
+  </div>
+</div>
+
+<div class="search-results hidden" id="globalResults" style="max-width:1400px;margin:0 auto;position:relative;z-index:200"></div>
+<div class="nav">
+  <div class="nav-inner">
+    <div class="nav-tab active" data-tab="overview">Overview</div>
+    <div class="nav-tab" data-tab="solutions">Solutions</div>
+    <div class="nav-tab" data-tab="experiments">All Experiments</div>
+    <div class="nav-tab" data-tab="evolution">Evolution</div>
+    <div class="nav-tab" data-tab="failed">Failed & Lessons</div>
+    <div class="nav-tab" data-tab="roadmap">Roadmap</div>
+    <div class="nav-tab" data-tab="writeups">Writeups</div>
+    <div class="nav-tab" data-tab="todo">Todo</div>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- OVERVIEW -->
+<div id="overview" class="tab-panel active">
+  <h2>Dashboard</h2>
+
+  <!-- Domain cards -->
+  <div id="domainCards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:20px"></div>
+
+  <!-- Sub-tabs for domain-specific dashboards -->
+  <div style="display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:16px;overflow-x:auto" id="domainTabs">
+    <div class="nav-tab active" onclick="switchDomain(this,'all')" style="border:none">All Domains</div>
+  </div>
+
+  <!-- Dynamic dashboard content -->
+  <div id="dashboardContent"></div>
+</div>
+
+<!-- SOLUTIONS -->
+<div id="solutions" class="tab-panel">
+  <h2>Solutions</h2>
+  <div class="filter-bar">
+    <input type="text" class="search-input" id="solSearch" placeholder="Search solutions..." oninput="filterSolutions()">
+    <label>Category:</label>
+    <select class="filter-select" id="solCatFilter" onchange="filterSolutions()">
+      <option value="">All</option>
+    </select>
+    <label>Status:</label>
+    <select class="filter-select" id="solStatusFilter" onchange="filterSolutions()">
+      <option value="">All</option><option value="breakthrough">Breakthrough</option><option value="promising">Promising</option><option value="limited">Limited</option><option value="wip">WIP</option><option value="failed">Failed</option>
+    </select>
+    <label>Type:</label>
+    <select class="filter-select" id="solTypeFilter" onchange="filterSolutions()">
+      <option value="">All</option>
+    </select>
+  </div>
+  <div class="sol-list" id="solList"></div>
+  <div class="detail-panel hidden" id="detailPanel"></div>
+</div>
+
+<!-- ALL EXPERIMENTS -->
+<div id="experiments" class="tab-panel">
+  <h2>All Experiments</h2>
+  <div class="filter-bar">
+    <input type="text" class="search-input" id="expSearch" placeholder="Filter experiments..." oninput="filterExp()">
+    <label>Dataset:</label>
+    <select class="filter-select" id="expDataset" onchange="filterExp()"><option value="">All</option></select>
+    <label>Category:</label>
+    <select class="filter-select" id="expCat" onchange="filterExp()"><option value="">All</option></select>
+    <label>Status:</label>
+    <select class="filter-select" id="expStatus" onchange="filterExp()">
+      <option value="">All</option><option value="success">Success (>50%)</option><option value="limited">Limited (10-50%)</option><option value="failed">Failed</option>
+    </select>
+    <label>Sort:</label>
+    <select class="filter-select" id="expSort" onchange="renderExp()">
+      <option value="acc-desc">Metric desc</option><option value="acc-asc">Metric asc</option><option value="phase-asc">Phase</option><option value="name">Name A-Z</option>
+    </select>
+    <label>Solution:</label>
+    <select class="filter-select" id="expSol" onchange="filterExp()"><option value="">All</option></select>
+  </div>
+  <div class="card" style="overflow-x:auto"><table id="expTable"><thead><tr>
+    <th>Phase</th><th>Solution</th><th>Algorithm</th><th>Category</th><th>Dataset</th><th>Metric</th><th>Value</th><th>Epochs</th><th>Stable</th><th>Verdict</th>
+  </tr></thead><tbody id="expBody"></tbody></table></div>
+  <div style="color:var(--text2);font-size:11px;margin-top:8px"><span id="expCount">0</span> experiments shown</div>
+</div>
+
+<!-- EVOLUTION -->
+<div id="evolution" class="tab-panel">
+  <h2>Research Evolution</h2>
+  <div class="chart-card" style="margin-bottom:24px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px">
+      <h3 style="margin:0">Accuracy Progression</h3>
+      <div>
+        <button class="filter-btn active" onclick="toggleEvo(this,0)">MNIST local</button>
+        <button class="filter-btn active" onclick="toggleEvo(this,1)">Backprop ref</button>
+        <button class="filter-btn active" onclick="toggleEvo(this,2)">CIFAR-10 local</button>
+      </div>
+    </div>
+    <canvas id="timelineChart" style="height:260px"></canvas>
+  </div>
+  <div class="timeline" id="timelineContainer"></div>
+</div>
+
+<!-- FAILED -->
+<div id="failed" class="tab-panel">
+  <h2>Failed & Abandoned</h2>
+  <div class="filter-bar">
+    <input type="text" class="search-input" id="failSearch" placeholder="Filter..." oninput="filterFail()">
+    <label>Category:</label>
+    <select class="filter-select" id="failCat" onchange="filterFail()"><option value="">All</option></select>
+    <label>Revisit?:</label>
+    <select class="filter-select" id="failRevisit" onchange="filterFail()">
+      <option value="">All</option><option value="Yes">Yes</option><option value="Maybe">Maybe</option><option value="No">No</option>
+    </select>
+  </div>
+  <div class="card" style="overflow-x:auto"><table id="failTable"><thead><tr>
+    <th>Algorithm</th><th>Category</th><th>Best</th><th>Failure Mode</th><th>Lesson</th><th>Revisit?</th>
+  </tr></thead><tbody id="failBody"></tbody></table></div>
+  <h3>Key Lessons</h3>
+  <div id="lessonsContainer"></div>
+</div>
+
+<!-- ROADMAP -->
+<div id="roadmap" class="tab-panel">
+  <h2>Roadmap</h2>
+  <div class="filter-bar">
+    <label>Solution:</label>
+    <select class="filter-select" id="rmSolFilter" onchange="filterRM()"><option value="">All</option></select>
+    <label>Priority:</label>
+    <select class="filter-select" id="rmPriFilter" onchange="filterRM()">
+      <option value="">All</option><option value="1">P1 Critical</option><option value="2">P2 Important</option><option value="3">P3 Nice-to-have</option><option value="4">P4 Speculative</option>
+    </select>
+  </div>
+  <div id="rmContainer"></div>
+</div>
+
+<!-- WRITEUPS -->
+<div id="writeups" class="tab-panel">
+  <h2>Writeups</h2>
+  <div class="filter-bar">
+    <input type="text" class="search-input" id="wuSearch" placeholder="Search writeups..." oninput="filterWriteups()">
+    <label>Type:</label>
+    <select class="filter-select" id="wuType" onchange="filterWriteups()">
+      <option value="">All</option><option value="article">Article</option><option value="book">Book</option><option value="chapter">Chapter</option><option value="essay">Essay</option><option value="tutorial">Tutorial</option>
+    </select>
+    <label>Solution:</label>
+    <select class="filter-select" id="wuSol" onchange="filterWriteups()"><option value="">All</option></select>
+    <label>Status:</label>
+    <select class="filter-select" id="wuStatus" onchange="filterWriteups()">
+      <option value="">All</option><option value="draft">Draft</option><option value="review">Review</option><option value="published">Published</option>
+    </select>
+  </div>
+  <div id="wuList"></div>
+  <div class="wu-reader hidden" id="wuReader"></div>
+</div>
+
+<!-- TODO -->
+<div id="todo" class="tab-panel">
+  <h2>Research TODO</h2>
+  <p style="color:var(--text2);margin-bottom:16px">Raw ideas backlog. Edit <code>todo.md</code> directly to add ideas.</p>
+  <div class="filter-bar">
+    <input type="text" class="search-input" id="todoSearch" placeholder="Filter todos..." oninput="filterTodos()">
+    <button class="filter-btn active" onclick="toggleTodoFilter(this,'all')">All</button>
+    <button class="filter-btn" onclick="toggleTodoFilter(this,'open')">Open</button>
+    <button class="filter-btn" onclick="toggleTodoFilter(this,'done')">Done</button>
+  </div>
+  <div id="todoContainer"></div>
+</div>
+
+</div>
+<div class="footer"><span>Nex</span>earch - Multi-Domain Research Platform | Fabien | 2026</div>
+
+<script>
+// ============================================================
+// DATA MODEL
+// Metrics are flexible: accuracy, perplexity, success_rate, FID, etc.
+// type: classifier | vla | vlm | llm | world-model | learning-rule
+// ============================================================
+
+const DOMAINS = ['ml','physics','quantum','cybersec','robotics','neuro','math'];
+const CATEGORIES = ['local-learning','gradient-free','physics-inspired','hybrid','novel-arch','transformer-alt','neuromorphic','efficiency','vla','vlm','llm','world-model','crypto','quantum-algo'];
+const TYPES = ['learning-rule','classifier','vla','vlm','llm','world-model','encoder','generator','theory','crypto-scheme','quantum-circuit'];
+
+// TODO items (parsed from todo.md structure)
+const TODOS = [
+  {text:'Multi-resolution fixed-point substrate (multigrid) for CIFAR-10',done:false,priority:'high'},
+  {text:'Spatial Hebbian for EG conv layers - patch-level correlation',done:false,priority:'high'},
+  {text:'Benchmark FluidVLA on LIBERO manipulation tasks',done:false,priority:'high'},
+  {text:'Benchmark FluidLM perplexity on WikiText-103',done:false,priority:'high'},
+  {text:'Can entropy-gated plasticity replace softmax attention in transformers?',done:false,priority:'idea'},
+  {text:'EG + spiking networks - entropy of spike rates (neuromorphic HW)',done:false,priority:'idea'},
+  {text:'Fixed-Point Substrate as world model - learn environment dynamics',done:false,priority:'idea'},
+  {text:'Combine FPS (002) with EG (001) - FPS medium + EG learning rule',done:false,priority:'idea'},
+  {text:'LVS theory applied to quantum error correction',done:false,priority:'idea'},
+  {text:'Post-quantum lattice crypto - fixed-point iteration on lattices',done:false,priority:'idea'},
+  {text:'Information-theoretic bounds on local learning',done:false,priority:'idea'},
+  {text:'Distributed local learning - no gradient sync across GPUs',done:false,priority:'idea'},
+  {text:'Unified theory: LVS + entropy gating + world models',done:false,priority:'speculative'},
+  {text:'Quantum fixed-point substrate',done:false,priority:'speculative'},
+  {text:'Entropy-Gated Learning V1-V4 on MNIST (97.46%) -> solution 001',done:true,priority:'done'},
+  {text:'Fixed-Point Substrate on MNIST/F-MNIST/CIFAR-10 (96.44%) -> solution 002',done:true,priority:'done'},
+  {text:'CIFAR-10 attempts for both EG and FPS -> open challenge',done:true,priority:'done'},
+];
+
+const SOLUTIONS = [
+  {id:'001',name:'Entropy-Gated Learning',abbr:'EG',category:'local-learning',type:'learning-rule',
+   status:'breakthrough',date:'2026-04-03',
+   domains:['ml','neuro'],
+   arxiv:null, paperStatus:'draft',
+   crossRefs:{builds_on:[],enables:['F01'],related_to:['002']},
+   github:null,
+   principle:'Plasticity gated by local entropy. High entropy = learn, low entropy = stabilize. No backprop in feature layers.',
+   nextStep:'Spatial Hebbian for Conv layers',
+   bestResults:{MNIST:{metric:'accuracy',value:97.46,unit:'%'},['CIFAR-10']:{metric:'accuracy',value:48.22,unit:'%'}},
+   params:{total:700000,local:680000,probe:20000},
+   equation:{
+     latex:'\\Delta W_i = \\sigma\\bigl(5(H_i - 0.4)\\bigr) \\cdot \\bigl(0.50\\,R + 0.25\\,D + 0.25\\,S\\bigr)',
+     components:[
+       {symbol:'H_i',desc:'Per-neuron binary entropy',latex:'H_i = -\\frac{1}{B}\\sum_b\\bigl[y\\log y + (1-y)\\log(1-y)\\bigr]'},
+       {symbol:'R',desc:'Reconstruction gradient',latex:'R = y^\\top(x - yW)/B'},
+       {symbol:'D',desc:'Decorrelation',latex:'D = -(C_{\\text{offdiag}} \\cdot W)'},
+       {symbol:'S',desc:'Sparsity',latex:'S = -(\\bar{y} - \\tau)W'},
+     ],
+     code:`# Per neuron i:
+H_i = -(y * log(y) + (1-y) * log(1-y)).mean(0)   # entropy
+plasticity = sigmoid(5 * (H_i - 0.4))              # gate
+
+recon  = y.T @ (x - y @ W) / B        # reconstruction
+decorr = -(corr_offdiag @ W)           # decorrelation
+sparse = -(mean_act - 0.12) * W        # sparsity
+
+dW = plasticity * (0.50*recon + 0.25*decorr + 0.25*sparse)
+momentum = 0.9 * momentum + dW
+W += cosine_lr(step) * momentum`
+   },
+   versions:[
+     {v:'V1',arch:'2L [500,500]+linear',acc:86.85,dataset:'MNIST',ep:5,stable:true,change:'First entropy-gated',status:'breakthrough'},
+     {v:'V2-EG',arch:'3L [600x2,300]+linear',acc:87.91,dataset:'MNIST',ep:20,stable:true,change:'Kaiming init, adaptive LR',status:'promising'},
+     {v:'V2-NTSO',arch:'3L [600x2,300]+linear',acc:88.90,dataset:'MNIST',ep:'6->NaN',stable:false,change:'Multi-signal plasticity',status:'failed'},
+     {v:'Hybrid',arch:'4L [700x3,350]+linear',acc:86.07,dataset:'MNIST',ep:'6->decline',stable:false,change:'EG+NTSO combined',status:'failed'},
+     {v:'V3',arch:'2L [500,300]+linear',acc:92.81,dataset:'MNIST',ep:50,stable:true,change:'no_grad, momentum, cosine LR',status:'breakthrough'},
+     {v:'V4',arch:'2L [700,400]+MLP',acc:97.46,dataset:'MNIST',ep:89,stable:true,change:'Wider, MLP probe, chunked decorr',status:'breakthrough'},
+     {v:'V4+aug',arch:'2L [700,400]+MLP+aug',acc:95.98,dataset:'MNIST',ep:100,stable:true,change:'Data augmentation hurts',status:'limited'},
+     {v:'Conv V1',arch:'Conv sigmoid',acc:10.00,dataset:'CIFAR-10',ep:4,stable:true,change:'Sigmoid kills conv',status:'failed'},
+     {v:'Conv V2',arch:'Conv ReLU+LocalBN',acc:48.22,dataset:'CIFAR-10',ep:6,stable:true,change:'Channel-avg Hebbian',status:'limited'},
+     {v:'MLP',arch:'Dense(3072->500)',acc:41.16,dataset:'CIFAR-10',ep:80,stable:true,change:'No spatial bias',status:'limited'},
+   ],
+  },
+  {id:'002',name:'Fixed-Point Substrate',abbr:'FPS',category:'physics-inspired',type:'learning-rule',
+   status:'promising',date:'2026-04-03',
+   domains:['ml','physics'],
+   arxiv:null, paperStatus:'draft',
+   crossRefs:{builds_on:['LVS theory'],enables:['F02'],related_to:['001']},
+   github:null,
+   principle:'Intelligence emerges from fixed points in a learnable medium. Input perturbs the medium, which collapses to equilibrium Z*=f(Z*). Zero backprop, constant memory. Inspired by LVS theory: It from Fix.',
+   nextStep:'Multi-resolution substrate for CIFAR-10',
+   bestResults:{MNIST:{metric:'accuracy',value:96.44,unit:'%'},['Fashion-MNIST']:{metric:'accuracy',value:77.15,unit:'%'},['CIFAR-10']:{metric:'accuracy',value:42.24,unit:'%'}},
+   params:{total:2799210,local:2799210,probe:0},
+   equation:{
+     latex:'Z^* = \\tanh\\bigl(\\sum_s \\kappa_s \\nabla^2_s Z^* + W_{\\text{mix}} Z^* + \\alpha X + \\beta\\bigr)',
+     components:[
+       {symbol:'\\kappa_s',desc:'Multi-scale conductivity (3x3, 5x5, 7x7)',latex:'\\kappa_s(x) \\in \\mathbb{R}^{C \\times H \\times W}'},
+       {symbol:'\\nabla^2_s',desc:'Discrete Laplacian at scale s',latex:'\\nabla^2_s Z = \\text{Conv2d}(Z, \\text{lap}_s)'},
+       {symbol:'\\alpha',desc:'Input coupling strength',latex:'\\alpha(x) \\in \\mathbb{R}^{C \\times H \\times W}'},
+       {symbol:'\\text{gate}',desc:'Entropy gate for learning',latex:'g_i = \\sigma(H_{\\text{local},i} + 0.5)'},
+     ],
+     code:`# Fixed-point iteration (7 iters with Anderson acceleration):
+Z = tanh(kappa_3*Lap3(Z) + kappa_5*Lap5(Z) + kappa_7*Lap7(Z)
+         + 0.5*W_mix@Z + alpha*X_proj + beta)
+
+# Learning (all local, no backprop):
+gate = sigmoid(H_local + 0.5)
+dkappa = lr * gate * (Z * error)        # Hebbian
+dalpha = lr * gate * (X_proj * error)   # input correlation
+dW_mix = lr * (Z_avg.T @ err_avg) / B  # channel Hebbian`
+   },
+   versions:[
+     {v:'v0.1',arch:'PDE temporal 48ch',acc:9.80,dataset:'MNIST',ep:5,stable:true,change:'Initial PDE approach',status:'failed'},
+     {v:'v0.2',arch:'PDE + global pool',acc:19.80,dataset:'MNIST',ep:10,stable:true,change:'Better readout, still temporal',status:'limited'},
+     {v:'v0.4a',arch:'Fixed-point 4x4 48ch',acc:76.20,dataset:'MNIST',ep:40,stable:true,change:'Paradigm shift to Z*=f(Z*)',status:'promising'},
+     {v:'v0.4b',arch:'+ 7x7 regions + var',acc:85.18,dataset:'MNIST',ep:40,stable:true,change:'Regional variance readout',status:'promising'},
+     {v:'v0.4c',arch:'+ spatial filters 64ch',acc:92.73,dataset:'MNIST',ep:40,stable:true,change:'Learnable retinal filters',status:'promising'},
+     {v:'v0.5',arch:'96ch multi-Lap Anderson 2L',acc:96.44,dataset:'MNIST',ep:50,stable:true,change:'All levers engaged',status:'breakthrough'},
+     {v:'v0.5',arch:'96ch 256h 7x7',acc:77.15,dataset:'Fashion-MNIST',ep:50,stable:true,change:'Fashion-MNIST benchmark',status:'promising'},
+     {v:'v0.5',arch:'96ch 384h 8x8',acc:42.24,dataset:'CIFAR-10',ep:60,stable:true,change:'CIFAR-10 benchmark',status:'limited'},
+   ],
+  },
+  {id:'F01',name:'FluidVLA',abbr:'FVLA',category:'vla',type:'vla',
+   status:'wip',date:'2025',
+   domains:['ml','robotics'],
+   arxiv:null, paperStatus:'none',
+   crossRefs:{builds_on:['001','002'],enables:[],related_to:['F02']},
+   github:'https://github.com/infinition/FluidVLA',
+   principle:'Vision-Language-Action model for robotic manipulation. End-to-end from pixels + language to actions.',
+   nextStep:'Integration with local learning features',
+   bestResults:{},
+   equation:{latex:'a_t = \\pi_\\theta(o_t, l)',code:'# VLA: observation + language -> action\n# See FluidVLA repo for full architecture'},
+   versions:[],
+  },
+  {id:'F02',name:'FluidWorld',abbr:'FW',category:'world-model',type:'world-model',
+   status:'wip',date:'2025',
+   domains:['ml','robotics'],
+   arxiv:null, paperStatus:'none',
+   crossRefs:{builds_on:['002'],enables:[],related_to:['F01']},
+   github:'https://github.com/infinition/FluidWorld',
+   principle:'World model for learning environment dynamics. Predicts future states from current state + action.',
+   nextStep:'Benchmark on standard simulation tasks',
+   bestResults:{},
+   equation:{latex:'\\hat{s}_{t+1} = f_\\theta(s_t, a_t)',code:'# World Model: state + action -> next state\n# See FluidWorld repo for architecture'},
+   versions:[],
+  },
+  {id:'F03',name:'FluidLM',abbr:'FLM',category:'llm',type:'llm',
+   status:'wip',date:'2025',
+   domains:['ml'],
+   arxiv:null, paperStatus:'none',
+   crossRefs:{builds_on:[],enables:[],related_to:[]},
+   github:'https://github.com/infinition/FluidLM',
+   principle:'Language model with fluid/continuous representations.',
+   nextStep:'Benchmark perplexity on standard datasets',
+   bestResults:{},
+   equation:{latex:'P(x_t | x_{<t}) = \\text{FluidLM}_\\theta(x_{<t})',code:'# LM: context -> next token distribution\n# See FluidLM repo for architecture'},
+   versions:[],
+  },
+];
+
+const EXPERIMENTS = [
+  // sol: solution ID, solName: human-readable name shown in table
+  {phase:1,sol:'-',solName:'Baseline',name:'Backprop Baseline',cat:'reference',type:'classifier',dataset:'MNIST',metric:'accuracy',val:98.04,unit:'%',ep:5,stable:true,verdict:'Reference'},
+  {phase:6,sol:'001',solName:'Entropy-Gated',name:'Entropy-Gated V4',cat:'local-learning',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:97.46,unit:'%',ep:100,stable:true,verdict:'Breakthrough'},
+  {phase:6,sol:'001',solName:'Entropy-Gated',name:'EG V4 + augmentation',cat:'local-learning',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:95.98,unit:'%',ep:100,stable:true,verdict:'Aug hurts'},
+  {phase:5,sol:'001',solName:'Entropy-Gated',name:'Entropy-Gated V3',cat:'local-learning',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:92.81,unit:'%',ep:50,stable:true,verdict:'Never plateaus'},
+  {phase:4,sol:'001',solName:'Entropy-Gated',name:'NTSO V2',cat:'local-learning',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:88.90,unit:'%',ep:20,stable:false,verdict:'Diverges ep19'},
+  {phase:4,sol:'001',solName:'Entropy-Gated',name:'Entropy-Gated V2',cat:'local-learning',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:87.91,unit:'%',ep:20,stable:true,verdict:'Still climbing'},
+  {phase:3,sol:'001',solName:'Entropy-Gated',name:'Entropy-Gated V1',cat:'local-learning',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:86.85,unit:'%',ep:5,stable:true,verdict:'First breakthrough'},
+  {phase:4,sol:'001',solName:'Entropy-Gated',name:'EG+NTSO Hybrid',cat:'hybrid',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:86.07,unit:'%',ep:20,stable:false,verdict:'Worse than pure EG'},
+  {phase:2,sol:'001',solName:'Entropy-Gated',name:'Reaction-Diffusion',cat:'physics-inspired',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:11.35,unit:'%',ep:4,stable:true,verdict:'PDE dead-end'},
+  {phase:3,sol:'001',solName:'Entropy-Gated',name:'Gradient-Free Contrastive',cat:'gradient-free',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:11.35,unit:'%',ep:5,stable:false,verdict:'Diverges'},
+  {phase:1,sol:'001',solName:'Entropy-Gated',name:'Forward-Forward (Hinton)',cat:'local-learning',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:9.80,unit:'%',ep:5,stable:false,verdict:'NaN'},
+  {phase:3,sol:'001',solName:'Entropy-Gated',name:'Learning by Disagreement',cat:'gradient-free',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:9.80,unit:'%',ep:5,stable:false,verdict:'NaN'},
+  {phase:3,sol:'001',solName:'Entropy-Gated',name:'Spectral Resonance',cat:'physics-inspired',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:9.80,unit:'%',ep:5,stable:false,verdict:'NaN'},
+  {phase:1,sol:'001',solName:'Entropy-Gated',name:'Predictive Coding',cat:'local-learning',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:0,unit:'%',ep:0,stable:false,verdict:'Crashed'},
+  {phase:1,sol:'001',solName:'Entropy-Gated',name:'Equilibrium Propagation',cat:'local-learning',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:0,unit:'%',ep:0,stable:false,verdict:'Not completed'},
+  {phase:1,sol:'001',solName:'Entropy-Gated',name:'InfoMax',cat:'local-learning',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:0,unit:'%',ep:0,stable:false,verdict:'Not completed'},
+  {phase:1,sol:'001',solName:'Entropy-Gated',name:'Competitive Hebbian',cat:'gradient-free',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:0,unit:'%',ep:0,stable:false,verdict:'Not completed'},
+  {phase:1,sol:'001',solName:'Entropy-Gated',name:'Diff Target Propagation',cat:'local-learning',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:0,unit:'%',ep:0,stable:false,verdict:'Not completed'},
+  {phase:2,sol:'001',solName:'Entropy-Gated',name:'Thermodynamic Free Energy',cat:'physics-inspired',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:0,unit:'%',ep:0,stable:false,verdict:'Not completed'},
+  {phase:2,sol:'001',solName:'Entropy-Gated',name:'Wave Interference',cat:'physics-inspired',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:0,unit:'%',ep:0,stable:false,verdict:'Not completed'},
+  {phase:2,sol:'001',solName:'Entropy-Gated',name:'Kuramoto Oscillators',cat:'physics-inspired',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:0,unit:'%',ep:0,stable:false,verdict:'Not completed'},
+  {phase:2,sol:'001',solName:'Entropy-Gated',name:'Gossip Protocol',cat:'gradient-free',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:0,unit:'%',ep:0,stable:false,verdict:'Not completed'},
+  {phase:7,sol:'-',solName:'Baseline',name:'Backprop Conv',cat:'reference',type:'classifier',dataset:'CIFAR-10',metric:'accuracy',val:85.83,unit:'%',ep:100,stable:true,verdict:'Reference'},
+  {phase:7,sol:'001',solName:'Entropy-Gated',name:'EG-Conv V2 (ReLU+BN)',cat:'local-learning',type:'learning-rule',dataset:'CIFAR-10',metric:'accuracy',val:48.22,unit:'%',ep:100,stable:true,verdict:'Limited'},
+  {phase:7,sol:'001',solName:'Entropy-Gated',name:'EG-MLP (flatten)',cat:'local-learning',type:'learning-rule',dataset:'CIFAR-10',metric:'accuracy',val:41.16,unit:'%',ep:80,stable:true,verdict:'Limited'},
+  {phase:7,sol:'001',solName:'Entropy-Gated',name:'EG-Conv V1 (Sigmoid)',cat:'local-learning',type:'learning-rule',dataset:'CIFAR-10',metric:'accuracy',val:10.00,unit:'%',ep:4,stable:true,verdict:'Dead-end'},
+  // 002 - Fixed-Point Substrate
+  {phase:8,sol:'002',solName:'Fixed-Point Substrate',name:'FPS v0.1 PDE Temporal',cat:'physics-inspired',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:9.80,unit:'%',ep:5,stable:true,verdict:'PDE = random'},
+  {phase:8,sol:'002',solName:'Fixed-Point Substrate',name:'FPS v0.2 PDE + pool',cat:'physics-inspired',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:19.80,unit:'%',ep:10,stable:true,verdict:'Diffusion destroys info'},
+  {phase:8,sol:'002',solName:'Fixed-Point Substrate',name:'FPS v0.4a Fixed-Point',cat:'physics-inspired',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:76.20,unit:'%',ep:40,stable:true,verdict:'Paradigm shift works'},
+  {phase:8,sol:'002',solName:'Fixed-Point Substrate',name:'FPS v0.4b +regions+var',cat:'physics-inspired',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:85.18,unit:'%',ep:40,stable:true,verdict:'Better readout'},
+  {phase:8,sol:'002',solName:'Fixed-Point Substrate',name:'FPS v0.4c +filters 64ch',cat:'physics-inspired',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:92.73,unit:'%',ep:40,stable:true,verdict:'Retinal filters'},
+  {phase:8,sol:'002',solName:'Fixed-Point Substrate',name:'FPS v0.5 Full Power',cat:'physics-inspired',type:'learning-rule',dataset:'MNIST',metric:'accuracy',val:96.44,unit:'%',ep:50,stable:true,verdict:'All levers - 1.6% gap'},
+  {phase:8,sol:'002',solName:'Fixed-Point Substrate',name:'FPS v0.5 Fashion-MNIST',cat:'physics-inspired',type:'learning-rule',dataset:'Fashion-MNIST',metric:'accuracy',val:77.15,unit:'%',ep:50,stable:true,verdict:'Promising'},
+  {phase:8,sol:'002',solName:'Fixed-Point Substrate',name:'FPS v0.5 CIFAR-10',cat:'physics-inspired',type:'learning-rule',dataset:'CIFAR-10',metric:'accuracy',val:42.24,unit:'%',ep:60,stable:true,verdict:'Limited - needs multi-res'},
+];
+
+const FAILED = [
+  {name:'Forward-Forward (Hinton)',cat:'local-learning',acc:'9.80%',fail:'NaN from ep 1',lesson:'Goodness threshold unstable',revisit:'Maybe'},
+  {name:'Predictive Coding',cat:'local-learning',acc:'crash',fail:'Dimension mismatch',lesson:'Complex to implement correctly',revisit:'Yes'},
+  {name:'Equilibrium Propagation',cat:'local-learning',acc:'-',fail:'Not completed',lesson:'Well-published, worth testing',revisit:'Yes'},
+  {name:'Reaction-Diffusion',cat:'physics-inspired',acc:'11.35%',fail:'Stuck at random',lesson:'PDE attractors != classification',revisit:'No'},
+  {name:'Wave Interference',cat:'physics-inspired',acc:'-',fail:'Phase NaN',lesson:'Complex arithmetic fragile fp32',revisit:'No'},
+  {name:'Kuramoto Oscillators',cat:'physics-inspired',acc:'-',fail:'Uniform sync',lesson:'Sync != discrimination',revisit:'No'},
+  {name:'Gossip Protocol',cat:'gradient-free',acc:'-',fail:'Info destruction',lesson:'Averaging kills signal',revisit:'No'},
+  {name:'Learning by Disagreement',cat:'gradient-free',acc:'9.80%',fail:'NaN',lesson:'Need error signal, not topology',revisit:'No'},
+  {name:'Gradient-Free Contrastive',cat:'gradient-free',acc:'11.35%',fail:'Loss explodes',lesson:'Cosine similarity too noisy',revisit:'Maybe'},
+  {name:'Spectral Resonance',cat:'physics-inspired',acc:'9.80%',fail:'Freq drift',lesson:'Needs frequency bounds',revisit:'No'},
+  {name:'NTSO V2',cat:'local-learning',acc:'88.90%',fail:'Diverges ep 19',lesson:'Multi-signal instability',revisit:'Maybe'},
+  {name:'EG+NTSO Hybrid',cat:'hybrid',acc:'86.07%',fail:'Stagnates',lesson:'Competing plasticity = conflict',revisit:'No'},
+  {name:'EG-Conv V1 (Sigmoid)',cat:'local-learning',acc:'10%',fail:'Sigmoid saturation',lesson:'Never sigmoid in conv',revisit:'No'},
+  {name:'EG V4 + augmentation',cat:'local-learning',acc:'95.98%',fail:'Aug hurts (-1.5%)',lesson:'Noisy inputs confuse recon',revisit:'No'},
+  {name:'FPS PDE Temporal (v0.1-v0.3)',cat:'physics-inspired',acc:'19.8%',fail:'Diffusion destroys spatial info',lesson:'Time-stepping PDE loses structure; fixed-point is the right paradigm',revisit:'No'},
+  {name:'FPS scalar input projection',cat:'physics-inspired',acc:'92.7%',fail:'Channel diversity too low',lesson:'Each channel needs unique spatial receptive field, not just a scalar',revisit:'No'},
+  {name:'FPS single-scale Laplacian',cat:'physics-inspired',acc:'85.2%',fail:'No long-range coupling',lesson:'Multi-scale (3+5+7) needed for spatial interactions',revisit:'No'},
+  {name:'FPS linear readout',cat:'physics-inspired',acc:'85.2%',fail:'Saturates early',lesson:'Nonlinear Hebbian readout recovers 11% more from same features',revisit:'No'},
+];
+
+const LESSONS = [
+  'You need an error signal. Topology/geometry/sync without prediction error leads to NaN.',
+  'Simpler plasticity > complex. One gate (entropy) beats 4 competing signals.',
+  'PDE dynamics are a dead-end for learning. Their attractors do not align with classification.',
+  'Sigmoid for dense, ReLU for conv. Sigmoid kills convolutional feature maps.',
+  'Stability > peak accuracy. NTSO peaked 88.9% but EG won 97.46% by never diverging.',
+  '2 layers optimal for local learning. Deeper = worse credit assignment without backprop.',
+  'Reconstruction is the key signal. "Can I predict my input?" drives learning.',
+  'Data augmentation hurts local learning - noisy inputs confuse reconstruction.',
+  '@torch.no_grad() is critical - without it, PyTorch builds autograd graph causing memory leak.',
+  'Fixed-point > PDE temporal. Finding equilibrium Z*=f(Z*) is fundamentally better than simulating dynamics.',
+  'The readout is the bottleneck, not the medium. FPS jumped 85->96% just by improving how we read the fixed point.',
+  'Anderson acceleration cuts fixed-point iterations from 11 to 7 for free.',
+  'Multi-scale Laplacian (3+5+7) is essential - single-scale misses long-range spatial coupling.',
+  'Learnable spatial filters (retinal receptors) give each channel a unique view - massive improvement over scalar projection.',
+];
+
+const ROADMAP = [
+  {sol:'001',p:1,text:'Spatial Hebbian for Conv layers - patch-level correlation, not channel-average'},
+  {sol:'001',p:1,text:'Local Batch Norm with learnable affine'},
+  {sol:'001',p:2,text:'Layer-wise pretraining - freeze layer 1, train layer 2'},
+  {sol:'001',p:2,text:'Local target propagation - combine EG with DTP for deeper nets'},
+  {sol:'001',p:3,text:'Fully local probe - kNN or Hebbian classifier, zero backprop'},
+  {sol:'001',p:3,text:'Free energy connection - prove EG minimizes variational free energy'},
+  {sol:'001',p:4,text:'EG as attention replacement - entropy-gated lateral competition'},
+  {sol:'001',p:4,text:'EG + spiking networks - neuromorphic HW compatible'},
+  {sol:'F01',p:1,text:'Benchmark FluidVLA on standard manipulation tasks (success rate)'},
+  {sol:'F01',p:2,text:'Integrate EG local learning into VLA encoder'},
+  {sol:'F02',p:1,text:'Benchmark FluidWorld prediction accuracy (MSE, FID)'},
+  {sol:'F02',p:2,text:'Compare to Dreamer, IRIS, other world models'},
+  {sol:'F03',p:1,text:'Benchmark FluidLM perplexity on standard corpora'},
+  {sol:'F03',p:2,text:'Test local learning for LM pre-training'},
+  {sol:'global',p:1,text:'Transformer alternatives - local competition instead of attention'},
+  {sol:'global',p:2,text:'Gradient-free at scale - evolutionary + entropy gating'},
+  {sol:'global',p:3,text:'Cross-pollinate: EG features in VLA/LM pipelines'},
+  {sol:'002',p:1,text:'Multi-resolution substrate (multigrid 8x8->16x16->32x32) for CIFAR-10'},
+  {sol:'002',p:1,text:'Hierarchical fixed points - coarse-to-fine equilibrium'},
+  {sol:'002',p:2,text:'Push Fashion-MNIST to 85%+ with more channels and longer training'},
+  {sol:'002',p:2,text:'Benchmark on CIFAR-100 and STL-10'},
+  {sol:'002',p:3,text:'Prove convergence guarantees (Banach fixed-point conditions)'},
+  {sol:'002',p:3,text:'Formal comparison with DEQ (Deep Equilibrium) networks'},
+  {sol:'002',p:4,text:'Substrate as world model - can the medium learn environment dynamics?'},
+  {sol:'002',p:4,text:'Combine FPS with Entropy-Gated Learning (001) for hybrid approach'},
+];
+
+const TIMELINE = [
+  {phase:1,cls:'p',label:'Phase 1 - Baselines',text:'7 classic local algorithms. FF: NaN. Predictive Coding: crashed.',decision:'Classic approaches limited. Need radical ideas.'},
+  {phase:2,cls:'f',label:'Phase 2 - Radical',text:'6 novel algorithms. Reaction-Diffusion: 11.35%. Entropy-Gated concept identified.',decision:'Kill PDE/wave/oscillator. Promote EG.'},
+  {phase:3,cls:'s',label:'Phase 3 - Shootout',text:'EG V1: 86.85% - clear winner. NTSO: 77.71%. Others: NaN.',decision:'Deep optimize EG and NTSO.'},
+  {phase:4,cls:'p',label:'Phase 4 - Deep Opt',text:'NTSO: 88.90% peak then diverges. EG V2: 87.91% stable. Hybrid: 86.07%.',decision:'Simplicity wins. Pure EG only.'},
+  {phase:5,cls:'s',label:'Phase 5 - EG V3',text:'@torch.no_grad() fix. Momentum + cosine LR. 92.81%, never plateaus.',decision:'Push wider + MLP probe.'},
+  {phase:6,cls:'s',label:'Phase 6 - EG V4',text:'[700,400] + MLP probe: 97.46%. Gap to backprop: 0.58%.',decision:'BREAKTHROUGH. Test CIFAR-10.'},
+  {phase:7,cls:'p',label:'Phase 7 - CIFAR-10',text:'EG-Conv V2: 48.22%. Backprop ref: 85.83%. Gap: 37.6%.',decision:'Open challenge. Need spatial Hebbian.'},
+  {phase:8,cls:'s',label:'Phase 8 - Fixed-Point Substrate',text:'New paradigm: Z*=f(Z*). PDE temporal failed (9.8-19.8%), pivot to fixed-point. Iterated: 76%->85%->92%->96.44% MNIST. Fashion-MNIST: 77.15%. CIFAR-10: 42.24%.',decision:'Fixed-point equilibrium validated. Multi-resolution needed for CIFAR.'},
+];
+
+// ============================================================
+// RENDERING ENGINE
+// ============================================================
+
+const C={green:'#43e97b',red:'#f5576c',orange:'#f6d365',blue:'#4facfe',purple:'#a18cd1',gray:'#6b7d96',cyan:'#38f9d7'};
+
+// Header stats - dynamic per dataset
+function renderHeader(){
+  const datasets=[...new Set(EXPERIMENTS.filter(e=>e.val>0).map(e=>e.dataset))];
+  let html=`<div class="stat"><div class="stat-value">${SOLUTIONS.length}</div><div class="stat-label">Solutions</div></div>`;
+  html+=`<div class="stat"><div class="stat-value">${EXPERIMENTS.length}</div><div class="stat-label">Experiments</div></div>`;
+  datasets.forEach(ds=>{
+    const best=Math.max(...EXPERIMENTS.filter(e=>e.dataset===ds&&e.cat!=='reference').map(e=>e.val));
+    const ref=EXPERIMENTS.find(e=>e.dataset===ds&&e.cat==='reference');
+    const color=ref&&best>=ref.val*0.95?'var(--green)':best>20?'var(--orange)':'var(--red)';
+    const unit=EXPERIMENTS.find(e=>e.dataset===ds)?.unit||'%';
+    html+=`<div class="stat"><div class="stat-value" style="color:${color}">${best}${unit}</div><div class="stat-label">Best ${ds}</div></div>`;
+  });
+  // Show WIP solutions count
+  const wip=SOLUTIONS.filter(s=>s.status==='wip').length;
+  if(wip) html+=`<div class="stat"><div class="stat-value" style="color:var(--purple)">${wip}</div><div class="stat-label">WIP</div></div>`;
+  document.getElementById('headerStats').innerHTML=html;
+}
+
+// Nav
+document.querySelectorAll('.nav-tab').forEach(t=>{
+  t.addEventListener('click',()=>showTab(t.dataset.tab));
+});
+
+// Populate filter dropdowns
+function populateFilters(){
+  const cats=new Set(),types=new Set(),ds=new Set();
+  SOLUTIONS.forEach(s=>{cats.add(s.category);types.add(s.type)});
+  EXPERIMENTS.forEach(e=>{cats.add(e.cat);ds.add(e.dataset);types.add(e.type)});
+  ['solCatFilter','expCat','failCat'].forEach(id=>{
+    const sel=document.getElementById(id);if(!sel)return;
+    cats.forEach(c=>{if(c==='reference')return;const o=document.createElement('option');o.value=c;o.textContent=c;sel.appendChild(o)});
+  });
+  ['solTypeFilter'].forEach(id=>{
+    const sel=document.getElementById(id);if(!sel)return;
+    types.forEach(t=>{const o=document.createElement('option');o.value=t;o.textContent=t;sel.appendChild(o)});
+  });
+  ['expDataset','overviewDataset'].forEach(id=>{
+    const sel=document.getElementById(id);if(!sel)return;
+    if(id!=='overviewDataset')ds.forEach(d=>{const o=document.createElement('option');o.value=d;o.textContent=d;sel.appendChild(o)});
+  });
+}
+
+// Solutions list
+function renderSolutions(){
+  document.getElementById('solList').innerHTML=SOLUTIONS.map(s=>{
+    const bestKey=Object.keys(s.bestResults)[0];
+    const bestVal=bestKey?s.bestResults[bestKey].value+s.bestResults[bestKey].unit:'WIP';
+    const bestColor=s.status==='breakthrough'?'var(--green)':s.status==='wip'?'var(--purple)':'var(--orange)';
+    const doms=(s.domains||[]).join(',');
+    return `<div class="sol-item" data-id="${s.id}" data-cat="${s.category}" data-type="${s.type}" data-status="${s.status}" data-name="${s.name.toLowerCase()}" data-domains="${doms}" onclick="showSolution('${s.id}')">
+      <div class="sol-id">${s.id}</div>
+      <div class="sol-name">${s.name}<div style="margin-top:2px">${domainBadges(s.domains)}</div></div>
+      <div class="sol-desc">${s.principle.substring(0,80)}...</div>
+      <div class="sol-meta"><span class="badge badge-${s.status}">${s.status}</span> ${paperBadge(s.paperStatus)}</div>
+      <div class="sol-acc" style="color:${bestColor}">${bestVal}</div>
+    </div>`;
+  }).join('');
+}
+
+function filterSolutions(){
+  const q=document.getElementById('solSearch').value.toLowerCase();
+  const cat=document.getElementById('solCatFilter').value;
+  const st=document.getElementById('solStatusFilter').value;
+  const ty=document.getElementById('solTypeFilter').value;
+  document.querySelectorAll('.sol-item').forEach(el=>{
+    const show=(!q||el.dataset.name.includes(q))&&(!cat||el.dataset.cat===cat)&&(!st||el.dataset.status===st)&&(!ty||el.dataset.type===ty);
+    el.style.display=show?'flex':'none';
+  });
+}
+
+function showSolution(id){
+  const s=SOLUTIONS.find(x=>x.id===id);if(!s)return;
+  const p=document.getElementById('detailPanel');p.classList.remove('hidden');
+
+  // === KPI ROW ===
+  let kpis='';
+  Object.entries(s.bestResults).forEach(([ds,r])=>{
+    const col=r.value>=90?'var(--green)':r.value>=40?'var(--orange)':'var(--red)';
+    kpis+=`<div class="kpi"><div class="kpi-value" style="color:${col}">${r.value}${r.unit}</div><div class="kpi-label">Best ${ds}</div></div>`;
+  });
+  if(s.params)kpis+=`<div class="kpi"><div class="kpi-value">${Math.round(s.params.local/s.params.total*100)}%</div><div class="kpi-label">Params local</div></div>`;
+  // Count related experiments & roadmap items
+  const relExp=EXPERIMENTS.filter(e=>e.sol===s.id);
+  const relFailed=relExp.filter(e=>e.val<10||(e.stable===false&&e.val<50));
+  const relRM=ROADMAP.filter(r=>r.sol===s.id);
+  kpis+=`<div class="kpi"><div class="kpi-value">${relExp.length}</div><div class="kpi-label">Experiments</div></div>`;
+  kpis+=`<div class="kpi"><div class="kpi-value">${relRM.length}</div><div class="kpi-label">Roadmap items</div></div>`;
+
+  // === EQUATION ===
+  let eqHtml='';
+  if(s.equation){
+    eqHtml=`<h3>Core Equation</h3><div class="eq-block"><div class="katex-render" data-display="true" data-tex="${escapeAttr(s.equation.latex)}"></div></div>`;
+    if(s.equation.components){
+      eqHtml+=`<table style="margin:8px 0"><tr><th>Symbol</th><th>Description</th><th>Equation</th></tr>`;
+      s.equation.components.forEach(c=>{
+        eqHtml+=`<tr><td><span class="katex-render" data-tex="${escapeAttr(c.symbol)}"></span></td><td>${c.desc}</td><td><span class="katex-render" data-tex="${escapeAttr(c.latex)}"></span></td></tr>`;
+      });
+      eqHtml+=`</table>`;
+    }
+    if(s.equation.code){
+      eqHtml+=`<h3>Implementation</h3><pre><code class="language-python">${escapeHtml(s.equation.code)}</code></pre>`;
+    }
+  }
+
+  // === VERSION HISTORY ===
+  let verHtml='';
+  if(s.versions.length){
+    verHtml=`<h3>Version History</h3><table><tr><th>Version</th><th>Architecture</th><th>Dataset</th><th>Result</th><th>Ep</th><th>Stable</th><th>Change</th><th>Status</th></tr>`;
+    s.versions.forEach(v=>{
+      const col=v.acc>=90?'acc-best':v.acc>=40?'acc-mid':'acc-fail';
+      verHtml+=`<tr><td><strong>${v.v}</strong></td><td><code>${v.arch}</code></td><td>${v.dataset||'MNIST'}</td>
+        <td class="${col}">${v.acc}%</td><td>${v.ep}</td>
+        <td>${v.stable?'Yes':'<span style="color:var(--red)">No</span>'}</td>
+        <td>${v.change}</td><td><span class="badge badge-${v.status}">${v.status}</span></td></tr>`;
+    });
+    verHtml+=`</table>`;
+  }
+
+  // === RELATED EXPERIMENTS (from EXPERIMENTS array) ===
+  let expHtml='';
+  if(relExp.length){
+    const sorted=[...relExp].sort((a,b)=>b.val-a.val);
+    expHtml=`<h3>All Experiments (${relExp.length})</h3><table><tr><th>Phase</th><th>Algorithm</th><th>Dataset</th><th>Metric</th><th>Value</th><th>Ep</th><th>Stable</th><th>Verdict</th></tr>`;
+    sorted.forEach(e=>{
+      const cl=e.val>=50?'acc-best':e.val>=10?'acc-mid':'acc-fail';
+      expHtml+=`<tr><td>${e.phase}</td><td><strong>${e.name}</strong></td><td>${e.dataset}</td><td>${e.metric}</td>
+        <td class="${cl}">${e.val>0?e.val+e.unit:'-'}</td><td>${e.ep}</td>
+        <td>${e.stable?'Yes':'<span style="color:var(--red)">No</span>'}</td><td>${e.verdict}</td></tr>`;
+    });
+    expHtml+=`</table>`;
+  }
+
+  // === RELATED FAILED / LESSONS ===
+  let failHtml='';
+  const relF=FAILED.filter(f=>{
+    // match by name patterns from this solution's experiments
+    return relExp.some(e=>f.name===e.name || e.name.includes(f.name) || f.name.includes(s.abbr||'---'));
+  });
+  // Also include any failed versions from the versions array
+  const failedVersions=(s.versions||[]).filter(v=>v.status==='failed');
+  if(relF.length || failedVersions.length){
+    failHtml=`<h3>Failed Approaches & Lessons</h3>`;
+    if(failedVersions.length){
+      failHtml+=`<table><tr><th>Version</th><th>Result</th><th>Change</th><th>Why it failed</th></tr>`;
+      failedVersions.forEach(v=>{
+        failHtml+=`<tr><td><strong>${v.v}</strong></td><td class="acc-fail">${v.acc}%</td><td>${v.change}</td>
+          <td style="color:var(--text2)">${v.stable===false?'Unstable / diverged':'Did not improve'}</td></tr>`;
+      });
+      failHtml+=`</table>`;
+    }
+    if(relF.length){
+      failHtml+=`<div style="margin-top:8px">`;
+      relF.forEach(f=>{
+        failHtml+=`<div class="lesson"><div class="lesson-n" style="background:var(--red)">!</div><div><strong>${f.name}</strong> (${f.acc}) - ${f.fail}. <em style="color:var(--text2)">${f.lesson}</em></div></div>`;
+      });
+      failHtml+=`</div>`;
+    }
+  }
+
+  // === ROADMAP ===
+  let rmHtml='';
+  if(relRM.length){
+    rmHtml=`<h3>Roadmap (${relRM.length} items)</h3>`;
+    relRM.sort((a,b)=>a.p-b.p).forEach(r=>{
+      rmHtml+=`<div class="rm-item"><div class="rm-p p${r.p}">P${r.p}</div><div>${r.text}</div></div>`;
+    });
+  }
+
+  // === WRITEUPS ===
+  let wuHtml='';
+  const relWU=WRITEUPS.filter(w=>w.sol===s.id);
+  if(relWU.length){
+    wuHtml=`<h3>Writeups (${relWU.length})</h3>`;
+    relWU.forEach(w=>{
+      wuHtml+=`<div class="wu-list-item" onclick="showTab('writeups');setTimeout(()=>openWriteup('${w.id}'),100)" style="margin-bottom:8px;padding:10px 14px">
+        <div style="display:flex;gap:8px;align-items:center">
+          <span class="wu-type-badge wu-type-${w.type}">${w.type}</span>
+          <strong>${w.title}</strong>
+          <span class="badge badge-${w.status==='published'?'breakthrough':'limited'}" style="font-size:10px">${w.status}</span>
+        </div>
+      </div>`;
+    });
+  }
+
+  // === ASSEMBLE ===
+  p.innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px">
+      <div>
+        <h2 style="border:none;padding:0;margin:0">${s.id} - ${s.name}</h2>
+        <p style="color:var(--text2);margin-top:4px">${s.principle}</p>
+        ${s.github?`<p style="margin-top:4px"><a href="${s.github}" target="_blank">${s.github}</a></p>`:''}
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+        <span class="badge badge-${s.status}" style="font-size:13px;padding:4px 12px">${s.status}</span>
+        <code>${s.category}</code><code>${s.type}</code>
+        ${paperBadge(s.paperStatus)}
+        ${s.arxiv?`<a href="https://arxiv.org/abs/${s.arxiv}" target="_blank" style="font-size:12px">arXiv:${s.arxiv}</a>`:''}
+      </div>
+    </div>
+    <div style="margin:8px 0">${domainBadges(s.domains)}</div>
+    ${s.crossRefs?`<div style="margin:6px 0">${crossRefLinks(s.crossRefs)}</div>`:''}
+    <div class="kpi-row">${kpis}</div>
+    ${eqHtml}
+    ${verHtml}
+    ${expHtml}
+    ${failHtml}
+    ${wuHtml}
+    ${rmHtml}
+    ${!rmHtml&&s.nextStep?`<h3>Next Step</h3><p>${s.nextStep}</p>`:''}`;
+
+  // Render KaTeX
+  p.querySelectorAll('.katex-render').forEach(el=>{
+    try{
+      katex.render(el.dataset.tex, el, {
+        throwOnError:false,
+        displayMode: el.dataset.display === 'true'
+      });
+    }catch(e){ el.textContent = el.dataset.tex; }
+  });
+  // Highlight code
+  p.querySelectorAll('pre code').forEach(b=>hljs.highlightElement(b));
+  // Init sort on dynamically generated tables in the detail panel
+  initTableSort(p);
+  p.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function escapeHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function escapeAttr(s){return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+// ============================================================
+// GENERIC TABLE SORTING - works on any <table> in the page
+// Click header = sort asc, click again = desc, click again = asc...
+// Auto-detects numeric vs string columns
+// ============================================================
+function initTableSort(root){
+  (root||document).querySelectorAll('table').forEach(table=>{
+    const headers=table.querySelectorAll('thead th');
+    if(!headers.length) return;
+    // Add sort arrows
+    headers.forEach((th,i)=>{
+      if(th.querySelector('.sort-arrow')) return; // already init
+      th.innerHTML+=`<span class="sort-arrow">&#8597;</span>`;
+      th.addEventListener('click',()=>sortTable(table,i,th));
+    });
+  });
+}
+
+function sortTable(table,colIdx,clickedTh){
+  const tbody=table.querySelector('tbody')||table;
+  const headerRow=table.querySelector('thead tr');
+  if(!headerRow) return;
+  const rows=Array.from(tbody.querySelectorAll('tr'));
+  if(!rows.length) return;
+
+  // Toggle direction
+  const wasAsc=clickedTh.classList.contains('sort-asc');
+  // Clear all headers in this table
+  headerRow.querySelectorAll('th').forEach(th=>{th.classList.remove('sort-asc','sort-desc')});
+  const dir=wasAsc?'desc':'asc';
+  clickedTh.classList.add('sort-'+dir);
+
+  // Extract cell values
+  rows.sort((a,b)=>{
+    const cellA=a.children[colIdx];
+    const cellB=b.children[colIdx];
+    if(!cellA||!cellB) return 0;
+    let va=cellA.textContent.trim();
+    let vb=cellB.textContent.trim();
+
+    // Try numeric (strip % and other units)
+    const na=parseFloat(va.replace(/[^0-9.\-]/g,''));
+    const nb=parseFloat(vb.replace(/[^0-9.\-]/g,''));
+    if(!isNaN(na)&&!isNaN(nb)){
+      return dir==='asc'?na-nb:nb-na;
+    }
+    // Handle '-' or empty as lowest
+    if(va==='-'||va==='') va='\uffff';
+    if(vb==='-'||vb==='') vb='\uffff';
+    // String compare
+    return dir==='asc'?va.localeCompare(vb):vb.localeCompare(va);
+  });
+
+  // Re-append sorted rows
+  rows.forEach(r=>tbody.appendChild(r));
+}
+
+// Experiments table
+function renderExp(){
+  // Populate solution filter dropdown
+  const solSel=document.getElementById('expSol');
+  if(solSel.options.length<=1){
+    const sols=new Set(EXPERIMENTS.map(e=>e.solName));
+    sols.forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;solSel.appendChild(o)});
+  }
+  const sort=document.getElementById('expSort').value;
+  let sorted=[...EXPERIMENTS];
+  if(sort==='acc-desc')sorted.sort((a,b)=>b.val-a.val);
+  else if(sort==='acc-asc')sorted.sort((a,b)=>a.val-b.val);
+  else if(sort==='phase-asc')sorted.sort((a,b)=>a.phase-b.phase);
+  else sorted.sort((a,b)=>a.name.localeCompare(b.name));
+  document.getElementById('expBody').innerHTML=sorted.map(e=>{
+    const cl=e.val>=50?'acc-best':e.val>=10?'acc-mid':'acc-fail';
+    const solBadge=e.sol==='-'?`<span style="color:var(--text2)">-</span>`
+      :`<span style="color:var(--accent);font-weight:600">${e.sol}</span> <span style="color:var(--text2);font-size:11px">${e.solName}</span>`;
+    return `<tr data-search="${e.name} ${e.cat} ${e.dataset} ${e.verdict} ${e.solName}".toLowerCase() data-dataset="${e.dataset}" data-cat="${e.cat}" data-val="${e.val}" data-sol="${e.solName}">
+      <td>${e.phase}</td><td>${solBadge}</td><td><strong>${e.name}</strong></td><td><code>${e.cat}</code></td>
+      <td>${e.dataset}</td><td>${e.metric}</td><td class="${cl}">${e.val>0?e.val+e.unit:'-'}</td>
+      <td>${e.ep}</td><td>${e.stable?'Yes':'<span style="color:var(--red)">No</span>'}</td><td>${e.verdict}</td></tr>`;
+  }).join('');
+  filterExp();
+}
+
+function filterExp(){
+  const q=document.getElementById('expSearch').value.toLowerCase();
+  const ds=document.getElementById('expDataset').value;
+  const cat=document.getElementById('expCat').value;
+  const st=document.getElementById('expStatus').value;
+  const sol=document.getElementById('expSol').value;
+  let count=0;
+  document.querySelectorAll('#expBody tr').forEach(r=>{
+    let show=true;
+    if(q&&!r.textContent.toLowerCase().includes(q))show=false;
+    if(ds&&r.dataset.dataset!==ds)show=false;
+    if(cat&&r.dataset.cat!==cat)show=false;
+    if(sol&&r.dataset.sol!==sol)show=false;
+    if(st){const v=parseFloat(r.dataset.val);
+      if(st==='success'&&v<50)show=false;
+      if(st==='limited'&&(v<10||v>=50))show=false;
+      if(st==='failed'&&v>=10)show=false;
+    }
+    r.style.display=show?'':'none';
+    if(show)count++;
+  });
+  document.getElementById('expCount').textContent=count;
+}
+
+// Failed table
+function renderFailed(){
+  document.getElementById('failBody').innerHTML=FAILED.map(f=>`
+    <tr data-search="${f.name} ${f.cat} ${f.fail} ${f.lesson}" data-cat="${f.cat}" data-revisit="${f.revisit}">
+      <td><strong>${f.name}</strong></td><td><code>${f.cat}</code></td><td class="acc-fail">${f.acc}</td>
+      <td>${f.fail}</td><td>${f.lesson}</td>
+      <td>${f.revisit==='Yes'?'<span style="color:var(--green)">Yes</span>':f.revisit==='Maybe'?'<span style="color:var(--orange)">Maybe</span>':'No'}</td>
+    </tr>`).join('');
+  document.getElementById('lessonsContainer').innerHTML=LESSONS.map((l,i)=>
+    `<div class="lesson"><div class="lesson-n">${i+1}</div><div>${l}</div></div>`).join('');
+}
+
+function filterFail(){
+  const q=document.getElementById('failSearch').value.toLowerCase();
+  const cat=document.getElementById('failCat').value;
+  const rev=document.getElementById('failRevisit').value;
+  document.querySelectorAll('#failBody tr').forEach(r=>{
+    let show=true;
+    if(q&&!r.dataset.search.includes(q))show=false;
+    if(cat&&r.dataset.cat!==cat)show=false;
+    if(rev&&r.dataset.revisit!==rev)show=false;
+    r.style.display=show?'':'none';
+  });
+}
+
+// Timeline
+function renderTimeline(){
+  document.getElementById('timelineContainer').innerHTML=TIMELINE.map(t=>`
+    <div class="tl-item ${t.cls}">
+      <div class="tl-label">${t.label}</div>
+      <div class="card" style="margin-top:4px">
+        <p>${t.text}</p>
+        <p style="color:var(--text2);margin-top:6px;font-size:12px"><strong>Decision:</strong> ${t.decision}</p>
+      </div>
+    </div>`).join('');
+}
+
+// Roadmap
+// Resolve solution ID to human-readable name
+function solLabel(id){
+  if(id==='global') return 'Global Research';
+  const s=SOLUTIONS.find(x=>x.id===id);
+  return s ? `${s.id} ${s.name}` : id;
+}
+
+function renderRM(){
+  const sel=document.getElementById('rmSolFilter');
+  const seen=new Set();
+  ROADMAP.forEach(r=>{
+    if(!seen.has(r.sol)){
+      seen.add(r.sol);
+      const o=document.createElement('option');
+      o.value=r.sol;
+      o.textContent=solLabel(r.sol);
+      sel.appendChild(o);
+    }
+  });
+  filterRM();
+}
+function filterRM(){
+  const sol=document.getElementById('rmSolFilter').value;
+  const pri=document.getElementById('rmPriFilter').value;
+  document.getElementById('rmContainer').innerHTML=ROADMAP.filter(r=>(!sol||r.sol===sol)&&(!pri||r.p==pri)).map(r=>{
+    const label=solLabel(r.sol);
+    const color=r.sol==='global'?'var(--text2)':'var(--accent)';
+    return `<div class="rm-item"><div class="rm-p p${r.p}">P${r.p}</div><div><span style="color:${color};font-weight:600">${label}</span> - ${r.text}</div></div>`;
+  }).join('');
+}
+
+// ============================================================
+// CHARTS
+// ============================================================
+const chartDefaults={responsive:true,plugins:{legend:{labels:{color:'#e6edf3',font:{size:11}}}},
+  scales:{y:{grid:{color:'#1a2030'},ticks:{color:'#6b7d96'}},x:{grid:{color:'#1a2030'},ticks:{color:'#6b7d96',font:{size:10}}}}};
+
+// ============================================================
+// DYNAMIC DASHBOARD - domain cards + domain-specific views
+// ============================================================
+const domainMeta={
+  ml:{name:'Machine Learning',icon:'&#9881;',color:C.blue},
+  physics:{name:'Physics',icon:'&#9883;',color:C.purple},
+  quantum:{name:'Quantum',icon:'&#9878;',color:C.cyan},
+  cybersec:{name:'Cybersecurity',icon:'&#9888;',color:C.red},
+  robotics:{name:'Robotics',icon:'&#9881;',color:C.orange},
+  neuro:{name:'Neuroscience',icon:'&#9829;',color:C.green},
+  math:{name:'Mathematics',icon:'&#8734;',color:C.gray},
+};
+
+let activeDashCharts=[];
+function destroyDashCharts(){activeDashCharts.forEach(c=>c.destroy());activeDashCharts=[]}
+
+function renderDomainCards(){
+  // Compute stats per domain
+  const domStats={};
+  DOMAINS.forEach(d=>{domStats[d]={solutions:0,experiments:0,best:null,bestLabel:'',wip:0}});
+  SOLUTIONS.forEach(s=>{
+    (s.domains||[]).forEach(d=>{
+      if(!domStats[d]) return;
+      domStats[d].solutions++;
+      if(s.status==='wip') domStats[d].wip++;
+      // Track best result
+      Object.entries(s.bestResults||{}).forEach(([ds,r])=>{
+        if(!domStats[d].best||r.value>domStats[d].best){domStats[d].best=r.value;domStats[d].bestLabel=`${r.value}${r.unit} ${ds}`}
+      });
+    });
+  });
+  EXPERIMENTS.forEach(e=>{
+    const sol=SOLUTIONS.find(s=>s.id===e.sol);
+    if(sol)(sol.domains||[]).forEach(d=>{if(domStats[d])domStats[d].experiments++});
+  });
+
+  // Render cards
+  const container=document.getElementById('domainCards');
+  container.innerHTML=DOMAINS.map(d=>{
+    const s=domStats[d];const m=domainMeta[d]||{name:d,icon:'?',color:C.gray};
+    const hasData=s.solutions>0;
+    return `<div class="card" style="cursor:pointer;border-left:3px solid ${m.color};padding:14px;${!hasData?'opacity:.4':''}" onclick="switchDomain(null,'${d}')">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:14px;font-weight:600;color:${m.color}">${m.icon} ${m.name}</div>
+        ${s.wip?`<span class="badge badge-wip" style="font-size:9px">WIP</span>`:''}
+      </div>
+      <div style="margin-top:8px;display:flex;gap:16px;font-size:12px;color:var(--text2)">
+        <div><strong style="color:var(--text)">${s.solutions}</strong> solutions</div>
+        <div><strong style="color:var(--text)">${s.experiments}</strong> experiments</div>
+      </div>
+      ${s.bestLabel?`<div style="margin-top:6px;font-size:13px"><strong style="color:${m.color}">${s.bestLabel}</strong></div>`:'<div style="margin-top:6px;font-size:12px;color:var(--text2)">No results yet</div>'}
+    </div>`;
+  }).join('');
+
+  // Render domain sub-tabs
+  const tabs=document.getElementById('domainTabs');
+  tabs.innerHTML=`<div class="nav-tab active" onclick="switchDomain(this,'all')" style="border:none">All Domains</div>`;
+  DOMAINS.forEach(d=>{
+    const m=domainMeta[d]||{name:d};
+    if(domStats[d].solutions>0){
+      tabs.innerHTML+=`<div class="nav-tab" onclick="switchDomain(this,'${d}')" style="border:none">${m.name}</div>`;
+    }
+  });
+
+  switchDomain(null,'all');
+}
+
+function switchDomain(btn,domain){
+  // Update tab state
+  document.querySelectorAll('#domainTabs .nav-tab').forEach(t=>t.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  else document.querySelector(`#domainTabs .nav-tab`)?.classList.add('active');
+
+  const container=document.getElementById('dashboardContent');
+  destroyDashCharts();
+
+  // Filter solutions & experiments by domain
+  const sols=domain==='all'?SOLUTIONS:SOLUTIONS.filter(s=>(s.domains||[]).includes(domain));
+  const exps=domain==='all'?EXPERIMENTS:EXPERIMENTS.filter(e=>{
+    const sol=SOLUTIONS.find(s=>s.id===e.sol);
+    return sol&&(sol.domains||[]).includes(domain) || e.cat==='reference';
+  });
+
+  // Build dashboard HTML
+  let html='<div class="chart-grid">';
+
+  // Chart 1: Results bar chart (filtered)
+  const chartData=exps.filter(e=>e.val>0).sort((a,b)=>b.val-a.val).slice(0,20);
+  html+=`<div class="chart-card"><h3>Results${domain!=='all'?' - '+((domainMeta[domain]||{}).name||domain):''}</h3><canvas id="dashChart1"></canvas></div>`;
+
+  // Chart 2: Status distribution
+  html+=`<div class="chart-card"><h3>Status Distribution</h3><canvas id="dashChart2"></canvas></div>`;
+  html+=`</div><div class="chart-grid">`;
+
+  // Chart 3: Solutions by category
+  html+=`<div class="chart-card"><h3>By Category</h3><canvas id="dashChart3"></canvas></div>`;
+
+  // Chart 4: Evolution of best solution in this domain
+  const bestSol=sols.filter(s=>s.versions&&s.versions.length).sort((a,b)=>{
+    const aMax=Math.max(...a.versions.map(v=>v.acc));
+    const bMax=Math.max(...b.versions.map(v=>v.acc));
+    return bMax-aMax;
+  })[0];
+  if(bestSol){
+    html+=`<div class="chart-card"><h3>Evolution - ${bestSol.name}</h3><canvas id="dashChart4"></canvas></div>`;
+  } else {
+    html+=`<div class="chart-card"><h3>No version history yet</h3><div style="padding:40px;text-align:center;color:var(--text2)">Add experiments to see evolution</div></div>`;
+  }
+  html+=`</div>`;
+
+  // Solutions table for this domain
+  html+=`<div class="card"><div class="card-title" style="margin-bottom:10px">Solutions${domain!=='all'?' in '+(domainMeta[domain]||{}).name:''}</div>`;
+  html+=`<table><thead><tr><th>ID</th><th>Name</th><th>Domains</th><th>Status</th><th>Best Result</th><th>Paper</th><th>Next Step</th></tr></thead><tbody>`;
+  sols.forEach(s=>{
+    const bestKey=Object.keys(s.bestResults||{})[0];
+    const bestStr=bestKey?`${s.bestResults[bestKey].value}${s.bestResults[bestKey].unit} ${bestKey}`:'WIP';
+    const bestColor=s.status==='breakthrough'?'acc-best':s.status==='wip'?'':'acc-mid';
+    html+=`<tr style="cursor:pointer" onclick="showTab('solutions');setTimeout(()=>showSolution('${s.id}'),100)">
+      <td><code>${s.id}</code></td><td><strong>${s.name}</strong></td>
+      <td>${domainBadges(s.domains)}</td>
+      <td><span class="badge badge-${s.status}">${s.status}</span></td>
+      <td class="${bestColor}">${bestStr}</td>
+      <td>${paperBadge(s.paperStatus)}</td>
+      <td style="color:var(--text2);font-size:12px">${s.nextStep||''}</td></tr>`;
+  });
+  html+=`</tbody></table></div>`;
+
+  container.innerHTML=html;
+
+  // Render charts
+  if(chartData.length){
+    activeDashCharts.push(new Chart(document.getElementById('dashChart1'),{type:'bar',
+      data:{labels:chartData.map(e=>e.name.substring(0,20)+(e.dataset!=='MNIST'?' ('+e.dataset+')':'')),
+        datasets:[{data:chartData.map(e=>e.val),backgroundColor:chartData.map(e=>e.val>=50?C.green:e.val>=10?C.orange:C.red),borderRadius:4}]},
+      options:{...chartDefaults,indexAxis:'y',plugins:{legend:{display:false}},
+        scales:{x:{...chartDefaults.scales.x,beginAtZero:true,ticks:{...chartDefaults.scales.x.ticks,callback:v=>v+'%'}},
+                y:{...chartDefaults.scales.y,ticks:{...chartDefaults.scales.y.ticks,font:{size:10}}}}}}));
+  }
+
+  // Status donut
+  const st={success:0,limited:0,failed:0,wip:0};
+  sols.forEach(s=>{if(s.status==='breakthrough')st.success++;else if(s.status==='promising')st.success++;else if(s.status==='wip')st.wip++;else if(s.status==='limited')st.limited++;else st.failed++});
+  activeDashCharts.push(new Chart(document.getElementById('dashChart2'),{type:'doughnut',
+    data:{labels:['Success','WIP','Limited','Failed'],datasets:[{data:[st.success,st.wip,st.limited,st.failed],
+      backgroundColor:[C.green,C.purple,C.orange,C.red]}]},
+    options:{responsive:true,plugins:{legend:{position:'right',labels:{color:'#d4dce8',font:{size:11}}}}}}));
+
+  // Category donut
+  const cats={};exps.filter(e=>e.cat!=='reference').forEach(e=>{cats[e.cat]=(cats[e.cat]||0)+1});
+  const catColors=[C.blue,C.green,C.orange,C.purple,C.red,C.gray,C.cyan];
+  activeDashCharts.push(new Chart(document.getElementById('dashChart3'),{type:'doughnut',
+    data:{labels:Object.keys(cats),datasets:[{data:Object.values(cats),backgroundColor:catColors.slice(0,Object.keys(cats).length)}]},
+    options:{responsive:true,plugins:{legend:{position:'right',labels:{color:'#d4dce8',font:{size:11}}}}}}));
+
+  // Evolution chart
+  if(bestSol && document.getElementById('dashChart4')){
+    const vers=bestSol.versions.filter(v=>v.dataset==='MNIST'||!v.dataset);
+    if(vers.length){
+      activeDashCharts.push(new Chart(document.getElementById('dashChart4'),{type:'line',
+        data:{labels:vers.map(v=>v.v),datasets:[{label:'Accuracy',
+          data:vers.map(v=>v.acc),borderColor:C.green,backgroundColor:'rgba(67,233,123,.08)',
+          fill:true,tension:.3,pointRadius:5,
+          pointBackgroundColor:vers.map(v=>v.stable?C.green:C.red)}]},
+        options:{...chartDefaults,scales:{...chartDefaults.scales,y:{...chartDefaults.scales.y,
+          ticks:{...chartDefaults.scales.y.ticks,callback:v=>v+'%'}}}}}));
+    }
+  }
+  // Init sort on generated table
+  initTableSort(container);
+}
+
+function buildOverviewChart(){renderDomainCards()}
+
+// Timeline chart
+const tlChart=new Chart(document.getElementById('timelineChart'),{type:'line',
+  data:{labels:TIMELINE.map(t=>t.label.replace('Phase ','P')),datasets:[
+    {label:'Best local MNIST',data:[9.80,11.35,86.85,88.90,92.81,97.46,97.46],borderColor:C.green,backgroundColor:'rgba(67,233,123,.08)',fill:true,tension:.3,pointRadius:5},
+    {label:'Backprop MNIST ref',data:Array(7).fill(98.04),borderColor:C.gray,borderDash:[5,5],pointRadius:0},
+    {label:'Best local CIFAR-10',data:[null,null,null,null,null,null,48.22],borderColor:C.orange,pointRadius:7,pointBackgroundColor:C.orange},
+  ]},options:{...chartDefaults,scales:{...chartDefaults.scales,y:{...chartDefaults.scales.y,min:0,max:100,ticks:{...chartDefaults.scales.y.ticks,callback:v=>v+'%'}}}}});
+
+function toggleEvo(btn,idx){
+  btn.classList.toggle('active');
+  tlChart.data.datasets[idx].hidden=!btn.classList.contains('active');
+  tlChart.update();
+}
+
+// ============================================================
+// INIT
+// ============================================================
+// ============================================================
+// GLOBAL SEARCH - searches across ALL data
+// ============================================================
+function clearGlobalSearch(){
+  const input=document.getElementById('globalSearch');
+  input.value='';
+  document.getElementById('searchWrap').classList.remove('has-value');
+  document.getElementById('globalResults').classList.add('hidden');
+  input.focus();
+}
+
+function globalSearchHandler(){
+  const input=document.getElementById('globalSearch');
+  const q=input.value.toLowerCase().trim();
+  const wrap=document.getElementById('searchWrap');
+  const res=document.getElementById('globalResults');
+  // Toggle clear button visibility
+  if(input.value.length>0) wrap.classList.add('has-value'); else wrap.classList.remove('has-value');
+  if(q.length<2){res.classList.add('hidden');return}
+  res.classList.remove('hidden');
+  let hits=[];
+  // Search solutions
+  SOLUTIONS.forEach(s=>{
+    const blob=`${s.name} ${s.principle} ${s.category} ${s.type} ${(s.domains||[]).join(' ')} ${s.equation?.code||''} ${s.equation?.latex||''} ${(s.tags||[]).join(' ')}`.toLowerCase();
+    if(blob.includes(q)) hits.push({type:'Solution',label:`${s.id} - ${s.name}`,sub:s.principle.substring(0,80),action:()=>{showTab('solutions');setTimeout(()=>showSolution(s.id),100)}});
+  });
+  // Search experiments
+  EXPERIMENTS.forEach(e=>{
+    const blob=`${e.name} ${e.solName} ${e.cat} ${e.dataset} ${e.verdict}`.toLowerCase();
+    if(blob.includes(q)) hits.push({type:'Experiment',label:e.name,sub:`${e.dataset} ${e.val}${e.unit} - ${e.verdict}`,action:()=>showTab('experiments')});
+  });
+  // Search failed
+  FAILED.forEach(f=>{
+    const blob=`${f.name} ${f.fail} ${f.lesson}`.toLowerCase();
+    if(blob.includes(q)) hits.push({type:'Lesson',label:f.name,sub:f.lesson,action:()=>showTab('failed')});
+  });
+  // Search lessons
+  LESSONS.forEach((l,i)=>{
+    if(l.toLowerCase().includes(q)) hits.push({type:'Lesson',label:`Lesson #${i+1}`,sub:l.substring(0,80),action:()=>showTab('failed')});
+  });
+  // Search roadmap
+  ROADMAP.forEach(r=>{
+    if(r.text.toLowerCase().includes(q)) hits.push({type:'Roadmap',label:solLabel(r.sol),sub:r.text.substring(0,80),action:()=>showTab('roadmap')});
+  });
+  // Search todos
+  TODOS.forEach(t=>{
+    if(t.text.toLowerCase().includes(q)) hits.push({type:'Todo',label:t.done?'[done]':'[open]',sub:t.text.substring(0,80),action:()=>showTab('todo')});
+  });
+  // Search writeups
+  WRITEUPS.forEach(w=>{
+    const blob=`${w.title} ${w.abstract||''} ${(w.tags||[]).join(' ')} ${w.content||''}`.toLowerCase();
+    if(blob.includes(q)) hits.push({type:'Writeup',label:w.title,sub:`${w.type} - ${w.status}`,action:()=>{showTab('writeups');setTimeout(()=>openWriteup(w.id),100)}});
+  });
+  // Limit and render
+  hits=hits.slice(0,15);
+  res.innerHTML=hits.length?hits.map(h=>
+    `<div class="sr-item" onclick="clearGlobalSearch();(${h.action.toString()})()">
+      <div class="sr-type">${h.type}</div><div><strong>${h.label}</strong><br><span style="color:var(--text2);font-size:11px">${h.sub}</span></div>
+    </div>`).join(''):`<div style="padding:16px;color:var(--text2);text-align:center">No results for "${q}"</div>`;
+}
+
+function showTab(id){
+  document.querySelectorAll('.nav-tab').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(x=>x.classList.remove('active'));
+  document.querySelector(`.nav-tab[data-tab="${id}"]`)?.classList.add('active');
+  document.getElementById(id)?.classList.add('active');
+}
+
+// ============================================================
+// TODO RENDERING
+// ============================================================
+let todoFilter='all';
+function renderTodos(){
+  const q=(document.getElementById('todoSearch')?.value||'').toLowerCase();
+  const items=TODOS.filter(t=>{
+    if(todoFilter==='open'&&t.done)return false;
+    if(todoFilter==='done'&&!t.done)return false;
+    if(q&&!t.text.toLowerCase().includes(q))return false;
+    return true;
+  });
+  document.getElementById('todoContainer').innerHTML=items.map(t=>{
+    const priBadge=t.priority==='high'?'<span class="badge" style="background:rgba(248,81,73,.15);color:var(--red);margin-left:6px">high</span>'
+      :t.priority==='idea'?'<span class="badge" style="background:rgba(88,166,255,.15);color:var(--accent);margin-left:6px">idea</span>'
+      :t.priority==='speculative'?'<span class="badge" style="background:rgba(188,140,255,.15);color:var(--purple);margin-left:6px">speculative</span>':'';
+    return `<div class="todo-item">
+      <div class="todo-check ${t.done?'done':''}">${t.done?'&#10003;':''}</div>
+      <div style="${t.done?'text-decoration:line-through;color:var(--text2)':''}">${t.text}${priBadge}</div>
+    </div>`;
+  }).join('');
+}
+function filterTodos(){renderTodos()}
+function toggleTodoFilter(btn,mode){
+  btn.parentElement.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  todoFilter=mode;
+  renderTodos();
+}
+
+// ============================================================
+// HELPER: domain badges HTML
+// ============================================================
+function domainBadges(domains){
+  if(!domains||!domains.length) return '';
+  return domains.map(d=>`<span class="domain-badge domain-${d}">${d}</span>`).join(' ');
+}
+
+// HELPER: cross-ref links
+function crossRefLinks(refs){
+  if(!refs) return '';
+  let html='';
+  const render=(label,ids)=>{
+    if(!ids||!ids.length) return '';
+    return `<span style="color:var(--text2);font-size:11px">${label}:</span> `+ids.map(id=>{
+      const s=SOLUTIONS.find(x=>x.id===id);
+      return s?`<span class="xref" onclick="showSolution('${id}')">${id} ${s.name}</span>`:`<span class="xref">${id}</span>`;
+    }).join(' ')+' ';
+  };
+  html+=render('Builds on',refs.builds_on);
+  html+=render('Enables',refs.enables);
+  html+=render('Related',refs.related_to);
+  return html;
+}
+
+// HELPER: paper status badge
+function paperBadge(status){
+  if(!status||status==='none') return '<span class="paper-none">no paper</span>';
+  return `<span class="paper-${status}">${status}</span>`;
+}
+
+// ============================================================
+// WRITEUPS
+// ============================================================
+// type: article | book | chapter | essay | tutorial
+// status: draft | review | published
+// content: markdown string (embedded here, or fetched from file)
+const WRITEUPS = [
+  // Example - remove or replace with real writeups
+  // {
+  //   id:'wu-001-intro',
+  //   title:'The Entropy-Gated Learning Paradigm',
+  //   type:'article',
+  //   sol:'001',
+  //   solName:'Entropy-Gated Learning',
+  //   date:'2026-04-03',
+  //   status:'draft',
+  //   abstract:'How entropy-gated plasticity achieves 97.46% on MNIST without backpropagation.',
+  //   tags:['local-learning','entropy','no-backprop'],
+  //   content:`## Introduction\n\nWhat if neurons could decide for themselves when to learn?\n\n...`
+  // },
+];
+
+// Minimal markdown to HTML (no external dep)
+function mdToHtml(md){
+  if(!md) return '<p style="color:var(--text2)">No content yet.</p>';
+  let html=md
+    // Code blocks first (before other rules)
+    .replace(/```(\w*)\n([\s\S]*?)```/g,(m,lang,code)=>`<pre><code class="language-${lang||'text'}">${escapeHtml(code.trim())}</code></pre>`)
+    // Inline code
+    .replace(/`([^`]+)`/g,'<code>$1</code>')
+    // Headers
+    .replace(/^#### (.+)$/gm,'<h4>$1</h4>')
+    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
+    .replace(/^## (.+)$/gm,'<h2>$1</h2>')
+    .replace(/^# (.+)$/gm,'<h1>$1</h1>')
+    // Bold / italic
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    // Blockquotes
+    .replace(/^> (.+)$/gm,'<blockquote>$1</blockquote>')
+    // Horizontal rules
+    .replace(/^---$/gm,'<hr>')
+    // Unordered lists
+    .replace(/^- (.+)$/gm,'<li>$1</li>')
+    // Links
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank">$1</a>')
+    // Images
+    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g,'<img src="$2" alt="$1">')
+    // Paragraphs (lines not already tagged)
+    .replace(/^(?!<[huplbio]|<li|<hr|<pre|<block)(.+)$/gm,'<p>$1</p>')
+    // Wrap consecutive <li> in <ul>
+    .replace(/(<li>.*<\/li>\n?)+/g,m=>`<ul>${m}</ul>`);
+  // LaTeX blocks
+  html=html.replace(/\$\$([^$]+)\$\$/g,'<div class="katex-render" data-display="true" data-tex="$1"></div>');
+  html=html.replace(/\$([^$]+)\$/g,'<span class="katex-render" data-tex="$1"></span>');
+  return html;
+}
+
+function renderWriteups(){
+  // Populate solution filter
+  const solSel=document.getElementById('wuSol');
+  if(solSel.options.length<=1){
+    const sols=new Set(WRITEUPS.map(w=>w.sol).filter(Boolean));
+    sols.forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=solLabel(s);solSel.appendChild(o)});
+  }
+  filterWriteups();
+}
+
+function filterWriteups(){
+  const q=(document.getElementById('wuSearch')?.value||'').toLowerCase();
+  const type=document.getElementById('wuType')?.value||'';
+  const sol=document.getElementById('wuSol')?.value||'';
+  const status=document.getElementById('wuStatus')?.value||'';
+
+  const items=WRITEUPS.filter(w=>{
+    if(q && !`${w.title} ${w.abstract} ${(w.tags||[]).join(' ')}`.toLowerCase().includes(q)) return false;
+    if(type && w.type!==type) return false;
+    if(sol && w.sol!==sol) return false;
+    if(status && w.status!==status) return false;
+    return true;
+  });
+
+  const list=document.getElementById('wuList');
+  if(!items.length){
+    list.innerHTML=`<div style="text-align:center;padding:40px;color:var(--text2)">
+      <p style="font-size:16px;margin-bottom:8px">No writeups yet</p>
+      <p style="font-size:13px">Add writeups in <code>solutions/NNN/writeups/</code> as .md files, then register them in the WRITEUPS array in index.html</p>
+    </div>`;
+    return;
+  }
+
+  list.innerHTML=items.map(w=>{
+    const solInfo=w.sol?`<span style="color:var(--accent);font-size:12px">${solLabel(w.sol)}</span>`:'';
+    return `<div class="wu-list-item" onclick="openWriteup('${w.id}')">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+        <div>
+          <div style="display:flex;gap:8px;align-items:center;margin-bottom:4px">
+            <span class="wu-type-badge wu-type-${w.type}">${w.type}</span>
+            <span class="badge badge-${w.status==='published'?'breakthrough':w.status==='review'?'promising':'limited'}" style="font-size:10px">${w.status}</span>
+            ${solInfo}
+          </div>
+          <div style="font-size:16px;font-weight:600;margin-bottom:4px">${w.title}</div>
+          <div style="font-size:13px;color:var(--text2)">${w.abstract||''}</div>
+        </div>
+        <div style="color:var(--text2);font-size:12px;white-space:nowrap">${w.date}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openWriteup(id){
+  const w=WRITEUPS.find(x=>x.id===id);if(!w) return;
+  const reader=document.getElementById('wuReader');
+  reader.classList.remove('hidden');
+  reader.className=`wu-reader wu-style-${w.type}`;
+
+  const solInfo=w.sol?`<span style="color:var(--accent)">${solLabel(w.sol)}</span> | `:'';
+  const tagHtml=(w.tags||[]).map(t=>`<code style="font-size:11px">${t}</code>`).join(' ');
+
+  reader.innerHTML=`
+    <div class="wu-reader-head">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px">
+        <div>
+          <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px">
+            <span class="wu-type-badge wu-type-${w.type}">${w.type}</span>
+            <span class="badge badge-${w.status==='published'?'breakthrough':w.status==='review'?'promising':'limited'}">${w.status}</span>
+          </div>
+          <h2 style="border:none;padding:0;margin:0;font-size:24px">${w.title}</h2>
+          <div style="color:var(--text2);font-size:13px;margin-top:6px">${solInfo}${w.date} | ${tagHtml}</div>
+        </div>
+        <button class="filter-btn" onclick="document.getElementById('wuReader').classList.add('hidden')" style="font-size:16px;padding:4px 10px">&times;</button>
+      </div>
+    </div>
+    <div class="wu-reader-body">${mdToHtml(w.content)}</div>`;
+
+  // Render KaTeX in writeup
+  reader.querySelectorAll('.katex-render').forEach(el=>{
+    try{katex.render(el.dataset.tex,el,{throwOnError:false,displayMode:el.dataset.display==='true'})}catch(e){el.textContent=el.dataset.tex}
+  });
+  // Highlight code
+  reader.querySelectorAll('pre code').forEach(b=>hljs.highlightElement(b));
+  reader.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ============================================================
+// INIT
+// ============================================================
+renderHeader();populateFilters();renderSolutions();renderExp();renderFailed();renderTimeline();renderRM();renderWriteups();renderTodos();buildOverviewChart();
+// Init column sorting on all static tables
+initTableSort();
+</script>
+</body>
+</html>

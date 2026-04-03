@@ -1,0 +1,28 @@
+{
+  "dataset": "fmnist",
+  "architecture": "FPS-v0.5 96ch 256h 7x7reg",
+  "category": "physics-inspired",
+  "type": "learning-rule",
+  "metric": "accuracy",
+  "unit": "%",
+  "epochs": 50,
+  "total_params": 2799210,
+  "best_value": 77.15,
+  "baseline_value": 89.0,
+  "baseline_name": "Backprop MLP",
+  "gpu_hours": 0.54,
+  "convergence_iters": 7,
+  "history": [
+    {"epoch": 1, "test_acc": 33.2, "time": 38.4},
+    {"epoch": 5, "test_acc": 57.0, "time": 38.2},
+    {"epoch": 10, "test_acc": 69.1, "time": 37.8},
+    {"epoch": 15, "test_acc": 71.8, "time": 37.5},
+    {"epoch": 20, "test_acc": 73.8, "time": 39.5},
+    {"epoch": 25, "test_acc": 74.8, "time": 39.2},
+    {"epoch": 30, "test_acc": 75.3, "time": 41.4},
+    {"epoch": 35, "test_acc": 76.0, "time": 43.3},
+    {"epoch": 40, "test_acc": 76.5, "time": 41.4},
+    {"epoch": 45, "test_acc": 76.8, "time": 42.0},
+    {"epoch": 50, "test_acc": 77.15, "time": 51.0}
+  ]
+}

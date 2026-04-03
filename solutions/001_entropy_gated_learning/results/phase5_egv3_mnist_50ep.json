@@ -1,0 +1,57 @@
+{
+  "experiment": "Phase 5 — Entropy-Gated V3 Pure (50 epochs)",
+  "date": "2026-04-03",
+  "dataset": "MNIST",
+  "epochs": 50,
+  "batch_size": 256,
+  "device": "RTX 4070 Ti",
+  "purpose": "Stabilized pure EG with torch.no_grad, cosine LR, momentum. See where it converges.",
+  "model": {
+    "name": "Entropy-Gated V3",
+    "architecture": "2L Sigmoid [784 → 500 → 300] + linear probe [300 → 10]",
+    "activation": "sigmoid",
+    "local_optimizer": "SGD + momentum 0.9",
+    "lr_schedule": "cosine annealing (0.03 → 0)",
+    "entropy_threshold": 0.4,
+    "gradient_clipping": 1.0,
+    "weight_decay": 1e-5,
+    "decorrelation": "sampled 50 pairs per chunk (memory efficient)"
+  },
+  "changes_from_v2": [
+    "@torch.no_grad() on local_update — FIXES MEMORY LEAK (critical)",
+    "SGD+momentum instead of raw SGD (less memory than Adam)",
+    "Cosine LR schedule instead of constant",
+    "Gradient clipping at norm=1.0",
+    "2 layers instead of 3 (faster convergence)"
+  ],
+  "best_accuracy": 0.9281,
+  "best_epoch": 50,
+  "total_time_minutes": 15,
+  "time_per_epoch": "16-19s",
+  "stable": true,
+  "trajectory": "MONOTONICALLY INCREASING — every epoch is a new best. Never plateaus.",
+  "history": [
+    {"epoch": 1, "loss": 1.6027, "accuracy": 0.8046},
+    {"epoch": 2, "loss": 0.8332, "accuracy": 0.8143},
+    {"epoch": 5, "loss": 0.7273, "accuracy": 0.8184},
+    {"epoch": 10, "loss": 0.5701, "accuracy": 0.8556},
+    {"epoch": 15, "loss": 0.4466, "accuracy": 0.8775},
+    {"epoch": 20, "loss": 0.3842, "accuracy": 0.8973},
+    {"epoch": 25, "loss": 0.3371, "accuracy": 0.9106},
+    {"epoch": 30, "loss": 0.3063, "accuracy": 0.9152},
+    {"epoch": 35, "loss": 0.2889, "accuracy": 0.9212},
+    {"epoch": 40, "loss": 0.2777, "accuracy": 0.9241},
+    {"epoch": 45, "loss": 0.2681, "accuracy": 0.9267},
+    {"epoch": 50, "loss": 0.2612, "accuracy": 0.9281}
+  ],
+  "also_tested": {
+    "EG-Sigmoid 3L [400,400,200]": {
+      "best_accuracy": 0.87,
+      "at_epoch": 47,
+      "notes": "Much slower convergence. 3L worse than 2L due to credit assignment problem.",
+      "verdict": "2L confirmed optimal"
+    }
+  },
+  "verdict": "92.81% and STILL climbing. Curve shows no plateau — with more epochs, should reach 95%+.",
+  "decision": "Proceed to V4: wider layers + MLP probe + 100 epochs"
+}

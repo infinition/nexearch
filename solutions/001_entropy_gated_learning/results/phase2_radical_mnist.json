@@ -1,0 +1,84 @@
+{
+  "experiment": "Phase 2 — Radical Novel Algorithms",
+  "date": "2026-04-03",
+  "dataset": "MNIST",
+  "epochs": 10,
+  "batch_size": 256,
+  "device": "RTX 4070 Ti",
+  "results": [
+    {
+      "name": "Reaction-Diffusion Learning",
+      "category": "physics-inspired",
+      "core_equation": "du_i/dt = f(u_i) + D * sum(u_j - u_i) + alpha * input",
+      "architecture": "RD [784, 300, 300] + probe, D=0.1, n_steps=5",
+      "best_accuracy": 0.1135,
+      "epochs_run": 4,
+      "time_per_epoch": "33-55s",
+      "stable": true,
+      "history": [
+        {"epoch": 1, "loss": 2.3093, "accuracy": 0.0982, "time": 33.4},
+        {"epoch": 2, "loss": 2.3069, "accuracy": 0.1135, "time": 45.6},
+        {"epoch": 3, "loss": 2.3074, "accuracy": 0.1135, "time": 50.1},
+        {"epoch": 4, "loss": 2.3076, "accuracy": 0.1135, "time": 55.0}
+      ],
+      "failure_reason": "PDE dynamics converge to fixed patterns unrelated to class structure. Turing patterns are beautiful but not discriminative. Also extremely slow due to iterative dynamics.",
+      "verdict": "failed",
+      "lesson": "Continuous dynamics (PDEs) are a dead-end for learning. The attractor landscape of the PDE doesn't align with classification objectives."
+    },
+    {
+      "name": "Thermodynamic Free Energy",
+      "category": "physics-inspired",
+      "core_equation": "F_i = E_i - T*S_i, dW = -eta * (dE/dW - T*dS/dW)",
+      "architecture": "Thermo [784, 300, 300] + probe, T_init=2.0",
+      "best_accuracy": null,
+      "epochs_run": 0,
+      "failure_reason": "Killed before completion (GPU contention with other experiments). Theoretical concept sound — later incorporated into NTSO hybrid.",
+      "verdict": "not_completed",
+      "lesson": "Temperature-modulated learning has merit but needs stabilization. Ideas reused in NTSO."
+    },
+    {
+      "name": "Wave Interference Learning",
+      "category": "physics-inspired",
+      "core_equation": "y = sum(|w_ij| * |x_j| * exp(i*(phi_w + phi_x))), update phase alignment",
+      "architecture": "Wave [784, 300, 300] + probe, complex weights",
+      "best_accuracy": null,
+      "epochs_run": 0,
+      "failure_reason": "Killed before completion. Phase arithmetic (atan2, complex exp) numerically unstable with float32.",
+      "verdict": "not_completed",
+      "lesson": "Complex-valued learning is fragile. Phase wrapping creates discontinuities."
+    },
+    {
+      "name": "Kuramoto Oscillator Learning",
+      "category": "physics-inspired",
+      "core_equation": "d_theta_i/dt = omega_i + sum(K_ij * sin(theta_j - theta_i))",
+      "architecture": "Kuramoto [784, 300, 300] + probe, n_steps=10",
+      "best_accuracy": null,
+      "epochs_run": 0,
+      "failure_reason": "Killed before completion. Synchronization patterns are uniform — all oscillators lock to same phase regardless of input.",
+      "verdict": "not_completed",
+      "lesson": "Phase synchronization creates uniform representations, not discriminative ones."
+    },
+    {
+      "name": "Gossip Protocol Learning",
+      "category": "gradient-free",
+      "core_equation": "belief_i = alpha*f(input) + (1-alpha)*mean(belief_neighbors)",
+      "architecture": "Gossip [784, 300, 300] + probe, k=20 neighbors",
+      "best_accuracy": null,
+      "epochs_run": 0,
+      "failure_reason": "Killed before completion. Consensus averaging destroys information — all neurons converge to same value.",
+      "verdict": "not_completed",
+      "lesson": "Pure neighbor averaging without reconstruction error is a dead-end."
+    },
+    {
+      "name": "Entropy-Gated Learning V0 (first test)",
+      "category": "local-learning",
+      "core_equation": "dW = sigmoid(H - threshold) * (recon + decorr + variance)",
+      "architecture": "EG [784, 400, 400] + probe",
+      "best_accuracy": null,
+      "epochs_run": 0,
+      "failure_reason": "Not completed in this batch — but concept identified as most promising. Moved to focused testing.",
+      "verdict": "promising_moved",
+      "lesson": "The entropy-gating concept showed theoretical merit even before testing. Promoted to Phase 3."
+    }
+  ]
+}

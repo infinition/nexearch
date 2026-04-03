@@ -1,0 +1,55 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage[margin=1in]{geometry}
+
+\title{Fixed-Point Substrate: Intelligence from Equilibrium in a Learnable Medium}
+\author{Fabien}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We propose the Fixed-Point Substrate (FPS), a computational paradigm where intelligence
+emerges from the equilibrium of a learnable medium rather than from signal propagation
+through layers. Input perturbs a medium with local physical properties (conductivity,
+coupling, bias), which collapses to a fixed point $Z^* = f(Z^*)$. The stable
+configuration IS the computation. Inspired by LVS theory ("It from Fix"),
+FPS achieves 96.44\% on MNIST with zero backpropagation, constant memory,
+and convergence in only 7 iterations via Anderson acceleration.
+\end{abstract}
+
+\section{Introduction}
+TODO: The void problem -- neural networks operate in empty space with no underlying medium.
+LVS theory -- reality emerges from fixed points. The substrate hypothesis.
+
+\section{Related Work}
+TODO: Deep Equilibrium Models (DEQ), Neural ODEs, implicit layers, Hopfield networks.
+
+\section{Method}
+
+The medium finds its equilibrium via fixed-point iteration:
+\begin{equation}
+Z^{(k+1)} = \tanh\bigl(\text{MultiLap}(Z^{(k)}) + \text{Mix}(Z^{(k)}) + \alpha X + \beta\bigr)
+\end{equation}
+where MultiLap uses multi-scale Laplacian operators ($3\times3$, $5\times5$, $7\times7$)
+and Mix is channel mixing. Convergence accelerated by Anderson acceleration.
+
+\section{Experiments}
+TODO: MNIST 96.44\%, Fashion-MNIST 77.15\%, CIFAR-10 42.24\%. Version evolution table.
+
+\section{Analysis}
+TODO: Why fixed-point beats PDE temporal. Readout matters more than medium quality.
+Learnable spatial filters. Anderson acceleration analysis.
+
+\section{Conclusion}
+TODO: Summary, connection to LVS theory, multi-resolution as next step.
+
+\bibliographystyle{plain}
+\bibliography{refs}
+
+\end{document}

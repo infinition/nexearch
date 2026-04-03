@@ -1,0 +1,91 @@
+{
+  "experiment": "Phase 1 — Baseline & Classic Local Algorithms",
+  "date": "2026-04-03",
+  "dataset": "MNIST",
+  "epochs": 5,
+  "batch_size": 512,
+  "device": "RTX 4070 Ti",
+  "results": [
+    {
+      "name": "Backprop Baseline",
+      "category": "reference",
+      "architecture": "MLP [784, 256, 256, 10]",
+      "optimizer": "Adam lr=1e-3",
+      "best_accuracy": 0.9804,
+      "epochs_run": 5,
+      "stable": true,
+      "history": [
+        {"epoch": 1, "loss": 0.3421, "accuracy": 0.9564, "time": 12.6},
+        {"epoch": 2, "loss": 0.1150, "accuracy": 0.9696, "time": 12.7},
+        {"epoch": 3, "loss": 0.0723, "accuracy": 0.9759, "time": 12.8},
+        {"epoch": 4, "loss": 0.0495, "accuracy": 0.9790, "time": 12.7},
+        {"epoch": 5, "loss": 0.0360, "accuracy": 0.9804, "time": 12.7}
+      ],
+      "notes": "Global backpropagation reference. Target to match with local learning."
+    },
+    {
+      "name": "Forward-Forward (Hinton 2022)",
+      "category": "local-learning",
+      "architecture": "FF [784+10, 500, 500]",
+      "optimizer": "Adam lr=0.03 per layer",
+      "best_accuracy": 0.098,
+      "epochs_run": 5,
+      "stable": false,
+      "history": [
+        {"epoch": 1, "loss": "NaN", "accuracy": 0.098},
+        {"epoch": 2, "loss": "NaN", "accuracy": 0.098},
+        {"epoch": 3, "loss": "NaN", "accuracy": 0.098},
+        {"epoch": 4, "loss": "NaN", "accuracy": 0.098},
+        {"epoch": 5, "loss": "NaN", "accuracy": 0.098}
+      ],
+      "failure_reason": "Goodness threshold causes NaN. Positive/negative goodness values explode.",
+      "verdict": "failed"
+    },
+    {
+      "name": "Predictive Coding Network",
+      "category": "local-learning",
+      "architecture": "PC [784, 256, 256, 10]",
+      "best_accuracy": null,
+      "epochs_run": 0,
+      "stable": false,
+      "failure_reason": "Dimension mismatch in error propagation: tensor a (784) vs b (256). Bug in value node update when layers have different widths.",
+      "verdict": "crashed"
+    },
+    {
+      "name": "Equilibrium Propagation",
+      "category": "local-learning",
+      "architecture": "EP [784, 256, 256, 10], beta=0.5, n_iter=20",
+      "best_accuracy": null,
+      "epochs_run": 0,
+      "failure_reason": "Did not complete — killed when baselines script crashed on Predictive Coding.",
+      "verdict": "not_tested"
+    },
+    {
+      "name": "InfoMax",
+      "category": "local-learning",
+      "architecture": "InfoMax [784, 256, 256] + probe",
+      "best_accuracy": null,
+      "epochs_run": 0,
+      "failure_reason": "Same — killed with baselines script.",
+      "verdict": "not_tested"
+    },
+    {
+      "name": "Competitive Hebbian",
+      "category": "gradient-free",
+      "architecture": "kWTA [784, 500, 500] + probe, k=100",
+      "best_accuracy": null,
+      "epochs_run": 0,
+      "failure_reason": "Same — killed with baselines script.",
+      "verdict": "not_tested"
+    },
+    {
+      "name": "Difference Target Propagation",
+      "category": "local-learning",
+      "architecture": "DTP [784, 256, 256, 10]",
+      "best_accuracy": null,
+      "epochs_run": 0,
+      "failure_reason": "Same — killed with baselines script.",
+      "verdict": "not_tested"
+    }
+  ]
+}

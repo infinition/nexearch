@@ -1,0 +1,43 @@
+# Datasets (large binary files)
+datasets/MNIST/
+datasets/CIFAR10/
+datasets/CIFAR100/
+datasets/ImageNet/
+datasets/**/*.gz
+datasets/**/*.tar
+datasets/**/*.zip
+datasets/**/*.bin
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.eggs/
+*.egg
+dist/
+build/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# PyTorch
+*.pt
+*.pth
+*.onnx
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment
+.env
+*.log
