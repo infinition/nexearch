@@ -1,0 +1,736 @@
+
+\documentclass[%
+ reprint,
+ superscriptaddress,
+%groupedaddress,
+%unsortedaddress,
+%runinaddress, 
+%frontmatterverbose, 
+%preprint,
+%showpacs,
+preprintnumbers,
+nofootinbib,
+%nobibnotes,
+%bibnotes,
+ amsmath,amssymb,
+ aps,
+prl,
+%prb,
+%rmp,
+%prstab,
+%prstper,
+%floatfix,
+]{revtex4-1}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{MnSymbol}
+\usepackage{nicefrac}
+%for integralsum sign
+\usepackage{amsfonts}
+\usepackage{dsfont}
+
+
+\usepackage[markup=nocolor]{changes}
+\usepackage{natbib}
+
+
+\usepackage{graphicx}% Include figure files
+
+
+\usepackage[normalem]{ulem}
+
+\usepackage{dcolumn}% Align table columns on decimal point
+\usepackage{bm}% bold math
+
+
+\usepackage{color}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{slashed}
+\usepackage{empheq}
+\newcommand{\bea}{\begin{eqnarray}}
+\newcommand{\eea}{\end{eqnarray}}
+\newcommand{\be}{\begin{equation}}
+\newcommand{\ee}{\end{equation}}
+
+\begin{document}
+
+
+\title{
+Top mass from asymptotic safety
+}
+ 
+ \author{Astrid Eichhorn}
+   \email{a.eichhorn@thphys.uni-heidelberg.de}
+\affiliation{Institut f\"ur Theoretische
+  Physik, Universit\"at Heidelberg, Philosophenweg 16, 69120
+  Heidelberg, Germany}
+\author{Aaron Held}
+\email{a.held@thphys.uni-heidelberg.de}
+\affiliation{Institut f\"ur Theoretische
+  Physik, Universit\"at Heidelberg, Philosophenweg 16, 69120
+  Heidelberg, Germany}
+
+
+
+
+\begin{abstract}
+We discover that asymptotically safe quantum gravity could predict the top-quark mass. For a  broad range of microscopic gravitational couplings, quantum gravity could provide an ultraviolet completion for the Standard Model by triggering asymptotic freedom in the gauge couplings and bottom Yukawa and asymptotic safety in the top-Yukawa and Higgs-quartic coupling. We find that in a part of this range, a difference of the top and bottom mass of approximately $170\, \rm GeV$ is generated and the Higgs mass is determined in terms of the top mass. Assuming no new physics below the Planck scale, we construct explicit Renormalization Group trajectories for Standard Model and gravitational couplings which link the transplanckian regime to the electroweak scale and yield a top pole mass of $M_\text{t,pole} \approx 171\, \rm GeV$. 
+\end{abstract}
+
+\pacs{Valid PACS appear here}% PACS, the Physics and Astronomy
+                             % Classification Scheme.
+
+\maketitle
+
+
+\noindent\emph{Open problems of the Standard Model}.
+The Standard Model (SM) is a highly successful effective quantum field theory, viable up to the Planck scale
+\cite{Bezrukov:2012sa,Buttazzo:2013uya}. 
+Beyond,
+it is expected to break down, due to
+the triviality problem signaled by Landau poles in the Abelian hypercharge \cite{GellMann:1954fq} and the Higgs-Yukawa sector \cite{triviality}. Moreover, it contains 19 
+free parameters. In particular, the 
+various Yukawa couplings have to be set such that they generate the significant difference between the top-quark mass and the other fermion masses.\\
+Asymptotically safe quantum fluctuations of gravity  \cite{Weinberg:1980gg,Reuter:1996cp}
+might tame the ultraviolet (UV) divergences in the  Abelian gauge sector \cite{Harst:2011zx,Christiansen:2017gtg}. We discover that a quantum-gravity induced UV completion of the Higgs-Yukawa sector could at the same time eliminate two of the free parameters of the SM.  The resulting model would contain quantum gravity and all SM fields, be UV complete and have a higher predictive power than the SM, cf.~Fig.~\ref{fig:flows}: 
+In a specific range
+of microscopic gravitational couplings, the asymptotic safety scenario might 
+predict the top mass in terms of the bottom mass, and generate a difference of $\sim 170\, \rm GeV$ between them.
+%
+\begin{figure}[!t]
+\includegraphics[width=\linewidth, clip=true, trim=10cm 5.8cm 12cm 5.6cm]{SM_gravity_running_full.pdf}
+\caption{\label{fig:flows} Running SM and gravity couplings in a UV-complete model, and a zoom into the regime close to the Planck scale, where the system smoothly transitions from pure SM running to the asymptotically safe running including gravitational fluctuations.}
+\end{figure}
+%
+\\
+\noindent\emph{Asymptotic safety}
+generalizes asymptotic freedom: The latter posits that a model evolves along a Renormalization Group (RG) trajectory which emanates from the free fixed point in the deep UV, whereas the former is based on a fixed point at finite values of the couplings. Both settings have in common that 
+their free parameters are the relevant couplings which parameterize the deviation of the model from the fixed point. For instance, QCD with massless quarks only has one free parameter, namely the value of the gauge coupling at some energy scale. All other, so called irrelevant couplings arise as predictions of the model. They are forced to stay close to  their fixed-point values in the UV scaling regime and are determined by the relevant couplings at all scales. Conversely, any deviation  of an irrelevant coupling from this special value in the infrared (IR) results in a running that in simple approximations typically leads into a singularity, triggering a breakdown of the model. As an important example, the sizable value of the top Yukawa at the Planck scale within the SM cannot be reconciled with a free fixed point, as the coupling is marginally irrelevant and hence repelled by the free fixed point 
+ when running further
+into the UV. 
+Our main result hinges on the fact that an asymptotically safe fixed point forces irrelevant couplings to stay at their \emph{non-zero} 
+values in the UV scaling regime beyond the Planck scale. Thereby the scenario enforces a specific finite value of each irrelevant coupling at the Planck scale. Running from this unique 
+value towards the IR
+leads to a prediction of the low-energy value of the coupling. 
+Within the present analysis, there is a non-trivial renormalization group fixed point which determines the top Yukawa and quartic Higgs couplings.
+
+\noindent\emph{Quantum-gravity induced UV completion for the Standard Model}.
+We focus on the Higgs-top-bottom sector of the SM coupled to the 
+U(1) hypercharge with coupling $g_Y=\sqrt{3/5}g_1$, 
+SU(2) with coupling $g_2$ and 
+SU(3)-color gauge interactions with coupling $g_3$ under the impact of quantum gravity. In this work, we truncate the microscopic gravitational dynamics to an Einstein-Hilbert action parameterized by a dimensionless running Newton coupling $G_N = \bar{G}_N k^2$ and  dimensionless running cosmological constant $\Lambda = \bar{\Lambda}k^{-2}$. To evaluate the running with momentum scale $k$, we employ functional Renormalization Group tools \cite{Wetterich:1992yh}, see also \cite{Morris:1993qb,Berges:2000ew,Reuter:2012id} and \cite{Gies:2014xha} for a study of the Higgs-Yukawa sector. 
+ There is strong evidence supporting the conjecture that the gravitational couplings $G_N$ and $\Lambda$ approach an asymptotically safe fixed point $(G_{N}^{\ast}, \Lambda^{\ast})$ at transplanckian momentum scales \cite{Reuter:1996cp,Litim:2003vp}, see \cite{Ambjorn:2012jv} for lattice studies.
+The one-loop SM beta functions for the top-Yukawa and quartic Higgs 
+coupling
+including quantum fluctuations of gravity take the form
+\bea
+\beta_{y_t} &=&\frac{1}{32 \pi^2}\left(9 y_t^3 +3y_b^2 y_t +y_t\left(-
+ 16g_3^2 - \frac{9}{2}g_2^2-\frac{17}{10}g_1^2\right)\right)\nonumber \\[0.5ex]
+&{}&+ G_N\, y_t\,f_y(\Lambda), \label{eq:betayt} \\[0.5ex]
+\beta_{\lambda_4}&=& \frac{1}{8\pi^2} \Bigg(12 \lambda_4^2 +6 \lambda_4 \left(y_t^2 +y_b^2 - \frac{3}{20}g_1^2 -\frac{3}{4}g_2^2 \right) -3 \left(y_t^4
+ +y_b^4\right)\nonumber\\[-0.5ex]
+ &{}& \quad \quad
++\frac{27}{400}g_1^4 + \frac{9}{16}g_2^4  + \frac{9}{40}g_1^2 g_2^2 
+ \Bigg)+ G_N\, \lambda_4\, f_{\lambda_4}(\Lambda),\label{eq:betalambda4}
+\eea
+where the quantum-gravity contributions 
+in the above parameterization of metric fluctuations \cite{Eichhorn:2016esv,Eichhorn:2017eht,scalar_gravity} 
+contain threshold effects
+\bea
+f_y(\Lambda)&=&\frac{96 +\Lambda (-235 + \Lambda (103+56\Lambda))}{12\pi(3+2\Lambda(-5+4\Lambda))^2},\\
+f_{\lambda_4}(\Lambda)&=& \frac{165 - 8 \Lambda \left(61+\Lambda(-49+4\Lambda) \right)}{6\pi \left(3+2\Lambda(-5+4\Lambda) \right)^2}.
+\eea
+These are obtained in the Landau-gauge limit as in \cite{Eichhorn:2017eht} with an optimized cutoff function \cite{Litim:2001up}.
+For the bottom-Yukawa,  the
+corresponding beta function 
+follows from Eq.~\eqref{eq:betayt} under the exchange $y_t \rightarrow y_b$ and  $17/10\, g_1 \rightarrow 1/2\, g_1$.
+There are  indications
+that asymptotically safe quantum gravity triggers asymptotic freedom in all gauge couplings, including the Abelian hypercharge coupling \cite{Daum:2009dn,Folkerts:2011jz,Harst:2011zx,Christiansen:2017gtg}.
+Their one-loop beta functions with a gauge-group independent quantum-gravity contribution  in the above approximation and with the same choice of RG scheme and gauge parameters read
+\bea
+\beta_{g_1}&=&\frac{g_1^3}{16\pi^2}\frac{41}{10} 
+ - G_N\, g_1f_g(\lambda)\;,  \label{eq:betag1}\\
+\beta_{g_2}&=&- \frac{g_2^3}{16\pi^2}\frac{19}{6} 
+- G_N\, g_2 f_g(\Lambda)\;,\nonumber\\
+\beta_{g_3}&=&- \frac{g_3^3}{16\pi^2}7
+ - G_N\, g_3 f_g(\Lambda), \quad  f_{g}(\Lambda)= \frac{5(1-4\Lambda)}{18 \pi(1-2\Lambda)^2}.\nonumber
+\eea
+According to these results, in the transplanckian regime, the logarithmic running of the gauge couplings is substituted by a power-law running towards asymptotic freedom, cf.~Fig.~\ref{fig:flows}, with a small exponent determined by the gravity couplings. The one-loop coefficients in Eq.~\eqref{eq:betag1} contain the effect of all SM matter fields.
+\\
+We find two distinct parts of the truncated gravitational parameter space: If the microscopic value of the cosmological constant -- which is not restricted by observations -- falls into the region $\Lambda^{\ast} \gtrsim-3.3$, then the top and bottom Yukawa only feature a free fixed point at which they are irrelevant. Thus, they remain stuck at zero in the transplanckian regime down to $M_{\rm Planck}$, implying a vanishing top and bottom mass at the electroweak scale.
+Hence, we tentatively conclude that compatibility of asymptotically safe quantum gravity with the SM appears to require the microscopic value of the cosmological constant to fall into the other region \cite{Eichhorn:2016esv,Eichhorn:2017eht}. In enlarged truncations this regime might also be reached due to higher-order gravitational couplings \cite{Eichhorn:2017eht,Hamada:2017rvn}.
+Within our approximation, the observationally viable regime lies at $f_y(\Lambda)<0$, where $y_t$ and $y_b$ become relevant at the free fixed point. Thus, non-zero IR values for those couplings become compatible with the latter.
+Simultaneously, gravity induces an interacting fixed point at:
+\bea
+y_{t}^{\ast} &=&
+\frac{\sqrt{32}\pi}{3}\sqrt{ -G_N\,f_y(\Lambda)} 
+\;, \quad 
+y_{b}^{\ast}= 0\;,  \quad 
+g_{i}^{\ast} = 0\; \label{eq:FPyt},
+\eea
+realizing the scenario in \cite{Eichhorn:2017eht}. A finite fixed-point value for $\lambda_{4}$ follows  
+by inserting $y_t^{\ast}$ from Eq.~\eqref{eq:FPyt} into the beta function in Eq.~\eqref{eq:betalambda4}.  This
+equation has two solutions. We focus on the fixed point which features a higher predictive power due to the  irrelevance of the  quartic Higgs coupling, as proposed in \cite{Shaposhnikov:2009pv,Bezrukov:2012sa}. In our simple truncation, it lies at $\lambda_4^{\ast}>0$, which guarantees stability of the potential. The positive value of $\lambda_4$ at and beyond the Planck scale leads to an overestimation of the Higgs mass in the IR, as the experimentally determined value of the Higgs mass appears to lie slightly below the stability bound, see \cite{Bezrukov:2012sa,Degrassi:2012ry,Buttazzo:2013uya} and references therein. 
+We hypothesize that effects beyond our truncation might shift that fixed point to
+lower values of $\lambda_4$ while simultaneously guaranteeing global stability of the potential through the presence of higher-order interactions.\\
+In our approximation all other Yukawas feature a free fixed point under the impact of quantum gravity, and can thus be chosen to match the experimentally determined small values.
+As an adequate quantitative approximation, we set all but $y_b, y_t$ to zero at all scales.
+\\
+Studies of asymptotically safe gravity-matter systems have not yet reached a stage of quantitative convergence regarding the fixed-point values for the gravitational couplings  \cite{Dona:2013qba,Meibohm:2015twa,Dona:2015tnf,Eichhorn:2016vvy,Biemans:2017zca}. To reach the observationally viable regime in our parameterization $\Lambda^{\ast}\lesssim-3.3$ has to hold.  It is a critical question for the future, whether extended approximations that treat quantum fluctuations around the physical background will converge into this regime.
+As highlighted in \cite{Eichhorn:2017eht}, truncations in pure gravity tend to yield fixed points  with
+$\Lambda^{\ast} \geq 0$. In the observationally favored regime, off-shell fluctuations of the transverse-traceless mode no longer dominate the RG flow, as they typically do in pure-gravity truncations.
+%
+ \begin{figure}[t]
+\includegraphics[width=\linewidth]{Yukawa_trajectories.pdf}
+\vspace*{-15pt}
+\caption{\label{fig:upperbounds} Upper bound on the running top mass: A larger top mass leads to UV unsafe trajectories. From the upper bound, an asymptotically safe UV regime is reached. Below the upper bound, the Yukawa coupling becomes asymptotically free.}
+\end{figure}
+%
+It is intriguing that a calculation of the microscopic values of the gravitational couplings under the impact of minimally coupled SM fields falls right into the preferred region \cite{Dona:2013qba}. For our quantitative analysis, we will employ the gravitational beta functions from \cite{Eichhorn:2016vvy} including the matter contributions from \cite{Dona:2013qba}, which provides beta functions in the Landau-gauge limit, reading
+\bea
+\beta_{G_N}&=& 2 \,G_N - G_N^2 \, f_{G_N}(\Lambda),\\[1ex] \nonumber
+\beta_{\Lambda}&=& -2 \,\Lambda - \frac{G_N}{2\pi}\Bigl(7 - \frac{3}{2(3-4\Lambda)}+ N_W -\frac{N_S}{2} - N_V\\[-0.5ex]
+&{}& -\frac{5}{ 2(1-2\Lambda)}- 
+8\ln(3/2)
+\Bigr) - G_N\,\Lambda \,f_{G_N}(\Lambda), \nonumber
+\eea
+with $N_S$ scalars, $N_V$ gauge fields and $N_W$ Weyl fermions ($N_S=4, N_V=12, N_W =45$ for the SM), and
+\bea
+f_{G_N}(\Lambda)&=&\frac{5}{6\pi(1-2\Lambda)}+ \frac{5}{3\pi(1-2\Lambda)^2} - \frac{1}{2\pi(3-4\Lambda)} \nonumber\\
+&{}&+ \frac{{11}+32\ln(3/2)}{12\pi} 
+ -\frac{N_W + N_S - 4N_V}{6\pi}. 
+\eea
+These provide asymptotically safe fixed-point values at
+\bea 
+G_{N}^{\ast}&=& 3.29,\; \Lambda^{\ast}=-4.51\,.\; \label{eq:fpvaluesgrav}
+\eea
+\noindent\emph{Upper bound on the top mass from asymptotic safety}.
+Asymptotically safe quantum gravity with microscopic values according to Eq.~\eqref{eq:fpvaluesgrav} enforces upper bounds on the top- and bottom-quark mass: These arise due to the basin of attraction of the free fixed point at $y_{t}^{\ast} = 0 =y_{b}^{\ast}$. The basin is limited by interacting fixed points, cf.~Eq.~\eqref{eq:FPyt}. The resulting bounds  on the masses are more intuitive when considering the RG flow starting in the IR: For quark masses below the upper bound, the flow is attracted into the free fixed point, cf.~Fig.~\ref{fig:upperbounds}. Exactly at the upper bound, the couplings reach the interacting fixed point. In all cases, the fixed point for $\lambda_4$  -- which remains irrelevant -- can only be reached from one particular value of the Higgs mass, which is fixed in terms of the top mass.  For the bottom Yukawa, a further fixed point beyond that displayed in Eq.~\eqref{eq:FPyt}, at which $y_{b}^{\ast} >0$ enforces a similar upper bound. For masses beyond the upper bound, the Planck-scale values of the Yukawas are too large to approach any of the fixed points, cf.~Fig.~\ref{fig:upperbounds}, and the model breaks down at high scales, requiring new physics. 
+\\
+The free and interacting fixed points for the top Yukawa 
+underlie two different possible UV completions for the SM plus gravity, with the latter having a higher predictive power.
+For the remainder of this letter, we will focus on the asymptotically safe fixed point in Eq.~\eqref{eq:FPyt}, which results in a uniquely determined value for the top mass, as the top Yukawa is no longer a free parameter of the model.
+\\
+
+\noindent\emph{Top-bottom mass difference}.
+At the fixed point in Eq.~\eqref{eq:FPyt} the relevant direction is not exactly aligned with the bottom Yukawa coupling. Instead the combination
+\vspace*{-2pt}
+\be
+\vspace*{-1pt}
+\tilde{y} = y_b - \frac{1}{5}y_t,\label{eq:reldir}
+\ee
+is relevant.
+ Thus, any value of the bottom mass below the upper bound can be reached along a UV complete RG trajectory.
+We choose it such that it matches the observed value of $M_b=4.18\, \rm GeV$. According to Eq.~\eqref{eq:reldir}, changing the bottom mass results in a slight change of the top mass. Given the gravitational fixed-point values in Eq.~\ref{eq:fpvaluesgrav}, realistic values for the bottom mass enforce a significant mass difference to the top quark. It
+is automatically of a similar size to that of the SM. Specifically, $M_{t,\,\rm pole }-M_b \geq 160\, \rm GeV$ holds for $M_b \lesssim 11\, \rm GeV$.\\
+Alternatively, a mass difference could be generated from the finite fixed-point value for the Abelian gauge coupling that arises in Eq.~\eqref{eq:betag1}, as found in \cite{Harst:2011zx,Eichhorn:2017lry}, yielding an additional interacting fixed point with distinct values for the top and bottom Yukawa \cite{Held20175}.\\
+We stress that the electroweak scale is an input of our calculation: The Higgs mass-parameter remains relevant, and thus the vacuum expectation value of $v = 246\, \rm GeV$ can be reached by choosing an appropriate trajectory. For the fermions, a separation of their mass scale from the Planck scale is possible as fermion masses are protected by chiral symmetry and remain so under the impact of asymptotically safe quantum gravity \cite{Eichhorn:2011pc,Eichhorn:2016vvy}. Hence, their masses are generated by electroweak symmetry breaking, and the precise values are determined by the Yukawa couplings.
+\\
+
+\noindent\emph{Renormalization Group flow of the Standard Model and quantum gravity.}
+Starting from the asymptotically safe regime in Eq.~\eqref{eq:FPyt} which, given  
+values in Eq.~\eqref{eq:fpvaluesgrav}  lies at
+\bea
+ y_{b}^{\ast}&=&0,\; y_{t}^{\ast}= 0.36,\; \lambda_{4}^{\ast}=0.01,\; g_{i}^{\ast}=0,\label{eq:fpvalues}
+ \eea
+we obtain $M_t = 161\, \rm GeV$ for the running top mass along the predictive trajectory, cf.~Fig.~\ref{fig:flows}. Adding the correction between the running mass and the pole mass \cite{Hempfling:1994ar,Buttazzo:2013uya}, we obtain an estimate of the top pole mass of $M_\text{t,\,pole} =171$, falling in the vicinity of the experimentally determined value \cite{Khachatryan:2015hba}. \\
+Above the Planck scale, the Yukawa and  quartic Higgs already exhibit a slow running away from their fixed-point values. This is a consequence of the presence of the gauge couplings which pull the 
+quartic Higgs and the Yukawa 
+along as soon as they deviate from their free values in the deep UV.
+The bump in the vicinity of the Planck scale is a consequence of a rapid transition from the semi-classical gravity regime to the fixed-point regime, cf.~Fig.~\ref{fig:flows}. Below the Planck scale, an IR attractive fixed point in the ratio of top Yukawa and gauge coupling and the ratio of the Higgs quartic coupling and  top Yukawa \cite{Wetterich:1981ir,Wetterich:1987az,Bornholdt:1992up} act as an attractor of the flow, yielding a Higgs mass of $M_h= 132\, \rm GeV$ in our simple truncation. Higher-order interactions 
+might reconcile global stability of the potential with a Higgs mass agreeing with the experimental result \cite{Aad:2015zhl}.
+%
+\begin{figure}[t]
+\vspace*{4pt}
+\begin{flushleft}
+\includegraphics[width=0.9\linewidth]{gLambdacontours.pdf}
+\end{flushleft}
+\vspace*{-20pt}
+\caption{\label{fig:glambda}Running top mass as a function of the microscopic values of the gravity couplings. The green dot is the result from Eq.~\eqref{eq:fpvaluesgrav} and the gray dashed curves indicate an estimate for a systematic error within the approximation.}
+\end{figure}
+%
+\\
+\noindent The predicted values of the masses depend on the microscopic values of the gravity couplings, which are only known in approximations. Further studies are required to determine whether those values will converge in the regime where a top mass prediction is possible. For the following, we assume that this will be the case. Varying the gravitational couplings away from the values in Eq.~\eqref{eq:fpvalues}, cf.~Fig.~\ref{fig:glambda}, 
+we obtain a range of masses. We consider only values for which the scalar potential in our truncation is stable and for which $M_h<M_t$, yielding the light blue region in Fig.~\ref{fig:glambda}. 
+We estimate a systematic error within our approximation under the assumption that extended truncations will converge in a similar regime. Including variations of $G_N^{\ast}, \Lambda^{\ast}$ induced by changes of the regulator underlying the functional RG implementation according to Tab.~I in \cite{Dona:2013qba} leads to changes of up to $60\%$ in the fixed-point values. In Fig.~\ref{fig:glambda} we include an ellipse with $60\%$ overall spread, resulting in a rather significant variation for $M_t$. 
+The difference between the running and the pole mass, that receives QCD corrections \cite{Hempfling:1994ar,Buttazzo:2013uya} is not included in the values shown in Fig.~\ref{fig:glambda}. As a more conservative error estimate, the larger ellipse with a radial deviation of $60\%$ strongly reinforces the need for extended truncations.
+\\
+\noindent 
+Through their quantum fluctuations, right-handed neutrinos (and the axion) impact the microscopic values of the gravitational couplings \cite{Dona:2013qba}. Accounting for this shift, we obtain a running top mass of $ M_t = 182\, ( 185
+)\, \rm GeV$. It is intriguing that in our setting, the values of the top and the Higgs mass are actually sensitive to new degrees of freedom at arbitrarily high scales which need only be coupled gravitationally. Within asymptotic safety it might accordingly be possible to draw conclusions about new physics at \emph{arbitrary} scales, once the systematic error induced by truncations is under control. This assumes that the gravity fixed-point values converge to the regime that we investigate at $\Lambda^{\ast}\lesssim-3.3$.
+\\
+
+\noindent\emph {Conclusions:}
+We explore a regime of asymptotically safe quantum gravity, in which a UV completion for the SM is triggered. The top mass and Higgs mass arise as predictions in this setting. In particular, fixing the bottom mass to its observed value enforces a mass difference between top and bottom of approximately $ 170\, \rm GeV$.
+\\
+In more detail, the following holds in a truncation of the RG flow:
+All gauge couplings of the SM become asymptotically free under the impact of quantum gravity fluctuations \cite{Daum:2009dn,Folkerts:2011jz,Harst:2011zx,Christiansen:2017gtg}. This includes the Abelian gauge coupling, which 
+exhibits a power-law running towards asymptotic freedom in the transplanckian regime.
+\\
+We discover an upper bound on the top mass: It is set by a quantum-gravity induced interacting fixed point for the top Yukawa. For values below the upper bound the top Yukawa exhibits a power-law running towards asymptotic freedom. Exactly at the upper bound, the UV regime is asymptotically safe. Beyond the upper bound, the top Yukawa diverges along UV unsafe trajectories.
+\\
+We then focus on the asymptotically safe fixed point for the top Yukawa. On the trajectory that emanates from the asymptotically safe regime in Eq.~\eqref{eq:FPyt} the top mass is predicted in terms of the bottom mass. Choosing $M_b=4.18\, \rm GeV$ automatically enforces a mass difference with the top, that is quantitatively close to the observed size of $M_{t,\, \rm pole}-M_b\sim 170\, \rm GeV$, and specifically yields a top pole mass $M_{t,\, \rm pole} \approx 171\, \rm GeV$. As proposed in \cite{Shaposhnikov:2009pv,Bezrukov:2012sa}, the Higgs mass also becomes a prediction.\\
+We stress that our results arise in a truncation of the RG flow that is limited to  the surmised leading-order effects of quantum gravity on matter. 
+In particular, convergence for the microscopic values of the gravity couplings under the inclusion of matter effects has not yet been achieved, and might require significant extensions of the truncation. We caution that the full system might feature fixed-point values in the regime $\Lambda^{\ast}>-3.3$.
+Quantitatively precise results require extensions of the truncation in the gravity sector, and a matching at the Planck scale to the NNLO running of the SM. 
+The uncovered predictive UV completion of the SM should give a strong incentive to advance in this direction.
+\\
+\noindent\emph{Acknowledgements}
+We acknowledge insightful discussions with H.~Gies, J.~M.~Pawlowski and C.~Wetterich and would also like to thank H.~Gies and J.~M.~Pawlowski for valuable comments on the manuscript. We thank M.~Reichert for making us aware of an error in one of the beta functions in a previous version.
+This research is supported by an Emmy-Noether fellowship through the DFG under grant no.~EI-1037-1.
+A.~Held is also supported by a scholarship of the Studienstiftung des deutschen Volkes.
+
+
+\begin{thebibliography}{99}
+
+%
+\bibitem{Bezrukov:2012sa} 
+  F.~Bezrukov, M.~Y.~Kalmykov, B.~A.~Kniehl and M.~Shaposhnikov,
+  %``Higgs Boson Mass and New Physics,''
+  JHEP {\bf 1210}, 140 (2012).
+%  [arXiv:1205.2893 [hep-ph]].
+  %%CITATION = ARXIV:1205.2893;%%
+  
+  %\cite{Buttazzo:2013uya}
+\bibitem{Buttazzo:2013uya} 
+  D.~Buttazzo, G.~Degrassi, P.~P.~Giardino, G.~F.~Giudice, F.~Sala, A.~Salvio and A.~Strumia,
+  %``Investigating the near-criticality of the Higgs boson,''
+  JHEP {\bf 1312}, 089 (2013)
+  doi:10.1007/JHEP12(2013)089.
+%  [arXiv:1307.3536 [hep-ph]].
+  %%CITATION = doi:10.1007/JHEP12(2013)089;%%
+  
+  \bibitem{GellMann:1954fq} 
+  M.~Gell-Mann and F.~E.~Low,
+  %``Quantum electrodynamics at small distances,''
+  Phys.\ Rev.\  {\bf 95}, 1300 (1954)
+  doi:10.1103/PhysRev.95.1300;
+  %%CITATION = doi:10.1103/PhysRev.95.1300;%%
+  %\cite{Gockeler:1997dn}
+%\bibitem{Gockeler:1997dn} 
+  M.~Gockeler, R.~Horsley, V.~Linke, P.~E.~L.~Rakow, G.~Schierholz and H.~Stuben,
+  %``Is there a Landau pole problem in QED?,''
+  Phys.\ Rev.\ Lett.\  {\bf 80}, 4119 (1998)
+  doi:10.1103/PhysRevLett.80.4119;
+%  [hep-th/9712244].
+  %%CITATION = doi:10.1103/PhysRevLett.80.4119;%%
+ % \bibitem{Gockeler:1997kt} 
+  M.~Gockeler, R.~Horsley, V.~Linke, P.~E.~L.~Rakow, G.~Schierholz and H.~Stuben,
+  %``Resolution of the Landau pole problem in QED,''
+  Nucl.\ Phys.\ Proc.\ Suppl.\  {\bf 63}, 694 (1998)
+  doi:10.1016/S0920-5632(97)00875-X;
+%  [hep-lat/9801004].
+  %%CITATION = doi:10.1016/S0920-5632(97)00875-X;%%
+%\cite{Gies:2004hy}
+%\bibitem{Gies:2004hy} 
+  H.~Gies and J.~Jaeckel,
+  %``Renormalization flow of QED,''
+  Phys.\ Rev.\ Lett.\  {\bf 93}, 110405 (2004)
+  doi:10.1103/PhysRevLett.93.110405.
+%  [hep-ph/0405183].
+  %%CITATION = doi:10.1103/PhysRevLett.93.110405;%%
+
+\bibitem{triviality}
+ L.~Maiani, G.~Parisi and R.~Petronzio,
+  %``Bounds on the Number and Masses of Quarks and Leptons,''
+  Nucl.\ Phys.\ B {\bf 136}, 115 (1978);
+  %%CITATION = NUPHA,B136,115;%%
+  N.~Cabibbo, L.~Maiani, G.~Parisi and R.~Petronzio,
+  %``Bounds on the Fermions and Higgs Boson Masses in Grand Unified Theories,''
+  Nucl.\ Phys.\ B {\bf 158}, 295 (1979);
+  %%CITATION = NUPHA,B158,295;%%
+ R.~F.~Dashen and H.~Neuberger,
+  %``How to Get an Upper Bound on the Higgs Mass,''
+  Phys.\ Rev.\ Lett.\  {\bf 50}, 1897 (1983);
+  %%CITATION = PRLTA,50,1897;%%
+  D.~J.~E.~Callaway,
+  %``Nontriviality of Gauge Theories With Elementary Scalars and Upper Bounds on Higgs Masses,''
+  Nucl.\ Phys.\ B {\bf 233}, 189 (1984);
+  %%CITATION = NUPHA,B233,189;%%
+  M.~A.~B.~Beg, C.~Panagiotakopoulos and A.~Sirlin,
+  %``Mass of the Higgs Boson in the Canonical Realization of the Weinberg-Salam Theory,''
+  Phys.\ Rev.\ Lett.\  {\bf 52}, 883 (1984);
+  %%CITATION = PRLTA,52,883;%%
+  M.~Lindner,
+  %``Implications of Triviality for the Standard Model,''
+  Z.\ Phys.\ C {\bf 31}, 295 (1986);
+  %%CITATION = ZEPYA,C31,295;%%
+  J.~Kuti, L.~Lin and Y.~Shen,
+  %``Upper Bound on the Higgs Mass in the Standard Model,''
+  Phys.\ Rev.\ Lett.\  {\bf 61}, 678 (1988);
+  %%CITATION = PRLTA,61,678;%%
+ T.~Hambye and K.~Riesselmann,
+  %``Matching conditions and Higgs mass upper bounds revisited,''
+  Phys.\ Rev.\ D {\bf 55}, 7255 (1997).
+  %[hep-ph/9610272].
+  %%CITATION = HEP-PH/9610272;%%
+  
+ 
+  \bibitem{Weinberg:1980gg}
+  S.~Weinberg,
+%  ``UV Divergences In Quantum Theories Of Gravitation,''
+%\href{http://www.slac.stanford.edu/spires/find/hep/www?irn=784877}{SPIRES entry}
+{\it  In *Hawking, S.W., Israel, W.: General Relativity*, 790-831}
+(Cambridge University Press, Cambridge, 1980).
+
+\bibitem{Reuter:1996cp} 
+  M.~Reuter,
+  %``non-perturbative evolution equation for quantum gravity,''
+  Phys.\ Rev.\ D {\bf 57}, 971 (1998).
+%  [hep-th/9605030].
+  %%CITATION = HEP-TH/9605030;%%
+  
+%\cite{Harst:2011zx}
+\bibitem{Harst:2011zx} 
+  U.~Harst and M.~Reuter,
+  %``QED coupled to QEG,''
+  JHEP {\bf 1105}, 119 (2011)
+  doi:10.1007/JHEP05(2011)119.
+%  [arXiv:1101.6007 [hep-th]].
+  %%CITATION = doi:10.1007/JHEP05(2011)119;%%
+ 
+%\cite{Christiansen:2017gtg}
+\bibitem{Christiansen:2017gtg} 
+  N.~Christiansen and A.~Eichhorn,
+  %``An asymptotically safe solution to the U(1) triviality problem,''
+  Phys.\ Lett.\ B {\bf 770}, 154 (2017)
+  doi:10.1016/j.physletb.2017.04.047.
+%  [arXiv:1702.07724 [hep-th]].
+  %%CITATION = doi:10.1016/j.physletb.2017.04.047;%%
+  
+  %
+\bibitem{Wetterich:1992yh} 
+  C.~Wetterich,
+  %``Exact evolution equation for the effective potential,''
+  Phys.\ Lett.\ B {\bf 301}, 90 (1993).
+  doi:10.1016/0370-2693(93)90726-X.
+  %%CITATION = doi:10.1016/0370-2693(93)90726-X;%%
+  
+  \bibitem{Morris:1993qb} 
+  T.~R.~Morris,
+  %``The Exact renormalization group and approximate solutions,''
+  Int.\ J.\ Mod.\ Phys.\ A {\bf 9}, 2411 (1994).
+%  doi:10.1142/S0217751X94000972
+%  [hep-ph/9308265].
+  %%CITATION = doi:10.1142/S0217751X94000972;%%
+  
+      \bibitem{Berges:2000ew}
+  J.~Berges, N.~Tetradis and C.~Wetterich,
+  Phys.\ Rept.\  {\bf 363} (2002) 223.
+%  [hep-ph/0005122].
+  %%CITATION = HEP-PH 0005122;%%
+  
+  \bibitem{Reuter:2012id} 
+  M.~Reuter and F.~Saueressig,
+  %``Quantum Einstein Gravity,''
+  New J.\ Phys.\  {\bf 14}, 055022 (2012).
+ % [arXiv:1202.2274 [hep-th]];
+  %%CITATION = ARXIV:1202.2274;%%
+  
+   %\cite{Gies:2014xha}
+\bibitem{Gies:2014xha} 
+  H.~Gies and R.~Sondenheimer,
+  %``Higgs Mass Bounds from Renormalization Flow for a Higgs-top-bottom model,''
+  Eur.\ Phys.\ J.\ C {\bf 75}, no. 2, 68 (2015)
+  doi:10.1140/epjc/s10052-015-3284-1.
+ % [arXiv:1407.8124 [hep-ph]].
+  %%CITATION = doi:10.1140/epjc/s10052-015-3284-1;%%
+  
+  %\cite{Litim:2003vp}
+\bibitem{Litim:2003vp} 
+  D.~F.~Litim,
+  %``Fixed points of quantum gravity,''
+  Phys.\ Rev.\ Lett.\  {\bf 92}, 201301 (2004)
+  doi:10.1103/PhysRevLett.92.201301;
+ % [hep-th/0312114].
+  %%CITATION = doi:10.1103/PhysRevLett.92.201301;%%
+%
+%\bibitem{Benedetti:2009rx} 
+  D.~Benedetti, P.~F.~Machado and F.~Saueressig,
+  %``Asymptotic safety in higher-derivative gravity,''
+  Mod.\ Phys.\ Lett.\ A {\bf 24}, 2233 (2009);
+%  [arXiv:0901.2984 [hep-th]].
+  %%CITATION = ARXIV:0901.2984;%%
+        %\cite{}
+%\bibitem{Falls:2013bv} 
+  K.~Falls, D.~F.~Litim, K.~Nikolakopoulos and C.~Rahmede,
+  %``A bootstrap towards asymptotic safety,''
+  arXiv:1301.4191 [hep-th];
+  %%CITATION = ARXIV:1301.4191;%%
+  % \bibitem{Becker:2014qya} 
+  D.~Becker and M.~Reuter,
+  %``En route to Background Independence: Broken split-symmetry, and how to restore it with bi-metric average actions,''
+  Annals Phys.\  {\bf 350}, 225 (2014)
+  doi:10.1016/j.aop.2014.07.023;
+%  [arXiv:1404.4537 [hep-th]].
+  %%CITATION = doi:10.1016/j.aop.2014.07.023;%%
+    %\cite{Gies:2016con}
+%\bibitem{Gies:2016con} 
+  H.~Gies, B.~Knorr, S.~Lippoldt and F.~Saueressig,
+  %``Gravitational Two-Loop Counterterm Is Asymptotically Safe,''
+  Phys.\ Rev.\ Lett.\  {\bf 116}, no. 21, 211302 (2016);
+ % doi:10.1103/PhysRevLett.116.211302
+%  [arXiv:1601.01800 [hep-th]].
+  %%CITATION = doi:10.1103/PhysRevLett.116.211302;%%  
+    %\cite{Denz:2016qks}
+%\bibitem{Denz:2016qks} 
+  T.~Denz, J.~M.~Pawlowski and M.~Reichert,
+  %``Towards apparent convergence in asymptotically safe quantum gravity,''
+  arXiv:1612.07315 [hep-th].
+  %%CITATION = ARXIV:1612.07315;%%
+  
+  %\cite{Ambjorn:2012jv}
+\bibitem{Ambjorn:2012jv} 
+  J.~Ambjorn, A.~Goerlich, J.~Jurkiewicz and R.~Loll,
+  %``Nonperturbative Quantum Gravity,''
+  Phys.\ Rept.\  {\bf 519}, 127 (2012)
+  doi:10.1016/j.physrep.2012.03.007;
+ % [arXiv:1203.3591 [hep-th]];
+  %%CITATION = doi:10.1016/j.physrep.2012.03.007;%%
+  %\cite{Laiho:2016nlp}
+%\bibitem{Laiho:2016nlp} 
+  J.~Laiho, S.~Bassler, D.~Coumbe, D.~Du and J.~T.~Neelakanta,
+  %``Lattice Quantum Gravity and Asymptotic Safety,''
+  arXiv:1604.02745 [hep-th].
+  %%CITATION = ARXIV:1604.02745;%%
+  
+  %\cite{Eichhorn:2016esv}
+\bibitem{Eichhorn:2016esv} 
+  A.~Eichhorn, A.~Held and J.~M.~Pawlowski,
+  %``Quantum-gravity effects on a Higgs-Yukawa model,''
+  Phys.\ Rev.\ D {\bf 94}, no. 10, 104027 (2016)
+  doi:10.1103/PhysRevD.94.104027.
+%  [arXiv:1604.02041 [hep-th]].
+  %%CITATION = doi:10.1103/PhysRevD.94.104027;%%
+  
+%\cite{Eichhorn:2017eht}
+\bibitem{Eichhorn:2017eht} 
+  A.~Eichhorn and A.~Held,
+  %``Viability of quantum-gravity induced ultraviolet completions for matter,''
+  arXiv:1705.02342 [gr-qc].
+  %%CITATION = ARXIV:1705.02342;%%
+  
+\bibitem{scalar_gravity}
+%\cite{Zanusso:2009bs}
+%\bibitem{Zanusso:2009bs} 
+  O.~Zanusso, L.~Zambelli, G.~P.~Vacca and R.~Percacci,
+  %``Gravitational corrections to Yukawa systems,''
+  Phys.\ Lett.\ B {\bf 689}, 90 (2010)
+  doi:10.1016/j.physletb.2010.04.043;
+ % [arXiv:0904.0938 [hep-th]];
+  %%CITATION = doi:10.1016/j.physletb.2010.04.043;%%  
+    G.~Narain and R.~Percacci,
+  %``Renormalization Group Flow in Scalar-Tensor Theories. I,''
+  Class.\ Quant.\ Grav.\  {\bf 27}, 075001 (2010)
+  doi:10.1088/0264-9381/27/7/075001
+%  [arXiv:0911.0386 [hep-th]];
+  %%CITATION = doi:10.1088/0264-9381/27/7/075001;%%
+    A.~Eichhorn,
+  %``Quantum-gravity-induced matter self-interactions in the asymptotic-safety scenario,''
+  Phys.\ Rev.\ D {\bf 86}, 105021 (2012)
+  doi:10.1103/PhysRevD.86.105021;
+%  [arXiv:1204.0965 [gr-qc]].
+  %%CITATION = doi:10.1103/PhysRevD.86.105021;%%
+  %\cite{Labus:2015ska}
+%\bibitem{Labus:2015ska} 
+  P.~Labus, R.~Percacci and G.~P.~Vacca,
+  %``Asymptotic safety in $O(N)$ scalar models coupled to gravity,''
+  Phys.\ Lett.\ B {\bf 753}, 274 (2016)
+ doi:10.1016/j.physletb.2015.12.022;
+  %[arXiv:1505.05393 [hep-th]].
+  %%CITATION = doi:10.1016/j.physletb.2015.12.022;%%
+  %\cite{Oda:2015sma}
+%\bibitem{Oda:2015sma} 
+  K.~y.~Oda and M.~Yamada,
+  %``Non-minimal coupling in Higgs?Yukawa model with asymptotically safe gravity,''
+  Class.\ Quant.\ Grav.\  {\bf 33}, no. 12, 125011 (2016)
+  doi:10.1088/0264-9381/33/12/125011.
+ % [arXiv:1510.03734 [hep-th]].
+  %%CITATION = doi:10.1088/0264-9381/33/12/125011;%%
+  
+  %\cite{Litim:2001up}
+\bibitem{Litim:2001up} 
+  D.~F.~Litim,
+  %``Optimized renormalization group flows,''
+  Phys.\ Rev.\ D {\bf 64}, 105007 (2001)
+  doi:10.1103/PhysRevD.64.105007
+  [hep-th/0103195].
+  %%CITATION = doi:10.1103/PhysRevD.64.105007;%%
+  
+  %\cite{}
+\bibitem{Daum:2009dn} 
+  J.~E.~Daum, U.~Harst and M.~Reuter,
+  %``Running Gauge Coupling in Asymptotically Safe Quantum Gravity,''
+  JHEP {\bf 1001}, 084 (2010)
+  doi:10.1007/JHEP01(2010)084.
+ % [arXiv:0910.4938 [hep-th]].
+  %%CITATION = doi:10.1007/JHEP01(2010)084;%%
+  
+  %\cite{Folkerts:2011jz}
+\bibitem{Folkerts:2011jz} 
+  S.~Folkerts, D.~F.~Litim and J.~M.~Pawlowski,
+  %``Asymptotic freedom of Yang-Mills theory with gravity,''
+  Phys.\ Lett.\ B {\bf 709}, 234 (2012)
+  doi:10.1016/j.physletb.2012.02.002.
+ % [arXiv:1101.5552 [hep-th]].
+  %%CITATION = doi:10.1016/j.physletb.2012.02.002;%%
+  
+  %\cite{Hamada:2017rvn}
+\bibitem{Hamada:2017rvn} 
+  Y.~Hamada and M.~Yamada,
+  %``Asymptotic safety of higher derivative quantum gravity non-minimally coupled with a matter system,''
+  arXiv:1703.09033 [hep-th].
+  %%CITATION = ARXIV:1703.09033;%%
+
+  %\cite{Degrassi:2012ry}
+\bibitem{Degrassi:2012ry} 
+  G.~Degrassi, S.~Di Vita, J.~Elias-Miro, J.~R.~Espinosa, G.~F.~Giudice, G.~Isidori and A.~Strumia,
+  %``Higgs mass and vacuum stability in the Standard Model at NNLO,''
+  JHEP {\bf 1208}, 098 (2012)
+  doi:10.1007/JHEP08(2012)098.
+  %[arXiv:1205.6497 [hep-ph]].
+  %%CITATION = doi:10.1007/JHEP08(2012)098;%%
+  
+%\cite{Dona:2013qba}
+\bibitem{Dona:2013qba} 
+  P.~Don\`a, A.~Eichhorn and R.~Percacci,
+  %``Matter matters in asymptotically safe quantum gravity,''
+  Phys.\ Rev.\ D {\bf 89}, no. 8, 084035 (2014)
+  doi:10.1103/PhysRevD.89.084035.
+ % [arXiv:1311.2898 [hep-th]].
+  %%CITATION = doi:10.1103/PhysRevD.89.084035;%%
+
+    %\cite{Eichhorn:2016vvy}
+\bibitem{Eichhorn:2016vvy} 
+  A.~Eichhorn and S.~Lippoldt,
+  %``Quantum gravity and Standard-Model-like fermions,''
+  Phys.\ Lett.\ B {\bf 767}, 142 (2017)
+  doi:10.1016/j.physletb.2017.01.064.
+ % [arXiv:1611.05878 [gr-qc]].
+  %%CITATION = doi:10.1016/j.physletb.2017.01.064;%%
+
+  
+  %\cite{Meibohm:2015twa}
+\bibitem{Meibohm:2015twa} 
+  J.~Meibohm, J.~M.~Pawlowski and M.~Reichert,
+  %``Asymptotic safety of gravity-matter systems,''
+  Phys.\ Rev.\ D {\bf 93}, no. 8, 084035 (2016)
+  doi:10.1103/PhysRevD.93.084035.
+ % [arXiv:1510.07018 [hep-th]].
+  %%CITATION = doi:10.1103/PhysRevD.93.084035;%%
+  
+  %\cite{Dona:2015tnf}
+\bibitem{Dona:2015tnf} 
+  P.~Don\`a, A.~Eichhorn, P.~Labus and R.~Percacci,
+  %``Asymptotic safety in an interacting system of gravity and scalar matter,''
+  Phys.\ Rev.\ D {\bf 93}, no. 4, 044049 (2016)
+  Erratum: [Phys.\ Rev.\ D {\bf 93}, no. 12, 129904 (2016)]
+  doi:10.1103/PhysRevD.93.129904, 10.1103/PhysRevD.93.044049.
+ % [arXiv:1512.01589 [gr-qc]].
+  %%CITATION = doi:10.1103/PhysRevD.93.129904, 10.1103/PhysRevD.93.044049;%%
+  
+  %\cite{Biemans:2017zca}
+\bibitem{Biemans:2017zca} 
+  J.~Biemans, A.~Platania and F.~Saueressig,
+  %``Renormalization group fixed points of foliated gravity-matter systems,''
+  JHEP {\bf 1705}, 093 (2017)
+  doi:10.1007/JHEP05(2017)093.
+ % [arXiv:1702.06539 [hep-th]].
+  %%CITATION = doi:10.1007/JHEP05(2017)093;%%
+  
+      %\cite{Shaposhnikov:2009pv}
+\bibitem{Shaposhnikov:2009pv} 
+  M.~Shaposhnikov and C.~Wetterich,
+  %``Asymptotic safety of gravity and the Higgs boson mass,''
+  Phys.\ Lett.\ B {\bf 683}, 196 (2010)
+  doi:10.1016/j.physletb.2009.12.022.
+%  [arXiv:0912.0208 [hep-th]].
+  %%CITATION = doi:10.1016/j.physletb.2009.12.022;%%
+    
+  %\cite{Khachatryan:2015hba}
+\bibitem{Khachatryan:2015hba} 
+  V.~Khachatryan {\it et al.} [CMS Collaboration],
+  %``Measurement of the top quark mass using proton-proton data at ${\sqrt{(s)}}$ = 7 and 8 TeV,''
+  Phys.\ Rev.\ D {\bf 93}, no. 7, 072004 (2016)
+  doi:10.1103/PhysRevD.93.072004.
+ % [arXiv:1509.04044 [hep-ex]].
+  %%CITATION = doi:10.1103/PhysRevD.93.072004;%%
+ 
+  
+   %\cite{Wetterich:1981ir}
+\bibitem{Wetterich:1981ir} 
+  C.~Wetterich,
+  %``Gauge Hierarchy Due To Strong Interactions?,''
+  Phys.\ Lett.\  {\bf 104B}, 269 (1981).
+  doi:10.1016/0370-2693(81)90124-6.
+  %%CITATION = doi:10.1016/0370-2693(81)90124-6;%% 
+  
+  %\cite{Wetterich:1987az}
+\bibitem{Wetterich:1987az} 
+  C.~Wetterich,
+  %``The Mass Of The Higgs Particle,''
+  DESY-87-154.
+  %%CITATION = DESY-87-154;%%
+  
+   %\cite{Bornholdt:1992up}
+\bibitem{Bornholdt:1992up} 
+  S.~Bornholdt and C.~Wetterich,
+  %``Selforganizing criticality, large anomalous mass dimension and the gauge hierarchy problem,''
+  Phys.\ Lett.\ B {\bf 282}, 399 (1992).
+  doi:10.1016/0370-2693(92)90659-R.
+  %%CITATION = doi:10.1016/0370-2693(92)90659-R;%% 
+ 
+  
+    %\cite{Aad:2015zhl}
+\bibitem{Aad:2015zhl} 
+  G.~Aad {\it et al.} [ATLAS and CMS Collaborations],
+  %``Combined Measurement of the Higgs Boson Mass in $pp$ Collisions at $\sqrt{s}=7$ and 8 TeV with the ATLAS and CMS Experiments,''
+  Phys.\ Rev.\ Lett.\  {\bf 114}, 191803 (2015)
+  doi:10.1103/PhysRevLett.114.191803.
+ % [arXiv:1503.07589 [hep-ex]].
+  %%CITATION = doi:10.1103/PhysRevLett.114.191803;%%
+  
+  %\cite{Hempfling:1994ar}
+\bibitem{Hempfling:1994ar} 
+  R.~Hempfling and B.~A.~Kniehl,
+  %``On the relation between the fermion pole mass and MS Yukawa coupling in the standard model,''
+  Phys.\ Rev.\ D {\bf 51}, 1386 (1995)
+  doi:10.1103/PhysRevD.51.1386.
+%  [hep-ph/9408313].
+  %%CITATION = doi:10.1103/PhysRevD.51.1386;%%
+ 
+ %\cite{Eichhorn:2017lry}
+\bibitem{Eichhorn:2017lry} 
+  A.~Eichhorn and F.~Versteegen,
+  %``Upper bound on the Abelian gauge coupling from asymptotic safety,''
+  arXiv:1709.07252 [hep-th].
+  %%CITATION = ARXIV:1709.07252;%%
+  
+  %\cite{Eichhorn:2011pc}
+\bibitem{Eichhorn:2011pc} 
+  A.~Eichhorn and H.~Gies,
+  %``Light fermions in quantum gravity,''
+  New J.\ Phys.\  {\bf 13}, 125012 (2011)
+  doi:10.1088/1367-2630/13/12/125012;
+  %[arXiv:1104.5366 [hep-th]].
+  %%CITATION = doi:10.1088/1367-2630/13/12/125012;%%
+%\cite{Meibohm:2016mkp}
+%\bibitem{Meibohm:2016mkp} 
+  J.~Meibohm and J.~M.~Pawlowski,
+  %``Chiral fermions in asymptotically safe quantum gravity,''
+  Eur.\ Phys.\ J.\ C {\bf 76}, no. 5, 285 (2016)
+  doi:10.1140/epjc/s10052-016-4132-7.
+%  [arXiv:1601.04597 [hep-th]].
+  %%CITATION = doi:10.1140/epjc/s10052-016-4132-7;%%
+  
+  \bibitem{Held20175}
+  A.~Eichhorn and A.~Held,
+  ``Mass difference for charged quarks from quantum gravity"
+  to appear.
+  
+\end{thebibliography}
+  
+  
+\end{document}

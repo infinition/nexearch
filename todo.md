@@ -1,6 +1,6 @@
 ---
 purpose: Research ideas backlog - raw ideas to explore in the future
-last_updated: 2026-04-03
+last_updated: 2026-04-24
 ---
 
 # Research TODO
@@ -11,6 +11,27 @@ last_updated: 2026-04-03
 ---
 
 ## High Priority
+
+### LVS (P01) - post-reset priorities (2026-04-24)
+
+- [ ] **Polish rigorous preprint** (P01) - `paper/lvs-preprint.md`: frame as conditional framework + negative result, prepare for arXiv submission (hep-th / gr-qc)
+- [ ] **SARAH / RGBeta 2-loop validation** (P01) - check that 1-loop Planck-BC numbers (f_g ~ 0.010, f_y ~ 0.013) survive at 2-loop
+- [ ] **Eichhorn-Held 2018 literature audit** (P01) - track what newer FRG truncations give for f_g, f_y; does the factor 3-5 mismatch shrink?
+- [ ] **Joint gauge-Yukawa stationarity** (P01) - Yukawa residue beta_yt != 0 at M_Pl forces joint treatment
+- [ ] **Direction 1: Pendleton-Ross IR attractor** (P01) - `scripts/direction2_attractor.py` - LVS as IR fixed-point selector?
+- [ ] **Direction 2: Yukawa-sector joint** (P01) - `scripts/direction2_yukawa.py`
+- [ ] **Direction 3: Hill-type attractor** (P01) - `figures/fig_hill_attractor.png` - analyse SM trajectory geometry
+- [ ] **Identify one genuinely distinctive prediction** (P01) - current Planck-BC is dimensional and non-distinctive; find something that discriminates LVS from competing UV completions
+
+### RAPC Modular Geometry (P02) - emergent geometry priorities (2026-04-24)
+
+- [ ] **Weak bridge rule** (P02) - redesign patch gluing so fragmented sparse patches can connect without densifying
+- [ ] **Large phase scan** (P02) - run 1000+ seeds per lambda on RTX 4070 Ti; map sparse-geometric phase width
+- [ ] **Dimension diagnostics** (P02) - estimate emergent dimension from ball growth, graph Laplacian spectra, and spectral gap scaling
+- [ ] **Basis-independent modular diagnostics** (P02) - replace Pauli projection with operator-algebraic non-factorization measures
+- [ ] **Type-II crossed-product analogue** (P02) - formulate a finite-to-algebraic bridge toward Witten/CLPW style crossed products
+
+### ML / other research lines
 
 - [ ] **DirectLocal at GPT-2 scale** (005) - language modeling with per-block probes on Transformer
 - [ ] **Mono-Forward CNN for CIFAR-10** (007) - reproduce paper result where MF beats BP (56.99% vs 54.25%)
@@ -85,3 +106,14 @@ last_updated: 2026-04-03
 - [x] Mono-Forward implementation: 98.12% MNIST -> solution 007
 - [x] Gradient-free barrier confirmed: all zero-grad approaches <45% MNIST
 - [x] Literature search: 40+ papers analyzed (SCFF, NoProp, MonoForward, EGGROLL, SLL, etc.)
+- [x] LVS methodological reset (2026-04-24): strong global-flow form FALSIFIED at alpha_s=0.048 (P01)
+- [x] LVS robustness test: sigma1/sigma2/sigma3 agree - "50% partial optimum" retracted as metric artifact (P01)
+- [x] LVS Planck-BC dimensional analysis: f_g ~ 0.010, f_y ~ 0.013 (P01)
+- [x] LVS Eichhorn-Held 2018 comparison: f_g=0.055, f_y=0.004 - factor 3-5 mismatch within ~60% truncation uncertainty (P01)
+- [x] LVS Yukawa residue finding: beta_yt != 0 at M_Pl even when beta_gauge vanishes (P01)
+- [x] Rigorous preprint promoted from `paper_v4_final` to `paper/lvs-preprint.md` (P01)
+- [x] Archived biased explorations (d=3 / SU321 / DESI GPU sims, "f_g=0.010585 exactly" overclaim) to `archives_biased_explorations/` (P01)
+- [x] RAPC Modular Geometry integrated as solution P02 with source scripts, notebook, writeups, JSON summaries, paper skeleton, and dashboard entries
+- [x] RAPC BMV and modular-phase toy gates passed (finite Type-I models only)
+- [x] RAPC spectral-locality scan found best sparse-geometric phase at 9/20 seeds across broad lambda range
+- [x] RAPC patch gluing attempt failed to add bridges, identifying weak-bridge generation as the next bottleneck

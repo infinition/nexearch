@@ -1,0 +1,61 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb}
+\usepackage{hyperref}
+
+\title{RAPC Modular Geometry: A Toy Falsification Lab for Emergent Quantum Spacetime}
+\author{Fabien}
+\date{April 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We describe RAPC, a finite-dimensional toy research program testing whether spacetime-like geometry can emerge from modular quantum correlations. The guiding hypothesis is that effective geometry is not the set of all correlations, but the stable sparse spectral compression of modular correlations. The current work implements a sequence of falsification gates: BMV-style entanglement, modular phase extraction from $K=-\log\rho$, subalgebra selection, hypergraph coarse-graining, MDL graph compression, spectral-locality phase scans, and patch-gluing attempts. The best current toy result is that adding spectral locality widens the sparse connected phase from a narrow simple-MDL window to roughly $9/20$ successful random seeds across a broad range of complexity penalties. The program remains a toy model and does not yet derive Lorentzian four-dimensional spacetime, Einstein dynamics, Type-III to Type-II crossed-product structure, or horizon entropy.
+\end{abstract}
+
+\section{Motivation}
+
+Quantum theory is naturally formulated on Hilbert-space states and observables, while general relativity treats spacetime geometry as dynamical. RAPC explores the inverse route: start from algebraic/modular correlation data, then ask whether effective geometry appears only after coarse-graining and compression.
+
+\section{Toy Framework}
+
+The finite prototype uses faithful density matrices and modular Hamiltonians
+\begin{equation}
+K = -\log \rho.
+\end{equation}
+Non-factorizing pieces of $K$ are interpreted as finite toy analogues of modular interactions. Effective graphs are built from pair reductions and selected by compression/locality scores.
+
+\section{Selection Principle}
+
+The current best toy score is
+\begin{equation}
+S(G) = I(G) - \lambda |E(G)| - c(N_c-1) + \nu \lambda_2(L_G) - \mu \mathrm{Var}(d_G),
+\end{equation}
+where $I(G)$ is preserved modular coupling weight, $|E(G)|$ is edge count, $N_c$ is component count, $\lambda_2(L_G)$ is algebraic connectivity, and $\mathrm{Var}(d_G)$ penalizes irregular degree distributions.
+
+\section{Current Results}
+
+Simple MDL compression produced a sparse connected phase only in a narrow window. Adding spectral locality widened the phase substantially:
+\begin{center}
+\begin{tabular}{c|c}
+Rule & Best sparse-geometric count \\
+\hline
+Simple MDL & $6/20$ seeds \\
+Spectral locality & $9/20$ seeds \\
+Residual patch gluing & $9/20$ seeds \\
+\end{tabular}
+\end{center}
+
+\section{Limitations}
+
+The current models assume finite Type-I tensor factors, Pauli bases, thermal states $\rho = e^{-K}/Z$, partial trace coarse-graining, and hand-tuned score weights. They are not claims about physical spacetime. They are falsification gates for future, more algebraic constructions.
+
+\section{Next Work}
+
+The next technical target is a bridge rule that can connect local patches using weak residual modular correlations without densifying the graph. A broader scan over seeds, node counts, and score parameters should then map the robustness of the sparse geometric phase.
+
+\bibliographystyle{plain}
+\bibliography{refs}
+
+\end{document}

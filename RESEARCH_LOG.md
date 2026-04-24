@@ -4,6 +4,131 @@ Chronological record of all research decisions, experiments, and discoveries.
 
 ---
 
+## 2026-04-24 - RAPC Modular Geometry (P02) - Full Integration into Nexearch
+
+**Goal:** Transfer the full RAPC quantum-gravity framework exploration into Nexearch as a standalone cross-domain solution.
+
+### What RAPC Is
+
+RAPC (Reseau Algebrique a Produit Croise / RAPC Modular Geometry) is a toy falsification lab for the hypothesis:
+
+```text
+geometry = stable sparse spectral compression of modular quantum correlations
+```
+
+It is not a finished theory of quantum gravity. It tests whether increasingly strict finite models can produce BMV-capable links, effective pair geometry, sparse locality, and stable graph phases without treating ML as a fundamental law.
+
+### Core Research Chain
+
+1. **BMV gate:** bilocal quantum channels create entanglement; LOCC controls do not.
+2. **Modular phase gate:** `K=-log(rho)` can generate a bilocal phase from correlations.
+3. **Subalgebra selection:** hidden effective pairs can be selected from global modular data.
+4. **Hypergraph coarse-graining:** higher-order modular terms can become pair edges when a reference asymmetry exists.
+5. **Automatic coarse-graining:** direct and generated edges are separated.
+6. **Iterated flow:** flows show empty, dense, decaying, and stable-topology regimes.
+7. **Sparse budget:** compression prevents nonlocal densification.
+8. **MDL budget selection:** graph size can be selected by information-complexity tradeoff.
+9. **Phase scan:** simple MDL has a narrow sparse-geometric phase.
+10. **Spectral locality:** adding Laplacian/connectivity terms widens the sparse-geometric phase.
+11. **Patch gluing:** first bridge rule fails, adding zero bridges.
+12. **Residual patch gluing:** retaining hypergraph memory stabilizes 9/20 cases but still adds no bridges.
+
+### Key Results
+
+| Experiment | Result | Decision |
+|------------|--------|----------|
+| BMV finite toy | concurrence 0.105, LOCC negativity 0 | Keep BMV as first falsification gate |
+| Modular phase | concurrence 0.644 from `K=-log(rho)` | Modular correlations can define toy bilocal generators |
+| Simple MDL scan | best sparse geometry 6/20 seeds | Compression alone is too weak |
+| Spectral locality scan | sparse geometry 9/20 across broad lambda range | Best current RAPC signal |
+| Patch gluing | 0 bridges added | Bridge rule failed |
+| Residual patch gluing | stable 9/20, still 0 bridges | Need new weak-bridge mechanism |
+
+### ML/GPU Decision
+
+ML and the RTX 4070 Ti may be used only as an external research microscope:
+
+```text
+ML for discovery, explicit mathematics for the final rule
+```
+
+The final physical model must not contain a neural network as a fundamental selector.
+
+### Files Added
+
+- `solutions/P02_rapc_modular_geometry/README.md`
+- `solutions/P02_rapc_modular_geometry/core.py`
+- `solutions/P02_rapc_modular_geometry/notebook.ipynb`
+- `solutions/P02_rapc_modular_geometry/source/*.py`
+- `solutions/P02_rapc_modular_geometry/results/*.csv`
+- `solutions/P02_rapc_modular_geometry/results/*_summary.json`
+- `solutions/P02_rapc_modular_geometry/writeups/*.md`
+- `solutions/P02_rapc_modular_geometry/paper/main.tex`
+
+### Next Decisions
+
+- Redesign patch gluing as multi-scale weak bridge generation.
+- Scan larger phase diagrams with 1000+ seeds per lambda.
+- Add dimension estimators from graph ball growth and Laplacian spectra.
+- Replace finite Pauli projections with basis-independent algebraic diagnostics.
+
+---
+
+## 2026-04-24 - LVS (P01) Rigorous Re-evaluation - Methodological Reset
+
+**Session goal:** After detecting confirmation bias in earlier LVS work, subject the theory to strict falsification tests and re-categorize all prior results by epistemic status.
+
+**Scope of reset.** All earlier LVS explorations (paper v1-v3, 9-test scorecard, d=3 / SU321 / DESI GPU simulations, "LVS predicts f_g = 0.010585 exactly" claim, 50% partial-LVS optimum) were moved to `solutions/P01_lvs_theory/archives_biased_explorations/` and reinterpreted as either tuned (not predictive), minimum-bar (no discriminative power), or metric artifacts.
+
+### Falsified - Global RG-flow minimization (strong LVS)
+
+Strong form hypothesis: SM parameters at M_Z minimize `int_{M_Z}^{M_Pl} sum_i beta_i^2 dt` (gauge sector). Numerical test (`scripts/rigorous_alpha_s_test.py`):
+
+- Optimum at alpha_s(M_Z) = **0.048**
+- Measured value: **0.1179**
+- **Verdict: falsified.** Strong form ruled out.
+
+### Robustness test (passed) - 3 stationarity metrics agree
+
+sigma1 (absolute), sigma2 (relative), sigma3 (sub-linear) all agree on the same optimum structure. The previously reported "50% partial LVS optimum" was a metric artifact of sigma2 alone - it does not survive the multi-metric test. **Retracted.**
+
+### Conditional - Planck-BC form survives
+
+Weak form: LVS imposed only as a boundary condition at M_Pl. Dimensional analysis gives
+
+  f_g = d_t g* / g*  ~ 1e-2,   f_y ~ 1e-2 at M_Pl
+
+This is a conditional deduction - it must be measured against FRG fixed-point values. It is not distinctive to LVS (any UV-completion producing similar stationarity would satisfy it).
+
+### Eichhorn-Held 2018 comparison (arXiv:1707.01107)
+
+At the Reuter fixed point in asymptotic safety:
+
+- f_g ~ **0.055**, f_y ~ **0.004**
+- LVS requires f_g ~ 0.010, f_y ~ 0.013 - **factor 3-5 mismatch**
+- Current FRG truncation uncertainty: ~60%
+- **Verdict: not confirmed, not refuted.** Hinges on future FRG calculations.
+
+### Yukawa residue finding
+
+Even when beta_gauge vanishes at M_Pl, beta_yt remains nonzero. Any future predictive LVS must treat gauge and Yukawa jointly (single-sector stationarity is insufficient).
+
+### Methodology changes
+
+- New `rigorous_2026_04/` folder is now the canonical location; earlier work preserved in `archives_biased_explorations/` for provenance.
+- Paper promoted: `paper/lvs-preprint.md` (from the former `paper_v4_final/`) is now the rigorous preprint; old skeleton saved as `main_skeleton_v1.tex`.
+- All AI-assistant transcripts and attribution removed from repo; `.gitignore` updated to prevent future leaks.
+
+### Next priorities
+
+1. SARAH / RGBeta 2-loop validation of the 1-loop Planck-BC numbers.
+2. Full Eichhorn-Held literature audit across newer FRG truncations.
+3. Joint gauge-Yukawa stationarity treatment (Yukawa residue forces this).
+4. Three exploratory directions: Pendleton-Ross IR attractor, Yukawa-sector joint, Hill-type attractor.
+5. Polish rigorous preprint for arXiv (hep-th or gr-qc) as honest negative-result + conditional framework.
+
+---
+
 ## 2026-04-03 - Local Learning Paradigm Search (005, 006, 007) - Session 2
 
 **Session goal:** Find a local learning algorithm where each neuron adjusts using only its neighbors - no global backpropagation. If found, training that takes 3 months on 10,000 GPUs could potentially run in hours on a laptop.

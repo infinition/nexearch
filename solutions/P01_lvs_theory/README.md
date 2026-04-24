@@ -5,17 +5,26 @@ abbreviation: LVS
 domains: [physics, math]
 category: physics-inspired
 type: theory
-status: promising
+status: limited
 date_created: 2024
+last_updated: 2026-04-24
 author: Fabien
-tags: [fixed-point, vacuum, stationarity, quantum-gravity, time-emergence, higgs, cosmology, JWST, Wheeler-DeWitt, Page-Wootters, asymptotic-safety, Coleman-Weinberg, symmetry-breaking, mass-frequency, dark-energy, non-locality, dimensionality]
+tags: [fixed-point, vacuum, stationarity, quantum-gravity, time-emergence, higgs, cosmology, JWST, Wheeler-DeWitt, Page-Wootters, asymptotic-safety, Coleman-Weinberg, symmetry-breaking, mass-frequency, dark-energy, non-locality, dimensionality, falsification, renormalization-group, Eichhorn-Held]
 validation_tests_passed: 6
 validation_tests_supported: 3
 validation_tests_total: 9
+global_flow_hypothesis_status: falsified
+global_flow_alpha_s_optimum: 0.048
+global_flow_alpha_s_measured: 0.1179
+planck_bc_f_g_required: 0.010
+planck_bc_f_y_required: 0.013
+eichhorn_held_f_g: 0.055
+eichhorn_held_f_y: 0.004
+frg_truncation_uncertainty_pct: 60
 higgs_mass_prediction_gev: 126
 higgs_mass_measured_gev: 125.25
 core_principle: "Observable reality corresponds to fixed points of the quantum vacuum landscape. Stability IS existence. It from Fix."
-key_equation: "H|Psi> = 0 + lambda(M_Pl) = 0 -> m_H = 126 GeV"
+key_equation: "beta_i(M_Pl) = 0 (Planck-scale boundary condition, conditional deduction f_g, f_y ~ 1e-2)"
 arxiv: null
 paper_status: draft
 github: null
@@ -26,8 +35,22 @@ related_to: ["001"]
 
 # P01 - LVS Theory (Latent Vacuum Stationarity)
 
+> **Status update 2026-04-24:** after a methodological audit (see `rigorous_2026_04/`), the strong "predictive" framing was retired. The *global* RG-flow minimization hypothesis is **falsified**. The *Planck-scale boundary-condition* formulation survives as a **conditional deduction** (not an exclusive prediction). Biased explorations from earlier iterations moved to `archives_biased_explorations/`.
+
 ## TL;DR
-Meta-interpretive physics framework: **observable reality = fixed points of the quantum vacuum**. Unifies fine-tuning, measurement problem, and time emergence through one principle: **stability IS existence** ("It from Fix"). Synthesis of Asymptotic Safety + Page-Wootters + Coleman-Weinberg. 6/9 empirical tests confirmed. Higgs mass predicted at 126 GeV (measured 125.25).
+Meta-interpretive physics framework: **observable reality = fixed points of the quantum vacuum**. Unifies fine-tuning, measurement problem, and time emergence through one principle: **stability IS existence** ("It from Fix"). Synthesis of Asymptotic Safety + Page-Wootters + Coleman-Weinberg. Compatible with Higgs near-criticality (Buttazzo et al. 2013) but **does not mechanistically derive it**. Current status: interpretive framework / early-phase research programme, neither confirmed nor conclusively refuted by current FRG calculations.
+
+## Current (rigorous) scientific status - April 2026
+
+| Hypothesis tested | Result |
+|---|---|
+| Global RG-flow action minimization across M_Z -> M_Pl | **Falsified** (min at alpha_s = 0.048, measured 0.1179) |
+| Planck-scale boundary condition beta_i(M_Pl) = 0 | Conditional deduction: requires f_g ~ 0.010, f_y ~ 0.013 from QG |
+| Eichhorn-Held 2018 FRG values (f_g = 0.055, f_y = 0.004) | Factor 3-5 mismatch; within 60% truncation uncertainty |
+| Robustness across 3 stationarity metrics | Passes (sigma1, sigma2, sigma3 agree) |
+| Yukawa-sector residue | Any LVS must constrain gauge AND Yukawa jointly |
+
+See [`rigorous_2026_04/LVS_Scientific_Status.md`](rigorous_2026_04/LVS_Scientific_Status.md) for the one-page status and [`rigorous_2026_04/LVS_Paper_Draft.md`](rigorous_2026_04/LVS_Paper_Draft.md) for the current preprint.
 
 ---
 
@@ -76,6 +99,18 @@ An infinite set of featureless points. Interaction between points creates links 
 
 ### Phase 11 - Essay "Du Point Fixe au Point de Rupture"
 Complete intellectual journal documenting the entire journey: from the photon question through calculations, impasses, honest self-assessment, to the framework's limits and what remains.
+
+### Phase 12 - Predictive Reformulation and Its Fall (April 2026)
+An aggressive reformulation tried to turn LVS from interpretation into prediction by coupling it to Asymptotic Safety and deducing f_g = 0.010585, f_y = 0.013540 from a 2-loop inversion. Accompanying GPU simulations claimed spontaneous emergence of d=3, SU(3)xSU(2)xU(1), and the DESI w0/wa anomaly. Material preserved in `archives_biased_explorations/`.
+
+### Phase 13 - Methodological Reset (April 2026)
+A strict audit identified AI sycophancy and confirmation bias in Phase 12. Corrections applied:
+1. **Robustness test**: three stationarity metrics (sigma1 absolute, sigma2 relative, sigma3 sub-linear) tested side-by-side. The previous "50% partial LVS optimum" evaporated - it was a metric artifact.
+2. **Global flow falsified**: `int sum(beta^2) dt` from M_Z to M_Pl is minimized at alpha_s = 0.048, far from the measured 0.1179. The strong form of LVS as a global variational principle is dead.
+3. **Eichhorn-Held audit**: ran the threshold functions from arXiv:1707.01107 with the paper's own (G_N*, Lambda*) = (3.29, -4.51). Got f_g^AS = 0.055, f_y^AS = 0.0037 - factor 3-5 away from the LVS-required 0.010 and 0.013. Within the ~60% truncation uncertainty, so not a refutation yet, but not a confirmation either.
+4. **Honest reframing**: LVS is a conditional deduction generator, not a prediction machine. Dimensional analysis alone gives f ~ 1e-2 for ANY boundary-condition scheme at M_Pl.
+
+Current paper (`rigorous_2026_04/LVS_Paper_Draft.md`): a rigorous negative result on 1-loop gauge-coupling stationarity, identifying three directions for a future predictive LVS (full asymptotic safety, joint gauge-Yukawa stationarity, Wilsonian extrema).
 
 ---
 
@@ -229,6 +264,10 @@ $$\Lambda \sim 1/N_{surf} \quad \text{where } N_{surf} \sim 10^{122}$$
 | Expressing LVS in existing frameworks | Hilbert/Riemannian/fiber bundles all inadequate | Maybe need fundamentally new framework |
 | Photon argument as foundational | Formalization showed it plays no role | Pedagogical only, not structural |
 | Proving AS / extending PW to full QG | Hundreds of physicists tried for decades | Not realistic for one person |
+| **Global RG-flow minimization (2026-04)** | alpha_s_opt = 0.048 vs measured 0.1179 | Strong LVS falsified; only Planck-BC form survives |
+| **"Partial 50% LVS optimum"** | Robustness test with 3 metrics showed it was an artifact | Always test against multiple metrics |
+| **"LVS predicts f_g = 0.010585 exactly"** (Phase 12) | Dimensional analysis gives f ~ 1e-2 for ANY BC scheme | Not a distinctive LVS signature |
+| **GPU sim of d=3 / SU(3)xSU(2)xU(1) / DESI** (Phase 12) | Potentials/ICs tuned toward target answers | Confirmation bias - archived in `archives_biased_explorations/` |
 
 ---
 
@@ -265,9 +304,35 @@ $$\Lambda \sim 1/N_{surf} \quad \text{where } N_{surf} \sim 10^{122}$$
 | `Et_si_lunivers_etait_en_pause.md` | Article (vulgarisation) | 38 KB | French |
 | `it_from_fix.md` | Essay | 4 KB | English |
 
-### paper/ + results/
-- `paper/main.tex` + `refs.bib` - LaTeX for publication
-- `results/validation_tests.json` - 9 tests structured
+### paper/ - CURRENT RIGOROUS PAPER
+- `paper/main.tex` - **Current preprint** "Latent Vacuum Stationarity as a Boundary Condition at the Planck Scale: A Conditional Framework" (the rigorous paper v4)
+- `paper/lvs-preprint.md` - Markdown source of the same preprint
+- `paper/refs.bib` - BibTeX references
+- `paper/main_skeleton_v1.tex` - Original 2024 skeleton (kept for provenance)
+
+### results/
+- `validation_tests.json` - 9 empirical tests
+- `global_flow_falsification.json` - April 2026 alpha_s scan result (falsification of strong LVS)
+- `eichhorn_held_comparison.json` - f_g, f_y comparison with Eichhorn-Held 2018
+- `stationarity_metric_robustness.json` - 3-metric agreement test
+
+### LVS_Master_Synthesis.md (top level)
+Research synthesis. Summarises the shift from interpretation to conditional prediction and what the computational substrate (FPS) was meant to demonstrate. Read alongside `rigorous_2026_04/LVS_Scientific_Status.md` for epistemic calibration.
+
+### rigorous_2026_04/ - METHODOLOGICAL AUDIT (read for provenance)
+- `LVS_Scientific_Status.md` - One-page honest status
+- `LVS_Paper_Draft.md` - Intermediate early draft (superseded by `paper/`)
+- `scripts/rigorous_alpha_s_test.py` - Falsification of global flow
+- `scripts/verify_eichhorn_held.py` - f_g, f_y reproduction from Eichhorn-Held
+- `scripts/metric_robustness.py` - 3-metric robustness test
+- `notebooks/LVS_Final_Notebook.ipynb` - Reproduces all figures
+- `references/` - Eichhorn-Held arXiv:1707.01107 source material
+
+### archives_biased_explorations/ - Retired for confirmation bias
+- `paper_v3_predictive/` - Paper v3 draft with overclaimed predictions (retired)
+- `advanced_experiments/` - DESI/2-loop/SU321 GPU experiments tuned toward target answers
+- `simulations_FPS/` - FPS emergent-dimension GPU sims (tuned, not blind)
+- `scripts_legacy/` - Voie 1/2/3 notebooks from predictive-framing phase
 
 ---
 
@@ -296,33 +361,31 @@ $$\Lambda \sim 1/N_{surf} \quad \text{where } N_{surf} \sim 10^{122}$$
 
 ---
 
-## Next Steps / Roadmap
+## Next Steps / Roadmap (rewritten 2026-04-24 under rigorous methodology)
 
-### Priority 1 - Credibility (paper v3)
-- [ ] Rewrite paper honestly: LVS = synthesis of AS + PW + CW, with full citations
-- [ ] Restructure: open with Wheeler-DeWitt -> vacuum -> fixed points, not photon argument
-- [ ] Grade every assertion: (a) established + formalized, (b) coherent but not formalized, (c) speculative
-- [ ] Add Shaposhnikov-Wetterich Higgs prediction (currently absent from paper!)
+### Priority 1 - Lock in the negative result (current preprint)
+- [x] Falsify global RG-flow minimization (done - scripts/rigorous_alpha_s_test.py)
+- [x] Pass 3-metric robustness test (done - scripts/metric_robustness.py)
+- [x] Reproduce Eichhorn-Held f_g, f_y (done - scripts/verify_eichhorn_held.py)
+- [ ] Compute formal uncertainty on f_g^LVS, f_y^LVS given measured (M_t, alpha_s) error bars
+- [ ] Validate 1-loop RGE against published Buttazzo 2013 benchmark (within 0.5%)
+- [ ] Polish `rigorous_2026_04/LVS_Paper_Draft.md` and post to arXiv [hep-th] + PhilSci-Archive
 
-### Priority 2 - Novel Contribution
-- [ ] Identify ONE testable consequence of the synthesis beyond SM
-- [ ] Best candidate: temporal resolution dt_min ~ hbar/(m_nu c^2) - check if anyone published this
-- [ ] Build a toy model: config space + stationarity + emergent time + determined constants
-- [ ] Implement full 2-loop Shaposhnikov-Wetterich calculation (reproduce m_H = 126 exactly)
-- [ ] Attempt to predict m_top from gravitational irrelevance (Eichhorn-Held approach)
+### Priority 2 - Cross-check with validated tools
+- [ ] Re-run 2-loop Machacek-Vaughn using SARAH / RGBeta / FlexibleSUSY (the hand-coded 2-loop had +23% deviation from Buttazzo, so it was dropped)
+- [ ] Literature review: do Eichhorn, Held, Wetterich, Pawlowski publish any independent f_g, f_y estimates? Are any ~1e-2?
 
-### Priority 3 - Ambitious
-- [ ] Formalize crystallization cosmology: derive specific expansion rate, compare to Lambda
-- [ ] Derive N_gen = 3 from fixed point (follow Eichhorn et al.)
-- [ ] Derive gauge group SU(3)xSU(2)xU(1) from stationarity (connect to Connes NCG)
-- [ ] Explore whether the framework itself needs to be non-dimensional (causal sets, amplituhedron)
+### Priority 3 - Three directions for a predictive LVS
+- [ ] **(A) Full asymptotic safety**: reformulate LVS as "Universe at UV fixed point of ALL couplings including gravity" - inherit Shaposhnikov-Wetterich predictive power
+- [ ] **(B) Joint gauge-Yukawa stationarity**: constrain Yukawa alongside gauge - may yield Pendleton-Ross-type quasi-fixed-point predictions
+- [ ] **(C) Wilsonian extrema**: variational principle on theory-space, not coupling-space - needs rigorous formulation
 
-### Priority 4 - Engagement & Cross-Domain
-- [ ] Submit to FQXi for funding
-- [ ] Post to PhilSci-Archive as philosophy of physics preprint
-- [ ] Contact Eichhorn, Hoehn, or Rovelli for expert feedback
-- [ ] Formalize LVS -> FPS bridge (vacuum fixed point -> computational substrate)
-- [ ] LVS implications for quantum error correction
-- [ ] Fixed-point structure in lattice-based PQC cryptography
-- [ ] Track DESI BAO results (2024-2025): w != -1 hints at variable dark energy -> LVS prediction
-- [ ] Track Euclid results (2025-2030): confirms or refutes variable Lambda
+### Priority 4 - Engagement & cross-domain (secondary until above lands)
+- [ ] Submit preprint to FQXi / Foundations of Physics
+- [ ] Contact Eichhorn, Hoehn, or Rovelli for expert feedback (especially on the f_g, f_y comparison)
+- [ ] Formalize LVS -> FPS bridge (P01 -> 002)
+- [ ] Track Euclid / DESI Year-5 for variable-Lambda hints (but do NOT fit Fisher-KPP to them - it's tautological)
+
+### Archived (do not pursue)
+- Tuned GPU simulations to "show" emergence of d=3 / SU(3)xSU(2)xU(1) / DESI w0,wa. Confirmation-bias prone; archived.
+- "LVS predicts f = 0.010585 exactly" framing. It's a dimensional-analysis result, not a distinctive signature.

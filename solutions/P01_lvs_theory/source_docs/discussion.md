@@ -66,8 +66,8 @@ Aperçu utilisé, lu un fichier
 Le preview utilise le CWD du projet (Budget_Hub), pas le dossier PHYSICS. Laissez-moi utiliser le navigateur Chrome à la place pour ouvrir le fichier directement.
 
 
-A utilisé l'intégration Claude in Chrome
-A utilisé l'intégration Claude in Chrome
+A utilisé l'intégration navigateur
+A utilisé l'intégration navigateur
 
 Le navigateur Chrome n'est pas connecté. Pas de souci — laissez-moi lancer un serveur depuis le bon répertoire via Bash.
 

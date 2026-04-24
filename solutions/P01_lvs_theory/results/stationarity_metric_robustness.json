@@ -1,0 +1,35 @@
+{
+  "solution_id": "P01",
+  "experiment": "Robustness of LVS stationarity optimum across three metrics",
+  "date": "2026-04-24",
+  "hypothesis": "If LVS identifies a genuine optimum in (alpha, Lambda_BSM) BSM parameter space, it must be invariant under the choice of stationarity measure.",
+  "method": "Parametrize BSM content by (alpha in [0, 1.5], Lambda_BSM) where alpha is the fraction of SM beta-coefficient cancellation. Integrate 1-loop SM+BSM RGEs and compute three stationarity measures at each point. Compare optima.",
+  "metrics": {
+    "sigma_1": "sum_i beta_i^2 (absolute, dimensionful)",
+    "sigma_2": "sum_i (beta_i / c_i)^2 (relative, dimensionless)",
+    "sigma_3": "sum_i sqrt(|beta_i / c_i|) (sub-linear)"
+  },
+  "optima": [
+    {"metric": "sigma_1", "alpha_opt": 1.00, "log10_Lambda_BSM_GeV": 18.0},
+    {"metric": "sigma_2", "alpha_opt": 0.95, "log10_Lambda_BSM_GeV": 18.0},
+    {"metric": "sigma_3", "alpha_opt": 1.00, "log10_Lambda_BSM_GeV": 18.0}
+  ],
+  "agreement": {
+    "alpha_spread": 0.05,
+    "log10_Lambda_spread": 0.0,
+    "verdict": "passes"
+  },
+  "earlier_finding_retracted": {
+    "claim": "50% partial LVS cancellation is the preferred optimum",
+    "outcome": "evaporated under multi-metric test; was an artifact of choosing sigma_2 only"
+  },
+  "yukawa_residue_finding": {
+    "description": "Fine scan around alpha=1, Lambda=1e18 GeV reveals sigma_2 is minimized at alpha=0.96 rather than 1.00 (0.2% improvement). Decomposition attributes this entirely to the Yukawa sector: beta_yt has irreducible y_t^2 and g_i^2 terms that gauge-only BSM cancellation cannot eliminate.",
+    "implication": "Any LVS programme must treat gauge and Yukawa sectors jointly. Gauge-only formulation is structurally incomplete."
+  },
+  "verdict": "optimum_is_robust_but_trivial",
+  "notes": "The three metrics agree: LVS-optimal BSM content = complete cancellation of SM beta-coefficients, activated as late as possible. This is robust to the choice of metric but physically trivial - any BSM content satisfying b_SM + Delta_b = 0 works. Does not predict any new scale, coupling, or particle. Reduces to the existing asymptotic safety programme.",
+  "reproduction": "rigorous_2026_04/scripts/metric_robustness.py",
+  "figure": "rigorous_2026_04/figures/fig_robustness_test.png",
+  "paper_section": "rigorous_2026_04/LVS_Paper_Draft.md - Section 3.2"
+}

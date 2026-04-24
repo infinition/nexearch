@@ -1,0 +1,20 @@
+{
+  "solution_id": "P01",
+  "experiment": "Global RG-flow minimization test (strong LVS form)",
+  "date": "2026-04-24",
+  "hypothesis": "SM parameters (especially alpha_s) minimize the RG-flow action S_LVS = integral of sum_i beta_i^2 from M_Z to M_Pl",
+  "method": "Integrate 1-loop SM RGEs for (g1, g2, g3, y_t) from M_Z=172.76 GeV to M_Pl=1.22e19 GeV, scan alpha_s(M_Z) in [0.01, 0.16], compute action and Euclidean length for each.",
+  "metric": "alpha_s_value_at_minimum_of_S",
+  "unit": "dimensionless",
+  "best_value": 0.048,
+  "baseline_name": "Measured alpha_s(M_Z) (PDG 2024)",
+  "baseline_value": 0.1179,
+  "baseline_uncertainty": 0.0010,
+  "length_minimum_alpha_s": 0.049,
+  "metrics_tested": ["action S = int sum(beta^2) dt", "length L = int sqrt(sum(beta^2)) dt"],
+  "verdict": "falsified",
+  "notes": "Measured alpha_s sits at ~2.4x the optimum. For alpha_s < 0.04 the top Yukawa hits a Landau pole before M_Pl, so the identified minimum is not a boundary artifact. This definitively rules out the strong LVS formulation as a global variational principle over the SM RG flow. The weaker Planck-BC form still survives - see eichhorn_held_comparison.json.",
+  "reproduction": "rigorous_2026_04/scripts/rigorous_alpha_s_test.py",
+  "figure": "rigorous_2026_04/figures/rigorous_alpha_s_test.png",
+  "paper_section": "rigorous_2026_04/LVS_Paper_Draft.md - Section 3"
+}

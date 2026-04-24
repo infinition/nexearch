@@ -1,0 +1,113 @@
+{
+  "solution_id": "P02",
+  "experiment": "G11 - patch gluing scan",
+  "date": "2026-04-24",
+  "dataset": "random modular hypergraph seeds",
+  "type": "theory",
+  "metric": "sparse_geometric_final_graphs",
+  "unit": "count_per_20_seeds",
+  "best_value": 9,
+  "best_lambda": 0.08,
+  "stable_best_value": 9,
+  "total_seeds_per_lambda": 20,
+  "stable": true,
+  "summary_by_lambda": [
+    {
+      "lambda": 0.02,
+      "counts": {
+        "empty": 0,
+        "fragmented_sparse": 10,
+        "sparse_geometric": 7,
+        "dense_nonlocal": 3
+      },
+      "stable_geo": 7,
+      "mean_edges": 5.5,
+      "mean_gap": 0.008652635665633263
+    },
+    {
+      "lambda": 0.04,
+      "counts": {
+        "empty": 0,
+        "fragmented_sparse": 11,
+        "sparse_geometric": 8,
+        "dense_nonlocal": 1
+      },
+      "stable_geo": 6,
+      "mean_edges": 4.75,
+      "mean_gap": 0.005785468832841526
+    },
+    {
+      "lambda": 0.06,
+      "counts": {
+        "empty": 0,
+        "fragmented_sparse": 11,
+        "sparse_geometric": 8,
+        "dense_nonlocal": 1
+      },
+      "stable_geo": 8,
+      "mean_edges": 4.5,
+      "mean_gap": 0.004875535165415728
+    },
+    {
+      "lambda": 0.08,
+      "counts": {
+        "empty": 0,
+        "fragmented_sparse": 11,
+        "sparse_geometric": 9,
+        "dense_nonlocal": 0
+      },
+      "stable_geo": 9,
+      "mean_edges": 4.45,
+      "mean_gap": 0.00484205321504647
+    },
+    {
+      "lambda": 0.1,
+      "counts": {
+        "empty": 0,
+        "fragmented_sparse": 11,
+        "sparse_geometric": 9,
+        "dense_nonlocal": 0
+      },
+      "stable_geo": 8,
+      "mean_edges": 4.25,
+      "mean_gap": 0.0045777513079332975
+    },
+    {
+      "lambda": 0.12,
+      "counts": {
+        "empty": 0,
+        "fragmented_sparse": 11,
+        "sparse_geometric": 9,
+        "dense_nonlocal": 0
+      },
+      "stable_geo": 9,
+      "mean_edges": 4.2,
+      "mean_gap": 0.004254194225930969
+    },
+    {
+      "lambda": 0.16,
+      "counts": {
+        "empty": 0,
+        "fragmented_sparse": 11,
+        "sparse_geometric": 9,
+        "dense_nonlocal": 0
+      },
+      "stable_geo": 9,
+      "mean_edges": 4.15,
+      "mean_gap": 0.0041811587849481585
+    },
+    {
+      "lambda": 0.2,
+      "counts": {
+        "empty": 0,
+        "fragmented_sparse": 11,
+        "sparse_geometric": 9,
+        "dense_nonlocal": 0
+      },
+      "stable_geo": 9,
+      "mean_edges": 4.1,
+      "mean_gap": 0.004187695517838108
+    }
+  ],
+  "notes": "Toy finite Type-I RAPC scan. ML/GPU is an exploration microscope, not part of the proposed physical law."
+}

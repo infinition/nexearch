@@ -1,0 +1,22 @@
+{
+  "sigma1_absolute": {
+    "alpha_opt": 1.0,
+    "log_mu_opt": 18.0,
+    "min_value": 3.2115241011415374e-05
+  },
+  "sigma2_relative": {
+    "alpha_opt": 0.9500000000000001,
+    "log_mu_opt": 18.0,
+    "min_value": 0.0001771974792250024
+  },
+  "sigma3_sqrt": {
+    "alpha_opt": 1.0,
+    "log_mu_opt": 18.0,
+    "min_value": 0.11543688765358148
+  },
+  "delta": {
+    "alpha_opt": 0.8,
+    "log_mu_opt": 13.0,
+    "min_value": 5.081931242612447
+  }
+}

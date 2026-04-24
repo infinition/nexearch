@@ -1,0 +1,31 @@
+{
+  "solution_id": "P01",
+  "experiment": "LVS Planck-scale boundary condition vs Eichhorn-Held 2018 FRG fixed point",
+  "date": "2026-04-24",
+  "hypothesis": "If LVS holds as a Planck-scale boundary condition (beta_i(M_Pl) = 0 for all couplings), Asymptotic Safety must supply gravity-induced anomalous dimensions f_g, f_y of a specific size.",
+  "reference_paper": "Eichhorn & Held 2018, 'Top mass from asymptotic safety', Phys. Lett. B 777, 217 [arXiv:1707.01107]",
+  "method": "Use Buttazzo 2013 extrapolated SM couplings at M_Pl to solve beta_SM - G_N*g*f_g = 0 and beta_SM + G_N*y*f_y = 0. Compare with threshold functions evaluated at (G_N*, Lambda*) = (3.29, -4.51) from Eichhorn-Held.",
+  "metric": "f_g, f_y anomalous dimensions",
+  "unit": "dimensionless",
+  "lvs_requirement": {
+    "f_g": 0.010,
+    "f_y": 0.013
+  },
+  "eichhorn_held_fixed_point": {
+    "G_N_star": 3.29,
+    "Lambda_star": -4.51,
+    "f_g_Lambda": 0.01677,
+    "f_y_Lambda": -0.00113,
+    "f_g_effective_AS": 0.055,
+    "f_y_effective_AS": 0.0037
+  },
+  "ratio_AS_over_LVS": {
+    "f_g": 5.5,
+    "f_y": 0.28
+  },
+  "truncation_uncertainty_AS_pct": 60,
+  "verdict": "not_confirmed_not_refuted",
+  "notes": "Factor 3-5 mismatch between LVS requirement and current FRG estimate. Eichhorn-Held explicitly state ~60% truncation uncertainty on G_N*, Lambda*. LVS value sits just outside one-sigma range for f_g, differs by > 1-sigma for f_y but in a regime where the sign of f_y is itself truncation-sensitive. Verdict: LVS survives current calculations but will be sharply tested as FRG truncations improve. CRUCIAL CAVEAT: dimensional analysis alone gives f ~ 1e-2 for ANY boundary-condition scheme at M_Pl - this ordering is not a distinctive LVS signature.",
+  "reproduction": "rigorous_2026_04/scripts/verify_eichhorn_held.py",
+  "paper_section": "paper/lvs-preprint.md - Sections 3 and 4"
+}

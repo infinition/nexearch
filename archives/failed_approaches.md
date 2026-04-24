@@ -1,7 +1,7 @@
 ---
 purpose: Complete archive of all failed and abandoned approaches with detailed failure analysis
-last_updated: 2026-04-03
-total_failed: 52
+last_updated: 2026-04-24
+total_failed: 56
 ---
 
 # Failed & Abandoned Approaches Archive
@@ -46,6 +46,10 @@ total_failed: 52
 | 30 | HSIC+Probe (S2) | hybrid | 42.06% | S2-R5 | HSIC features unhelpful | No |
 | 31 | SCFF impl (S2) | gradient-free | 10.49% | S2-R6 | Implementation failed | Yes (paper: 98.7%) |
 | 32 | EqProp+Momentum (S2) | local-learning | 87.49% | S2-R2 | Gap too large (11%) | No — surpassed by DLL |
+| 40 | LVS global RG-flow min (strong) | physics-theory | — | P01 2026-04 | alpha_s opt=0.048 vs 0.1179 | No — falsified; weak (Planck-BC) form remains |
+| 41 | "50% partial-LVS optimum" | physics-theory | — | P01 2026-04 | sigma2-only artifact; sigma1/sigma3 disagree | No — retracted |
+| 42 | "f_g=0.010585 exactly" overclaim | physics-theory | — | P01 2026-04 | Dimensional coincidence sold as precision | No — replaced by honest Planck-BC framing |
+| 43 | d=3 / SU321 / DESI GPU tuned sims | physics-sim | — | P01 2026-03 | Post-hoc tuning, not pre-registered | Only with pre-registered protocols |
 
 ---
 
@@ -285,6 +289,56 @@ These were designed but not benchmarked due to time/GPU constraints. Documented 
 - **Lesson:** Need chunked ridge regression or PyTorch implementation. The architecture works, just needs memory optimization.
 - **Worth Revisiting?** YES - with chunked computation or PyTorch.
 
+## P01 LVS - falsifications and retractions (2026-04-24)
+
+### F40 - Global RG-flow minimization (strong LVS form)
+- **Solution:** P01 | **Optimum:** alpha_s(M_Z) = 0.048 | **Measured:** 0.1179 | **Reproduce:** `scripts/rigorous_alpha_s_test.py`
+- **Hypothesis:** SM parameters at M_Z minimize `int_{M_Z}^{M_Pl} sum_i beta_i^2 dt` over the gauge sector.
+- **Failure:** The minimum of the global flow action sits nowhere near the measured alpha_s. Strong form **falsified**.
+- **Lesson:** LVS as a *global* action principle is ruled out. Only the *local* Planck-BC form (weak stationarity at M_Pl) remains viable.
+- **Worth Revisiting?** No for the strong form. The Planck-BC form lives on as a conditional framework.
+
+### F41 - "50% partial-LVS optimum" artifact
+- **Solution:** P01 | **Retracted:** 2026-04 robustness test
+- **Failure:** Earlier runs using only the relative metric sigma2 reported an optimum where couplings flatten ~50% from their measured values. Running the same scan under sigma1 (absolute) and sigma3 (sub-linear) shows no such optimum - the apparent minimum was a reparameterization artifact of sigma2. See `figures/fig_robustness_test.png`.
+- **Lesson:** Never report a stationarity extremum under a single metric. Multi-metric agreement (sigma1/sigma2/sigma3) is now the minimum bar.
+- **Worth Revisiting?** No - the artifact is now fully understood.
+
+### F42 - "LVS predicts f_g = 0.010585 exactly" overclaim
+- **Solution:** P01 | **Retracted:** 2026-04
+- **Failure:** A dimensional-analysis coincidence was reported as a sharp prediction. Actual LVS output is a *range* consistent with f_g ~ 10^-2, not a specific digit string. The value also lacks distinctiveness - any UV completion producing similar stationarity would satisfy it.
+- **Lesson:** Distinguish order-of-magnitude from precision predictions in papers. Never quote spurious digits from a dimensional argument.
+- **Worth Revisiting?** No - replaced by honest Planck-BC framing in the rigorous preprint.
+
+### F43 - d=3 / SU(3)xSU(2)xU(1) / DESI tuned GPU simulations
+- **Solution:** P01 | **Verdict:** tuned, not predictive | **Archived:** `archives_biased_explorations/simulations_FPS/`
+- **Failure:** GPU simulations producing "d=3" as the preferred dimensionality, the SM gauge group, or DESI-compatible expansion, were, on audit, sensitive to choices that had been tuned to yield those outcomes. They are illustrations, not evidence.
+- **Lesson:** For tests of a selection principle like LVS, every free parameter must be pre-registered. Post-hoc tuning to known outcomes produces zero Bayesian evidence.
+- **Worth Revisiting?** Only with pre-registered, blinded simulation protocols.
+
+## P02 RAPC Modular Geometry - failed or limited toy gates (2026-04-24)
+
+### F44 - Simple MDL compression as geometry selector
+- **Solution:** P02 | **Best:** 6/20 sparse-geometric seeds | **Reproduce:** `solutions/P02_rapc_modular_geometry/source/rapc_phase_scan_toy.py`
+- **Hypothesis:** A simple score `information - lambda * graph_complexity` is enough to make sparse connected geometry emerge from modular hypergraph seeds.
+- **Failure:** The sparse-geometric phase exists but is narrow. Most seeds become fragmented or empty as lambda increases.
+- **Lesson:** Compression alone is too weak. A locality/spectral term is needed.
+- **Worth Revisiting?** Only as a baseline against spectral-locality selection.
+
+### F45 - RAPC patch gluing without residual memory
+- **Solution:** P02 | **Result:** mean_bridges = 0 | **Reproduce:** `solutions/P02_rapc_modular_geometry/source/rapc_patch_gluing_scan_toy.py`
+- **Hypothesis:** After local patches form, weak candidate edges can glue fragmented patches into connected sparse geometry.
+- **Failure:** The bridge rule added no bridges. The pair-only flow had already discarded the hypergraph information that might have mediated later bridges.
+- **Lesson:** Multi-scale gluing needs residual modular memory or a separate weak-link candidate pool.
+- **Worth Revisiting?** Yes - redesign bridge candidates and add a no-densification guard.
+
+### F46 - Residual patch gluing with conservative bridge rule
+- **Solution:** P02 | **Result:** sparse geometry stable at 9/20, but mean_bridges = 0 | **Reproduce:** `solutions/P02_rapc_modular_geometry/source/rapc_residual_patch_gluing_scan_toy.py`
+- **Hypothesis:** Keeping a decaying residual copy of the microscopic hypergraph lets later bridge selection connect patches.
+- **Failure:** The residual memory stabilized the spectral result but still did not add bridges under the current conservative rule.
+- **Lesson:** The bottleneck is now the bridge objective itself, not merely loss of memory.
+- **Worth Revisiting?** Yes - test aggressive and variational bridge objectives.
+
 ## Updated Meta-Lessons (from 003 lab)
 
 8. **Reservoir computing is the gradient-free king.** Random fixed dynamics + simple readout beats all complex local/bio/exotic rules.
@@ -297,3 +351,11 @@ These were designed but not benchmarked due to time/GPU constraints. Documented 
 15. **Per-layer probes are the winning pattern.** DirectLocal (98.15%), MonoForward (98.12%), NoProp (97.89%) all use per-layer classification objectives with h.detach() between layers.
 16. **CPU advantage grows with depth.** DirectLocal is 3.3x faster than backprop on CPU for 12 layers because backprop's backward pass is sequential while local updates are independent.
 17. **DirectLocal works on Transformers.** Validated at 96.22% vs 97.20% BP on ViT-8, proving the paradigm extends beyond MLPs.
+
+## Meta-lessons (from P01 methodological reset, 2026-04)
+
+18. **Confirmation bias eats theory programmes alive.** Nine "passed" empirical tests for LVS turned out on audit to be a mix of pre-existing results (Shaposhnikov-Wetterich m_H), correlational fits (hadron masses), and non-distinctive constraints (d=3 selection). Passing a test means nothing unless the test could have failed.
+19. **Distinguish strong and weak forms of every principle.** The strong form of LVS (global flow minimization) was directly falsifiable; the weak form (Planck-scale boundary condition) is only a conditional deduction. Papers must separate them explicitly.
+20. **Robustness under metric choice is mandatory.** A stationarity result that exists under sigma2 but not under sigma1 or sigma3 is a parametrization artifact, not physics.
+21. **Pre-register or perish for selection-principle tests.** Simulations whose free parameters are tuned to produce known outcomes carry no evidential weight. Every tunable knob must be frozen before the test.
+22. **Report negative results.** The April 2026 reset turned a "confirmed" theory into an honest conditional framework. This is progress, not failure.

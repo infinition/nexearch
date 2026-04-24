@@ -2,9 +2,9 @@
 title: Nexearch - Multi-Domain Research Platform
 author: Fabien
 created: 2026-04-03
-last_updated: 2026-04-03
-total_solutions: 11
-total_experiments: 104
+last_updated: 2026-04-24
+total_solutions: 12
+total_experiments: 89
 status: active
 domains: [ml, physics, quantum, cybersec, robotics, neuro, math]
 ---
@@ -22,12 +22,12 @@ domains: [ml, physics, quantum, cybersec, robotics, neuro, math]
 | Domain | Tag | Description | Active Solutions |
 |--------|-----|-------------|-----------------|
 | **Machine Learning** | `ml` | Training algorithms, architectures, VLA/VLM/LLM | 001, 002, 003, 004, 005, 006, 007, F01, F02, F03 |
-| **Physics** | `physics` | Theoretical physics, LVS theory, statistical mechanics | P01, 002 |
-| **Quantum** | `quantum` | Quantum computing, quantum information, QEC | - |
+| **Physics** | `physics` | Theoretical physics, LVS theory, statistical mechanics | P01, P02, 002 |
+| **Quantum** | `quantum` | Quantum computing, quantum information, QEC | P02 |
 | **Cybersecurity** | `cybersec` | Cryptography, PQC, adversarial robustness | - |
 | **Robotics** | `robotics` | Embodied AI, manipulation, control | F01 |
 | **Neuroscience** | `neuro` | Brain-inspired computing, biological plausibility | 001, 003, 004, 005, 006, 007 |
-| **Mathematics** | `math` | Pure/applied math supporting other research | P01, 003 |
+| **Mathematics** | `math` | Pure/applied math supporting other research | P01, P02, 003 |
 
 ## Cross-Domain Knowledge Graph
 
@@ -38,6 +38,8 @@ Entropy Gating (neuro) --builds_on--> Entropy-Gated Learning 001 (ml)
 Entropy-Gated Learning 001 (ml) --enables--> FluidVLA F01 (robotics)
 Fixed-Point Substrate 002 (ml) --enables--> FluidWorld F02 (robotics)
 Fixed-Point Substrate 002 (ml) --builds_on--> LVS Theory P01 (physics)
+LVS Theory P01 (physics) --builds_on--> RAPC Modular Geometry P02 (physics/quantum/math)
+RAPC Modular Geometry P02 --related_to--> Fixed-Point Substrate 002 and FluidLM F03
 Entropy-Gated (001) --related_to--> Fixed-Point Substrate (002)
 Entropy-Gated (001) --enables--> Gradient-Free Reservoir Lab 003 (ml)
 Gradient-Free Reservoir Lab 003 (ml) --enables--> NoProp-Reservoir 004 (ml)
@@ -60,7 +62,7 @@ NoProp Diffusion 006 (ml) --related_to--> Mono-Forward 007 (ml)
 | **Gradient-Free** | `gradient-free` | No gradient computation at all (evolutionary, Hebbian, etc.) | 002, 003, 004 |
 | **Transformer Alternatives** | `transformer-alt` | Architectures that replace attention/transformers entirely | — |
 | **Neuromorphic** | `neuromorphic` | Spiking networks, event-driven, brain-like computation | — |
-| **Physics-Inspired** | `physics-inspired` | From thermodynamics, quantum, statistical mechanics, etc. | 002 |
+| **Physics-Inspired** | `physics-inspired` | From thermodynamics, quantum, statistical mechanics, etc. | P01, P02, 002 |
 | **Hybrid Paradigms** | `hybrid` | Combine multiple paradigms (e.g., local + global, symbolic + neural) | — |
 | **Training Efficiency** | `efficiency` | Same accuracy, fewer resources (less GPU, less data, less time) | — |
 | **Novel Architectures** | `novel-arch` | Fundamentally new network topologies or computation models | - |
@@ -90,7 +92,8 @@ NoProp Diffusion 006 (ml) --related_to--> Mono-Forward 007 (ml)
 |----|----------|---------|----------|--------|-------------|-------|-----------|-----------|
 | 001 | [Entropy-Gated Learning](solutions/001_entropy_gated_learning/) | ml, neuro | local-learning | 🏆 Breakthrough | **97.46%** MNIST | draft | - | Spatial Hebbian for Conv |
 | 002 | [Fixed-Point Substrate](solutions/002_fixed_point_substrate/) | ml, physics | physics-inspired | ✅ Promising | **96.44%** MNIST | draft | LVS theory | Multi-resolution substrate |
-| P01 | [LVS Theory](solutions/P01_lvs_theory/) | physics, math | theory | ✅ Promising | 6/9 tests confirmed | draft | - | Falsifiable prediction beyond SM |
+| P01 | [LVS Theory](solutions/P01_lvs_theory/) | physics, math | theory | ⚠️ Limited | Global flow falsified; Planck-BC conditional (f_g~0.010, f_y~0.013) | preprint | - | SARAH 2-loop validation + Eichhorn-Held audit |
+| P02 | [RAPC Modular Geometry](solutions/P02_rapc_modular_geometry/) | physics, quantum, math | physics-inspired | WIP | Spectral locality widens sparse geometry to **9/20** seeds | draft | P01 | Multi-scale bridge rule + phase diagram scan |
 | F01 | [FluidVLA](https://github.com/infinition/FluidVLA) | ml, robotics | vla | 🔬 WIP | - | none | 001, 002 | Benchmark LIBERO |
 | F02 | [FluidWorld](https://github.com/infinition/FluidWorld) | ml, robotics | world-model | 🔬 WIP | - | none | 002 | Benchmark MSE/FID |
 | 003 | [Gradient-Free Reservoir Lab](solutions/003_gradient_free_reservoir_lab/) | ml, neuro, math | gradient-free | 🏆 Breakthrough | **97.28%** MNIST, **88.65%** Fashion | draft | 001 | Conv reservoir for CIFAR |
@@ -103,6 +106,21 @@ NoProp Diffusion 006 (ml) --related_to--> Mono-Forward 007 (ml)
 ---
 
 ## Master Results Tables
+
+### RAPC Modular Geometry (P02) - Emergent Geometry Toy Gates
+
+| Gate | Experiment | Result | Verdict |
+|------|------------|--------|---------|
+| G1 | BMV finite channel | Quantum bilocal concurrence 0.105; LOCC negativity 0 | Passed toy BMV gate |
+| G2 | Modular phase | `K=-log(rho)` extracts `ZZ:0.35`; concurrence 0.644 | Passed finite modular gate |
+| G4 | Hypergraph coarse-grain | `Z0Z1Z2 + hZ2 -> J_eff Z0Z1` | Pair geometry can emerge from hyperedge + reference |
+| G8 | MDL budget selection | Dense / sparse / empty phases observed | Promising but sparse phase narrow |
+| G9 | Simple MDL phase scan | Best sparse geometry 6/20 seeds | Limited |
+| G10 | Spectral locality scan | Sparse geometry 9/20 across broad lambda range | Best current result |
+| G11 | Patch gluing | No bridges added | Failed bridge rule |
+| G12 | Residual patch gluing | Stable 9/20 but still no bridges | Limited |
+
+**Current principle:** geometry = stable sparse spectral compression of modular correlations. ML/GPU is only a research microscope, not part of the proposed physical law.
 
 ### MNIST (Reference: Backprop MLP = 98.22%)
 
@@ -306,18 +324,24 @@ Inference: y_est -> Block_1(denoise) -> Block_2(refine) -> ... -> Block_8 -> pre
 ### P01 - LVS Theory (Latent Vacuum Stationarity)
 
 - **Domains:** `physics`, `math`
-- **Status:** Promising (6/9 empirical tests confirmed)
-- **Folder:** [solutions/P01_lvs_theory/](solutions/P01_lvs_theory/)
-- **Date:** 2024
+- **Status:** ⚠️ Limited — after methodological reset (April 2026), strong "global flow" form is falsified; Planck-BC form survives as a **conditional deduction** within FRG truncation uncertainty.
+- **Folder:** [solutions/P01_lvs_theory/](solutions/P01_lvs_theory/) · **Paper:** [paper/lvs-preprint.md](solutions/P01_lvs_theory/paper/lvs-preprint.md) · **Status note:** [LVS_Scientific_Status.md](solutions/P01_lvs_theory/rigorous_2026_04/LVS_Scientific_Status.md)
+- **Date:** 2024 (initial) · 2026-04-24 (rigorous re-evaluation)
 - **Core Idea:** Observable reality = fixed points of the quantum vacuum landscape. Stability IS existence. "It from Fix."
-- **Key Result:** Higgs mass predicted at 126 GeV from fixed-point condition (measured: 125.25 GeV)
+- **Key Results (rigorous, 2026-04):**
+  - **Falsified:** global RG-flow minimization predicts α_s(M_Z) ≈ 0.048 (measured: 0.1179) — strong form ruled out.
+  - **Conditional:** Planck-scale BC needs f_g ≈ 0.010, f_y ≈ 0.013 (dimensional analysis, non-distinctive).
+  - **FRG comparison:** Eichhorn-Held 2018 gives f_g ≈ 0.055, f_y ≈ 0.004 — factor 3–5 mismatch, within ~60% truncation uncertainty. Not confirmed, not refuted.
+  - **Robustness:** 3 stationarity metrics (σ1/σ2/σ3) agree; prior "50% partial LVS optimum" was a metric artifact and has been retracted.
+  - **Yukawa residue:** even when β_gauge vanishes, β_yt ≠ 0 at M_Pl — joint treatment required.
+- **Retracted overclaims:** "LVS predicts f_g = 0.010585 exactly"; d=3 / SU(3)×SU(2)×U(1) / DESI GPU simulations (tuned, not predictive).
 - **Enables:** 002 Fixed-Point Substrate (computational realization of LVS)
 
-**Core Equation:**
+**Core Equation (conditional form, the one that survives):**
 ```
-H|Psi> = 0                    (Wheeler-DeWitt: timeless substrate)
-lambda(M_Pl) = 0, beta(M_Pl) = 0   (fixed-point -> m_H = 126 GeV)
-|psi(t)>_S = C<t|Psi>         (Page-Wootters: time emergence)
+f_g ≡ partial_t g* / g*   at the Planck scale
+Demand: f_g ≈ 10^-2, f_y ≈ 10^-2   (LVS boundary condition)
+Compare: FRG fixed-point values from Eichhorn-Held 2018 etc.
 ```
 
 ### 002 - Fixed-Point Substrate (FPS)
@@ -384,7 +408,7 @@ Learning: gate = sigmoid(H_local + 0.5); dW = lr * gate * Hebbian_correlation
 Every solution MUST report:
 1. **Accuracy** on standard benchmarks
 2. **Training time** per epoch
-3. **Stability** (does it diverge? plateau? oscillate?)
+3. **Stability** (does it diverge- plateau- oscillate-)
 4. **Param count** (total, and which parts use backprop if any)
 5. **Core equation** (the update rule or architecture novelty)
 
@@ -399,14 +423,14 @@ Every solution MUST report:
 4. Theoretical connection to free energy principle
 
 ### Transformer Alternatives
-5. Can attention be replaced by local competition/synchronization?
+5. Can attention be replaced by local competition/synchronization-
 6. State-space models (Mamba, S4) vs local learning hybrids
-7. Can EG-style entropy gating replace softmax attention?
+7. Can EG-style entropy gating replace softmax attention-
 
 ### Gradient-Free
 8. Evolutionary strategies at scale
 9. Random feedback alignment + entropy gating
-10. Can forward-only algorithms match backprop on ImageNet?
+10. Can forward-only algorithms match backprop on ImageNet-
 
 ### Novel Architectures
 11. Hyperbolic neural networks for hierarchical data
@@ -414,6 +438,6 @@ Every solution MUST report:
 13. Continuous-depth networks (Neural ODEs) with local rules
 
 ### Efficiency
-14. Can local learning be faster than backprop? (no backward pass)
+14. Can local learning be faster than backprop- (no backward pass)
 15. Memory efficiency: no activation storage needed
 16. Distributed training without gradient synchronization

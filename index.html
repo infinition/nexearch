@@ -317,13 +317,13 @@ select.filter-select{background:var(--bg3);border:1px solid var(--border);color:
     <input type="text" class="search-input" id="failSearch" placeholder="Filter..." oninput="filterFail()">
     <label>Category:</label>
     <select class="filter-select" id="failCat" onchange="filterFail()"><option value="">All</option></select>
-    <label>Revisit?:</label>
+    <label>Revisit-:</label>
     <select class="filter-select" id="failRevisit" onchange="filterFail()">
       <option value="">All</option><option value="Yes">Yes</option><option value="Maybe">Maybe</option><option value="No">No</option>
     </select>
   </div>
   <div class="card" style="overflow-x:auto"><table id="failTable"><thead><tr>
-    <th>Algorithm</th><th>Category</th><th>Best</th><th>Failure Mode</th><th>Lesson</th><th>Revisit?</th>
+    <th>Algorithm</th><th>Category</th><th>Best</th><th>Failure Mode</th><th>Lesson</th><th>Revisit-</th>
   </tr></thead><tbody id="failBody"></tbody></table></div>
   <h3>Key Lessons</h3>
   <div id="lessonsContainer"></div>
@@ -456,33 +456,75 @@ W += cosine_lr(step) * momentum`
    ],
   },
   {id:'P01',name:'LVS Theory',abbr:'LVS',category:'physics-inspired',type:'theory',
-   status:'promising',date:'2024',
+   status:'limited',date:'2024 / 2026-04-24',
    domains:['physics','math'],
-   arxiv:null, paperStatus:'draft',
+   arxiv:null, paperStatus:'preprint',
    crossRefs:{builds_on:[],enables:['002'],related_to:['001']},
    github:null,
-   principle:'Observable reality = fixed points of the quantum vacuum. Stability IS existence. "It from Fix." 6/9 empirical tests confirmed. Higgs mass predicted at 126 GeV.',
-   nextStep:'Falsifiable prediction beyond Standard Model',
-   bestResults:{'Validation':{metric:'tests_confirmed',value:6,unit:'/9'},'Higgs':{metric:'prediction',value:126,unit:' GeV (vs 125.25)'}},
+   principle:'Observable reality = fixed points of the quantum vacuum. After 2026-04 methodological reset: the strong "global RG-flow minimization" form is FALSIFIED (predicted alpha_s(M_Z)=0.048 vs measured 0.1179). The Planck-scale boundary-condition form survives as a CONDITIONAL deduction: f_g~0.010, f_y~0.013. Eichhorn-Held FRG gives f_g~0.055, f_y~0.004 - factor 3-5 mismatch, within ~60% truncation uncertainty.',
+   nextStep:'SARAH/RGBeta 2-loop validation + Eichhorn-Held literature audit + joint gauge-Yukawa treatment',
+   bestResults:{'GlobalFlow':{metric:'verdict',value:'falsified',unit:''},'PlanckBC_fg':{metric:'f_g',value:0.010,unit:' (required)'},'PlanckBC_fy':{metric:'f_y',value:0.013,unit:' (required)'}},
    params:null,
    equation:{
-     latex:'\\hat{H}|\\Psi\\rangle = 0 \\quad \\land \\quad \\lambda(M_{Pl})=0,\\; \\beta_\\lambda(M_{Pl})=0 \\;\\Rightarrow\\; m_H \\approx 126\\,\\text{GeV}',
+     latex:'f_g \\equiv \\frac{\\partial_t g_*}{g_*}\\bigg|_{M_{Pl}} \\approx 10^{-2}, \\quad f_y \\equiv \\frac{\\partial_t y_*}{y_*}\\bigg|_{M_{Pl}} \\approx 10^{-2}',
      components:[
-       {symbol:'\\hat{H}|\\Psi\\rangle = 0',desc:'Wheeler-DeWitt: timeless universal state'},
-       {symbol:'\\lambda(M_{Pl})=0',desc:'Higgs self-coupling vanishes at Planck scale'},
-       {symbol:'\\beta_\\lambda=0',desc:'Beta function fixed point'},
-       {symbol:'|\\psi(t)\\rangle_S = C\\langle t|\\Psi\\rangle',desc:'Page-Wootters: time emergence from static state'},
+       {symbol:'f_g, f_y',desc:'Stationarity fractions at Planck scale (LVS boundary condition)'},
+       {symbol:'\\partial_t',desc:'RG time derivative t = log(mu/M_Pl)'},
+       {symbol:'\\text{FRG}',desc:'Eichhorn-Held 2018: f_g~0.055, f_y~0.004 (within ~60% truncation uncertainty)'},
+       {symbol:'|\\psi(t)\\rangle_S = C\\langle t|\\Psi\\rangle',desc:'Page-Wootters: time emergence from static state (framework-level)'},
      ],
-     code:`# LVS is a theoretical framework, not a ML model.\n# Key computational results in notebooks:\n#   LVS_Formalization.ipynb  -> m_H = 126 GeV prediction\n#   LVS_Validation.ipynb     -> 9 empirical tests\n#   LVS_Experiments.ipynb    -> RG flows, Page-Wootters\n\nHIGGS_PREDICTED = 126.0   # GeV\nHIGGS_MEASURED  = 125.25  # GeV\nVALIDATION_CONFIRMED = 6\nVALIDATION_SUPPORTED = 3`
+     code:`# LVS 2026-04 rigorous status\n# ---------------------------\n# Strong form (global flow min) -> FALSIFIED\n#   min int sum(beta_i^2) dt over alpha_s(M_Z) gives 0.048, not 0.1179.\n# Weak form (Planck-BC) -> CONDITIONAL deduction\n#   Requires f_g ~ 0.010, f_y ~ 0.013 (dimensional, non-distinctive).\n# FRG comparison (Eichhorn-Held 2018):\n#   f_g ~ 0.055, f_y ~ 0.004  -> factor 3-5 mismatch\n#   Within ~60% truncation uncertainty => not confirmed, not refuted.\n\nALPHA_S_OPT_GLOBAL_FLOW = 0.048   # Falsification point\nALPHA_S_MEASURED        = 0.1179\nLVS_FG_REQUIRED = 0.010\nLVS_FY_REQUIRED = 0.013\nEH_FG = 0.055\nEH_FY = 0.004\nFRG_TRUNCATION_UNCERTAINTY = 0.60`
    },
    versions:[
      {v:'Spark',arch:'Photon question',acc:0,dataset:'-',ep:'-',stable:true,change:'ds^2=0 for photon -> atemporality insight',status:'promising'},
      {v:'Paper v1',arch:'13-section paper',acc:6,dataset:'Validation (6/9)',ep:'-',stable:true,change:'Framework formalized: AS + PW + CW synthesis',status:'promising'},
-     {v:'Validation',arch:'9-test scorecard',acc:6,dataset:'Multi-physics',ep:'-',stable:true,change:'6 confirmed, 3 supported. But = minimum bar.',status:'promising'},
-     {v:'Formalization',arch:'RG + fixed-point',acc:126,dataset:'Higgs (GeV)',ep:'-',stable:true,change:'Shaposhnikov-Wetterich m_H=126 GeV',status:'breakthrough'},
+     {v:'Validation v1',arch:'9-test scorecard',acc:6,dataset:'Multi-physics',ep:'-',stable:true,change:'6 confirmed - later recognized as minimum bar (no discriminative power)',status:'limited'},
+     {v:'Formalization',arch:'RG + fixed-point',acc:126,dataset:'Higgs (GeV)',ep:'-',stable:true,change:'Shaposhnikov-Wetterich m_H=126 GeV (pre-existing result, not LVS-specific)',status:'promising'},
      {v:'Self-critique',arch:'Honest assessment',acc:0,dataset:'-',ep:'-',stable:true,change:'Acknowledged: not falsifiable beyond SM yet',status:'limited'},
      {v:'v3 Reformulation',arch:'Network of interactions',acc:0,dataset:'-',ep:'-',stable:true,change:'Mass=frequency, gravity=desync, dark energy=latent space',status:'promising'},
      {v:'Essay FR',arch:'20-chapter journal',acc:0,dataset:'-',ep:'-',stable:true,change:'Du Point Fixe au Point de Rupture (56K chars)',status:'promising'},
+     {v:'GPU sims (2026-03)',arch:'d=3 / SU321 / DESI',acc:0,dataset:'Tuned simulations',ep:'-',stable:true,change:'Retrospectively recognized as tuned, not predictive - archived under biased explorations',status:'failed'},
+     {v:'50% partial-LVS',arch:'sigma2 relative metric',acc:0,dataset:'-',ep:'-',stable:true,change:'Claimed optimum at 50% flattening - retracted after 3-metric robustness test',status:'failed'},
+     {v:'Global flow min',arch:'min int sum(beta^2) dt',acc:0.048,dataset:'alpha_s(M_Z)',ep:'-',stable:true,change:'Strong LVS form. FALSIFIED: min at 0.048 vs measured 0.1179',status:'failed'},
+     {v:'Planck-BC (rigorous)',arch:'f_g, f_y at M_Pl',acc:0.010,dataset:'f_g required',ep:'-',stable:true,change:'Conditional deduction: f_g~0.010, f_y~0.013. To be compared against FRG.',status:'promising'},
+     {v:'Eichhorn-Held audit',arch:'FRG comparison',acc:0,dataset:'f_g=0.055, f_y=0.004',ep:'-',stable:true,change:'Factor 3-5 mismatch within 60% truncation uncertainty. Not confirmed, not refuted.',status:'limited'},
+     {v:'Robustness test',arch:'sigma1/sigma2/sigma3',acc:0,dataset:'-',ep:'-',stable:true,change:'3 stationarity metrics agree - 50% optimum was a metric artifact',status:'promising'},
+     {v:'Paper (rigorous)',arch:'LVS as conditional framework',acc:0,dataset:'Preprint',ep:'-',stable:true,change:'paper/lvs-preprint.md: honest, negative-result-aware rigorous paper',status:'promising'},
+   ],
+  },
+  {id:'P02',name:'RAPC Modular Geometry',abbr:'RAPC',category:'physics-inspired',type:'theory',
+   status:'wip',date:'2026-04-24',
+   domains:['physics','quantum','math'],
+   arxiv:null, paperStatus:'draft',
+   crossRefs:{builds_on:['P01'],enables:[],related_to:['002','F03']},
+   github:null,
+   principle:'Geometry may be the stable sparse spectral compression of modular quantum correlations. ML/GPU is used as a research microscope only, not as a physical law.',
+   nextStep:'Multi-scale bridge rule + wider phase diagram scan',
+   bestResults:{'SparseGeometry':{metric:'stable_geo',value:9,unit:'/20 seeds'},'BMVGate':{metric:'concurrence',value:0.105,unit:''}},
+   params:{nodes:6,seedsPerLambda:20,bestLambda:'0.08-0.20'},
+   equation:{
+     latex:'S(G)=I(G)-\lambda |E|-c(N_c-1)+\nu\lambda_2(L_G)-\mu\mathrm{Var}(d)',
+     components:[
+       {symbol:'I(G)',desc:'Preserved modular coupling weight'},
+       {symbol:'|E|',desc:'Graph complexity / edge count'},
+       {symbol:'N_c',desc:'Connected component count'},
+       {symbol:'\lambda_2(L_G)',desc:'Algebraic connectivity of graph Laplacian'},
+       {symbol:'\mathrm{Var}(d)',desc:'Degree variance locality penalty'},
+     ],
+     code:`score = information
+score -= lambda_edges * edge_count
+score -= disconnect_cost * (components - 1)
+score += nu_gap * algebraic_connectivity
+score -= mu_degree * degree_variance`
+   },
+   versions:[
+     {v:'G1',arch:'BMV finite channel',acc:0.105,dataset:'Two-qubit toy',ep:'-',stable:true,change:'Bilocal phase entangles; LOCC does not',status:'promising'},
+     {v:'G2',arch:'Modular phase',acc:0.644,dataset:'Two-qubit rho',ep:'-',stable:true,change:'K=-log(rho) yields bilocal ZZ generator',status:'promising'},
+     {v:'G4',arch:'Hypergraph coarse-grain',acc:0.177,dataset:'3-node toy',ep:'-',stable:true,change:'Biased hidden node yields effective pair coefficient',status:'promising'},
+     {v:'G9',arch:'Simple MDL phase scan',acc:6,dataset:'20 seeds/lambda',ep:6,stable:true,change:'Sparse geometric phase exists but narrow',status:'limited'},
+     {v:'G10',arch:'Spectral locality scan',acc:9,dataset:'20 seeds/lambda',ep:6,stable:true,change:'Sparse geometric phase widened across lambda range',status:'promising'},
+     {v:'G11',arch:'Patch gluing',acc:0,dataset:'20 seeds/lambda',ep:6,stable:true,change:'No bridge edges added',status:'failed'},
+     {v:'G12',arch:'Residual patch gluing',acc:9,dataset:'20 seeds/lambda',ep:6,stable:true,change:'Stable 9/20 but still no bridges',status:'limited'},
    ],
   },
   {id:'002',name:'Fixed-Point Substrate',abbr:'FPS',category:'physics-inspired',type:'learning-rule',
@@ -736,16 +778,31 @@ const EXPERIMENTS = [
   {phase:7,sol:'001',solName:'Entropy-Gated',name:'EG-Conv V2 (ReLU+BN)',cat:'local-learning',type:'learning-rule',dataset:'CIFAR-10',metric:'accuracy',val:48.22,unit:'%',ep:100,stable:true,verdict:'Limited'},
   {phase:7,sol:'001',solName:'Entropy-Gated',name:'EG-MLP (flatten)',cat:'local-learning',type:'learning-rule',dataset:'CIFAR-10',metric:'accuracy',val:41.16,unit:'%',ep:80,stable:true,verdict:'Limited'},
   {phase:7,sol:'001',solName:'Entropy-Gated',name:'EG-Conv V1 (Sigmoid)',cat:'local-learning',type:'learning-rule',dataset:'CIFAR-10',metric:'accuracy',val:10.00,unit:'%',ep:4,stable:true,verdict:'Dead-end'},
+  // P02 - RAPC Modular Geometry
+  {phase:1,sol:'P02',solName:'RAPC',name:'BMV finite channel',cat:'physics-inspired',type:'theory',dataset:'Two-qubit toy',metric:'concurrence',val:0.105,unit:'',ep:'-',stable:true,verdict:'Bilocal quantum channel entangles; LOCC controls do not'},
+  {phase:2,sol:'P02',solName:'RAPC',name:'Modular phase extraction',cat:'physics-inspired',type:'theory',dataset:'Two-qubit rho',metric:'concurrence',val:0.644,unit:'',ep:'-',stable:true,verdict:'K=-log(rho) extracts bilocal ZZ generator'},
+  {phase:4,sol:'P02',solName:'RAPC',name:'Hypergraph coarse-graining',cat:'physics-inspired',type:'theory',dataset:'3-node modular hyperedge',metric:'J_eff',val:0.177,unit:'',ep:'-',stable:true,verdict:'Reference-biased hidden node creates effective pair edge'},
+  {phase:9,sol:'P02',solName:'RAPC',name:'Simple MDL phase scan',cat:'physics-inspired',type:'theory',dataset:'Random modular hypergraphs',metric:'sparse_geometric',val:6,unit:'/20',ep:6,stable:true,verdict:'Sparse geometry exists but phase is narrow'},
+  {phase:10,sol:'P02',solName:'RAPC',name:'Spectral-locality phase scan',cat:'physics-inspired',type:'theory',dataset:'Random modular hypergraphs',metric:'sparse_geometric',val:9,unit:'/20',ep:6,stable:true,verdict:'Best current result: locality prior widens geometric phase'},
+  {phase:11,sol:'P02',solName:'RAPC',name:'Patch gluing scan',cat:'physics-inspired',type:'theory',dataset:'Random modular hypergraphs',metric:'bridges_added',val:0,unit:'',ep:6,stable:true,verdict:'Failed bridge rule: no bridges added'},
+  {phase:12,sol:'P02',solName:'RAPC',name:'Residual patch gluing scan',cat:'physics-inspired',type:'theory',dataset:'Random modular hypergraphs',metric:'sparse_geometric',val:9,unit:'/20',ep:6,stable:true,verdict:'Stable 9/20 but still no bridge generation'},
   // 002 - Fixed-Point Substrate
   // P01 - LVS Theory
   // P01 LVS Theory - all computational/validation experiments
-  {phase:0,sol:'P01',solName:'LVS Theory',name:'9-test empirical validation',cat:'physics-inspired',type:'theory',dataset:'Multi-physics',metric:'tests_confirmed',val:6,unit:'/9',ep:'-',stable:true,verdict:'6 confirmed, 3 supported, 0 tension'},
-  {phase:0,sol:'P01',solName:'LVS Theory',name:'Higgs mass (Shaposhnikov-Wetterich)',cat:'physics-inspired',type:'theory',dataset:'LHC',metric:'prediction',val:126,unit:' GeV',ep:'-',stable:true,verdict:'Measured 125.25 - within 1 GeV'},
-  {phase:0,sol:'P01',solName:'LVS Theory',name:'Hadron mass fit (lattice QCD)',cat:'physics-inspired',type:'theory',dataset:'PDG',metric:'R2',val:99.9998,unit:'%',ep:'-',stable:true,verdict:'6 decimal place agreement'},
-  {phase:0,sol:'P01',solName:'LVS Theory',name:'Top quark quasi-fixed-point',cat:'physics-inspired',type:'theory',dataset:'Tevatron/LHC',metric:'deviation',val:97.3,unit:'%',ep:'-',stable:true,verdict:'y_t^2 ~ (8/9)g_3^2 within 2.7%'},
+  // Early "validation" phase (2024-2026-Q1) - kept for provenance, reinterpreted as minimum-bar / non-discriminative
+  {phase:0,sol:'P01',solName:'LVS Theory',name:'9-test empirical validation (v1, reinterpreted)',cat:'physics-inspired',type:'theory',dataset:'Multi-physics',metric:'tests_confirmed',val:6,unit:'/9',ep:'-',stable:true,verdict:'Minimum-bar - no discriminative power (2026-04 audit)'},
+  {phase:0,sol:'P01',solName:'LVS Theory',name:'Higgs mass (Shaposhnikov-Wetterich)',cat:'physics-inspired',type:'theory',dataset:'LHC',metric:'prediction',val:126,unit:' GeV',ep:'-',stable:true,verdict:'Pre-existing SW result (2009) - not LVS-specific'},
+  {phase:0,sol:'P01',solName:'LVS Theory',name:'Hadron mass fit (lattice QCD)',cat:'physics-inspired',type:'theory',dataset:'PDG',metric:'R2',val:99.9998,unit:'%',ep:'-',stable:true,verdict:'Correlational fit - not a prediction'},
+  {phase:0,sol:'P01',solName:'LVS Theory',name:'Top quark quasi-fixed-point',cat:'physics-inspired',type:'theory',dataset:'Tevatron/LHC',metric:'deviation',val:97.3,unit:'%',ep:'-',stable:true,verdict:'y_t^2 ~ (8/9)g_3^2 (Pendleton-Ross 1981) - not LVS-specific'},
   {phase:0,sol:'P01',solName:'LVS Theory',name:'Lambda prediction (Fisher-KPP)',cat:'physics-inspired',type:'theory',dataset:'Cosmology',metric:'ratio',val:1.08,unit:'x',ep:'-',stable:true,verdict:'Tautological - equals Friedmann. Dead end.'},
-  {phase:0,sol:'P01',solName:'LVS Theory',name:'d=3 uniqueness analysis',cat:'physics-inspired',type:'theory',dataset:'Theory',metric:'constraints',val:4,unit:'/4',ep:'-',stable:true,verdict:'Ehrenfest+quantum+Huygens+knots all select d=3'},
-  {phase:0,sol:'P01',solName:'LVS Theory',name:'Page-Wootters simulation (32-level)',cat:'physics-inspired',type:'theory',dataset:'Simulation',metric:'emergence',val:100,unit:'%',ep:'-',stable:true,verdict:'Time emerges from static state correctly'},
+  {phase:0,sol:'P01',solName:'LVS Theory',name:'d=3 uniqueness analysis',cat:'physics-inspired',type:'theory',dataset:'Theory',metric:'constraints',val:4,unit:'/4',ep:'-',stable:true,verdict:'Ehrenfest+quantum+Huygens+knots all select d=3 - not LVS-specific'},
+  {phase:0,sol:'P01',solName:'LVS Theory',name:'Page-Wootters simulation (32-level)',cat:'physics-inspired',type:'theory',dataset:'Simulation',metric:'emergence',val:100,unit:'%',ep:'-',stable:true,verdict:'Reproduces Page-Wootters 1983 - framework illustration, not prediction'},
+  // Rigorous phase (2026-04) - methodological reset
+  {phase:12,sol:'P01',solName:'LVS Theory',name:'Global RG-flow minimization (strong LVS)',cat:'physics-inspired',type:'theory',dataset:'SM 1-loop RGE',metric:'alpha_s_opt',val:0.048,unit:'',ep:'-',stable:true,verdict:'FALSIFIED: opt=0.048 vs measured 0.1179'},
+  {phase:12,sol:'P01',solName:'LVS Theory',name:'3-metric robustness (sigma1/sigma2/sigma3)',cat:'physics-inspired',type:'theory',dataset:'SM 1-loop RGE',metric:'agreement',val:3,unit:'/3',ep:'-',stable:true,verdict:'Passed: prior 50% optimum was a metric artifact - retracted'},
+  {phase:12,sol:'P01',solName:'LVS Theory',name:'Planck-BC dimensional analysis',cat:'physics-inspired',type:'theory',dataset:'1-loop RGE',metric:'f_g_required',val:0.010,unit:'',ep:'-',stable:true,verdict:'Conditional deduction: f_g~0.010, f_y~0.013'},
+  {phase:13,sol:'P01',solName:'LVS Theory',name:'Eichhorn-Held 2018 comparison (FRG)',cat:'physics-inspired',type:'theory',dataset:'arXiv:1707.01107',metric:'f_g_FRG',val:0.055,unit:'',ep:'-',stable:true,verdict:'Factor 3-5 mismatch, within ~60% truncation - not confirmed/not refuted'},
+  {phase:13,sol:'P01',solName:'LVS Theory',name:'Yukawa residue at M_Pl',cat:'physics-inspired',type:'theory',dataset:'1-loop RGE',metric:'beta_yt',val:1,unit:' (nonzero)',ep:'-',stable:true,verdict:'beta_yt != 0 even when gauge beta vanishes - joint treatment required'},
   // F03 - FluidLM
   {phase:0,sol:'F03',solName:'FluidLM',name:'FluidLM V4.2 PoC',cat:'transformer-alt',type:'llm',dataset:'TinyStories',metric:'loss',val:0,unit:'',ep:'-',stable:true,verdict:'Proof of concept: PDE trains'},
   {phase:0,sol:'F03',solName:'FluidLM',name:'FluidLM V4.4.0 Major',cat:'transformer-alt',type:'llm',dataset:'TinyStories',metric:'loss',val:0,unit:'',ep:'-',stable:true,verdict:'LongConv + memory pump'},
@@ -803,6 +860,8 @@ const EXPERIMENTS = [
 ];
 
 const FAILED = [
+  {name:'RAPC simple MDL compression',cat:'physics-inspired',acc:'6/20 sparse geometry',fail:'Sparse connected phase narrow; most seeds fragment or empty',lesson:'Compression alone is too weak; spectral locality is required',revisit:'Replaced by spectral-locality score'},
+  {name:'RAPC patch gluing',cat:'physics-inspired',acc:'0 bridges',fail:'No inter-patch bridges selected',lesson:'Pair-only flow discards useful hypergraph memory or bridge rule is too conservative',revisit:'Yes - redesign bridge candidates'},
   {name:'Forward-Forward (Hinton)',cat:'local-learning',acc:'9.80%',fail:'NaN from ep 1',lesson:'Goodness threshold unstable',revisit:'Maybe'},
   {name:'Predictive Coding',cat:'local-learning',acc:'crash',fail:'Dimension mismatch',lesson:'Complex to implement correctly',revisit:'Yes'},
   {name:'Equilibrium Propagation',cat:'local-learning',acc:'-',fail:'Not completed',lesson:'Well-published, worth testing',revisit:'Yes'},
@@ -883,6 +942,11 @@ const LESSONS = [
 ];
 
 const ROADMAP = [
+  {sol:'P02',p:1,text:'Design weak bridge candidates that preserve inter-patch modular memory without densifying'},
+  {sol:'P02',p:1,text:'Run 1000+ seed phase scans on RTX 4070 Ti to measure robustness of the sparse geometric phase'},
+  {sol:'P02',p:2,text:'Replace Pauli-basis projections with basis-independent operator algebra diagnostics'},
+  {sol:'P02',p:2,text:'Estimate emergent dimension from graph ball growth and Laplacian spectra'},
+  {sol:'P02',p:3,text:'Formulate a Type-II crossed-product analogue of the finite toy flow'},
   {sol:'001',p:1,text:'Spatial Hebbian for Conv layers - patch-level correlation, not channel-average'},
   {sol:'001',p:1,text:'Local Batch Norm with learnable affine'},
   {sol:'001',p:2,text:'Layer-wise pretraining - freeze layer 1, train layer 2'},
@@ -945,26 +1009,22 @@ const ROADMAP = [
   {sol:'007',p:2,text:'Test on Transformer blocks'},
   {sol:'007',p:2,text:'Investigate why MF converges to better minima than BP (paper claim)'},
   {sol:'007',p:3,text:'Energy/compute measurement vs backprop (reproduce 41% energy reduction)'},
-  // P01 Roadmap - from discussion.md exhaustive analysis
-  {sol:'P01',p:1,text:'Rewrite paper v3: LVS = synthesis of AS+PW+CW, cite Shaposhnikov/Eichhorn/Connes/Barbour/Rovelli'},
-  {sol:'P01',p:1,text:'Derive ONE falsifiable prediction beyond Standard Model (best candidate: dt_min ~ hbar/(m_nu c^2))'},
-  {sol:'P01',p:1,text:'Restructure paper: open with Wheeler-DeWitt core, not photon argument (which is pedagogical only)'},
-  {sol:'P01',p:1,text:'Grade every assertion: (a) established+formalized, (b) coherent not formalized, (c) speculative'},
-  {sol:'P01',p:2,text:'Build toy model: config space + stationarity + emergent time + determined constants'},
-  {sol:'P01',p:2,text:'Implement full 2-loop Shaposhnikov-Wetterich (reproduce m_H = 126 GeV exactly)'},
-  {sol:'P01',p:2,text:'Attempt m_top prediction from gravitational irrelevance (Eichhorn-Held approach)'},
-  {sol:'P01',p:2,text:'Predict hadron mass ratios from stationarity first-principles'},
-  {sol:'P01',p:2,text:'Track DESI BAO (2024-2025): w != -1 hints -> variable Lambda -> LVS testable prediction'},
-  {sol:'P01',p:3,text:'Formalize crystallization cosmology: derive expansion rate, compare to Lambda'},
-  {sol:'P01',p:3,text:'Derive N_gen = 3 from fixed point (follow Eichhorn et al.)'},
-  {sol:'P01',p:3,text:'Derive gauge group SU(3)xSU(2)xU(1) from stationarity (connect Connes NCG)'},
-  {sol:'P01',p:3,text:'Formalize LVS -> FPS bridge (vacuum fixed point -> computational substrate)'},
-  {sol:'P01',p:3,text:'Submit to FQXi / PhilSci-Archive / arXiv (hep-th or gr-qc)'},
-  {sol:'P01',p:4,text:'Contact Eichhorn, Hoehn, or Rovelli for expert feedback'},
-  {sol:'P01',p:4,text:'LVS implications for quantum error correction'},
-  {sol:'P01',p:4,text:'Fixed-point structure in lattice-based PQC cryptography'},
-  {sol:'P01',p:4,text:'Explore non-dimensional framework (causal sets, spin networks, amplituhedron)'},
-  {sol:'P01',p:4,text:'Track Euclid results (2025-2030): confirms/refutes variable Lambda'},
+  // P01 Roadmap - rewritten 2026-04-24 after methodological reset (strong LVS falsified, Planck-BC conditional)
+  {sol:'P01',p:1,text:'Polish rigorous preprint (paper/lvs-preprint.md): honest framing as conditional framework, not predictive theory'},
+  {sol:'P01',p:1,text:'SARAH/RGBeta 2-loop validation of 1-loop Planck-BC result (f_g~0.010, f_y~0.013)'},
+  {sol:'P01',p:1,text:'Full Eichhorn-Held 2018 literature audit: which f_g, f_y values survive newer FRG truncations?'},
+  {sol:'P01',p:1,text:'Joint gauge-Yukawa stationarity treatment (Yukawa residue beta_yt != 0 at M_Pl must be addressed)'},
+  {sol:'P01',p:2,text:'Direction 1: Pendleton-Ross style IR attractors - LVS as infrared fixed-point selector?'},
+  {sol:'P01',p:2,text:'Direction 2: Yukawa-sector joint stationarity (direction2_yukawa.py)'},
+  {sol:'P01',p:2,text:'Direction 3: Hill-type attractor analysis of SM trajectory (fig_hill_attractor.png)'},
+  {sol:'P01',p:2,text:'Identify ONE genuinely distinctive prediction (current Planck-BC is dimensional and non-distinctive)'},
+  {sol:'P01',p:3,text:'Contact Eichhorn, Held, or Wetterich group for expert review of Planck-BC comparison'},
+  {sol:'P01',p:3,text:'Track FRG truncation program: does 60% uncertainty shrink- (would tighten LVS comparison)'},
+  {sol:'P01',p:3,text:'Formalize LVS -> FPS bridge - FPS 002 remains the concrete computational realization'},
+  {sol:'P01',p:3,text:'Submit rigorous preprint (arXiv hep-th/gr-qc) - as negative result + conditional framework'},
+  {sol:'P01',p:4,text:'Track DESI/Euclid BAO: if w != -1 firms up, revisit LVS cosmological implications'},
+  {sol:'P01',p:4,text:'Explore stationarity-selection principles in other UV completions (string landscape, AS)'},
+  {sol:'P01',p:4,text:'Cross-domain: stationarity formalism for neural learning rules (connect back to FPS 002)'},
   {sol:'global',p:1,text:'Transformer alternatives - local competition instead of attention'},
   {sol:'global',p:2,text:'Gradient-free at scale - evolutionary + entropy gating'},
   {sol:'global',p:3,text:'Cross-pollinate: EG features in VLA/LM pipelines'},
@@ -1302,7 +1362,7 @@ function renderExp(){
     const cl=e.val>=50?'acc-best':e.val>=10?'acc-mid':'acc-fail';
     const solBadge=e.sol==='-'?`<span style="color:var(--text2)">-</span>`
       :`<span style="color:var(--accent);font-weight:600">${e.sol}</span> <span style="color:var(--text2);font-size:11px">${e.solName}</span>`;
-    return `<tr data-search="${e.name} ${e.cat} ${e.dataset} ${e.verdict} ${e.solName}".toLowerCase() data-dataset="${e.dataset}" data-cat="${e.cat}" data-val="${e.val}" data-sol="${e.solName}">
+    return `<tr data-search="${`${e.name} ${e.cat} ${e.dataset} ${e.verdict} ${e.solName}`.toLowerCase()}" data-dataset="${e.dataset}" data-cat="${e.cat}" data-val="${e.val}" data-sol="${e.solName}">
       <td>${e.phase}</td><td>${solBadge}</td><td><strong>${e.name}</strong></td><td><code>${e.cat}</code></td>
       <td>${e.dataset}</td><td>${e.metric}</td><td class="${cl}">${e.val>0?e.val+e.unit:'-'}</td>
       <td>${e.ep}</td><td>${e.stable?'Yes':'<span style="color:var(--red)">No</span>'}</td><td>${e.verdict}</td></tr>`;
@@ -1448,7 +1508,7 @@ function renderDomainCards(){
   // Render cards
   const container=document.getElementById('domainCards');
   container.innerHTML=DOMAINS.map(d=>{
-    const s=domStats[d];const m=domainMeta[d]||{name:d,icon:'?',color:C.gray};
+    const s=domStats[d];const m=domainMeta[d]||{name:d,icon:'-',color:C.gray};
     const hasData=s.solutions>0;
     return `<div class="card" style="cursor:pointer;border-left:3px solid ${m.color};padding:14px;${!hasData?'opacity:.4':''}" onclick="switchDomain(null,'${d}')">
       <div style="display:flex;justify-content:space-between;align-items:center">
@@ -1735,6 +1795,82 @@ function paperBadge(status){
 // status: draft | review | published
 // content: markdown string (embedded here, or fetched from file)
 const WRITEUPS = [
+  {id:'wu-P02-summary',
+   title:'RAPC Modular Geometry - Research Summary',
+   type:'article', sol:'P02', solName:'RAPC Modular Geometry', date:'2026-04-24', status:'draft',
+   abstract:'Gate-by-gate summary of RAPC, a toy falsification lab for emergent geometry as sparse spectral compression of modular correlations.',
+   tags:['RAPC','modular-geometry','quantum-gravity','BMV','spectral-locality'],
+   file:'solutions/P02_rapc_modular_geometry/writeups/RAPC_SPECTRAL_LOCALITY_SCAN_RESULTS.md',
+   content:null
+  },
+  {id:'wu-P02-bmv', title:'RAPC BMV Gate', type:'article', sol:'P02', solName:'RAPC Modular Geometry', date:'2026-04-24', status:'draft',
+   abstract:'Detailed RAPC technical note for the modular geometry toy research line.',
+   tags:['RAPC','modular-geometry','quantum-gravity'],
+   file:'solutions/P02_rapc_modular_geometry/writeups/RAPC_BMV_RESULTS.md', content:null},
+  {id:'wu-P02-modular-phase', title:'RAPC Modular Phase Gate', type:'article', sol:'P02', solName:'RAPC Modular Geometry', date:'2026-04-24', status:'draft',
+   abstract:'Detailed RAPC technical note for the modular geometry toy research line.',
+   tags:['RAPC','modular-geometry','quantum-gravity'],
+   file:'solutions/P02_rapc_modular_geometry/writeups/RAPC_MODULAR_PHASE_RESULTS.md', content:null},
+  {id:'wu-P02-subalgebra', title:'RAPC Subalgebra Selection', type:'article', sol:'P02', solName:'RAPC Modular Geometry', date:'2026-04-24', status:'draft',
+   abstract:'Detailed RAPC technical note for the modular geometry toy research line.',
+   tags:['RAPC','modular-geometry','quantum-gravity'],
+   file:'solutions/P02_rapc_modular_geometry/writeups/RAPC_SUBALGEBRA_SELECTION_RESULTS.md', content:null},
+  {id:'wu-P02-hypergraph', title:'RAPC Hypergraph Coarse-Graining', type:'article', sol:'P02', solName:'RAPC Modular Geometry', date:'2026-04-24', status:'draft',
+   abstract:'Detailed RAPC technical note for the modular geometry toy research line.',
+   tags:['RAPC','modular-geometry','quantum-gravity'],
+   file:'solutions/P02_rapc_modular_geometry/writeups/RAPC_HYPERGRAPH_COARSE_GRAIN_RESULTS.md', content:null},
+  {id:'wu-P02-auto-coarse', title:'RAPC Automatic Coarse-Graining', type:'article', sol:'P02', solName:'RAPC Modular Geometry', date:'2026-04-24', status:'draft',
+   abstract:'Detailed RAPC technical note for the modular geometry toy research line.',
+   tags:['RAPC','modular-geometry','quantum-gravity'],
+   file:'solutions/P02_rapc_modular_geometry/writeups/RAPC_AUTO_COARSE_GRAIN_RESULTS.md', content:null},
+  {id:'wu-P02-iterated-flow', title:'RAPC Iterated Flow', type:'article', sol:'P02', solName:'RAPC Modular Geometry', date:'2026-04-24', status:'draft',
+   abstract:'Detailed RAPC technical note for the modular geometry toy research line.',
+   tags:['RAPC','modular-geometry','quantum-gravity'],
+   file:'solutions/P02_rapc_modular_geometry/writeups/RAPC_ITERATED_FLOW_RESULTS.md', content:null},
+  {id:'wu-P02-sparse-budget', title:'RAPC Sparse Budget Flow', type:'article', sol:'P02', solName:'RAPC Modular Geometry', date:'2026-04-24', status:'draft',
+   abstract:'Detailed RAPC technical note for the modular geometry toy research line.',
+   tags:['RAPC','modular-geometry','quantum-gravity'],
+   file:'solutions/P02_rapc_modular_geometry/writeups/RAPC_SPARSE_BUDGET_FLOW_RESULTS.md', content:null},
+  {id:'wu-P02-mdl-budget', title:'RAPC MDL Budget Selection', type:'article', sol:'P02', solName:'RAPC Modular Geometry', date:'2026-04-24', status:'draft',
+   abstract:'Detailed RAPC technical note for the modular geometry toy research line.',
+   tags:['RAPC','modular-geometry','quantum-gravity'],
+   file:'solutions/P02_rapc_modular_geometry/writeups/RAPC_MDL_BUDGET_SELECTION_RESULTS.md', content:null},
+  {id:'wu-P02-phase-scan', title:'RAPC Phase Scan', type:'article', sol:'P02', solName:'RAPC Modular Geometry', date:'2026-04-24', status:'draft',
+   abstract:'Detailed RAPC technical note for the modular geometry toy research line.',
+   tags:['RAPC','modular-geometry','quantum-gravity'],
+   file:'solutions/P02_rapc_modular_geometry/writeups/RAPC_PHASE_SCAN_RESULTS.md', content:null},
+  {id:'wu-P02-patch-gluing', title:'RAPC Patch Gluing', type:'article', sol:'P02', solName:'RAPC Modular Geometry', date:'2026-04-24', status:'draft',
+   abstract:'Detailed RAPC technical note for the modular geometry toy research line.',
+   tags:['RAPC','modular-geometry','quantum-gravity'],
+   file:'solutions/P02_rapc_modular_geometry/writeups/RAPC_PATCH_GLUING_RESULTS.md', content:null},
+  {id:'wu-P02-residual-patch', title:'RAPC Residual Patch Gluing', type:'article', sol:'P02', solName:'RAPC Modular Geometry', date:'2026-04-24', status:'draft',
+   abstract:'Detailed RAPC technical note for the modular geometry toy research line.',
+   tags:['RAPC','modular-geometry','quantum-gravity'],
+   file:'solutions/P02_rapc_modular_geometry/writeups/RAPC_RESIDUAL_PATCH_GLUING_RESULTS.md', content:null},
+  {id:'wu-P01-rigorous-preprint',
+   title:'LVS as a Planck-Scale Boundary Condition: A Conditional Framework',
+   type:'article', sol:'P01', solName:'LVS Theory', date:'2026-04', status:'draft',
+   abstract:'Rigorous preprint (April 2026). Strong global-flow form of LVS is falsified. Planck-BC form survives as a conditional deduction (f_g~0.010, f_y~0.013) to be compared against FRG fixed-point values. Eichhorn-Held 2018 gives f_g~0.055, f_y~0.004 - factor 3-5 mismatch within ~60% truncation uncertainty.',
+   tags:['LVS','physics','preprint','english','rigorous','negative-result','FRG','asymptotic-safety','boundary-condition'],
+   file:'solutions/P01_lvs_theory/paper/lvs-preprint.md',
+   content:null
+  },
+  {id:'wu-P01-scientific-status',
+   title:'LVS - Scientific Status (April 2026)',
+   type:'article', sol:'P01', solName:'LVS Theory', date:'2026-04', status:'draft',
+   abstract:'One-page honest status note after methodological reset. Summarizes what is falsified, what is conditional, what remains to be tested.',
+   tags:['LVS','physics','status','english','rigorous','methodology'],
+   file:'solutions/P01_lvs_theory/rigorous_2026_04/LVS_Scientific_Status.md',
+   content:null
+  },
+  {id:'wu-P01-master-synthesis',
+   title:'LVS Master Synthesis',
+   type:'essay', sol:'P01', solName:'LVS Theory', date:'2026-04', status:'draft',
+   abstract:'Top-level research synthesis tying together the rigorous 2026-04 work with the broader LVS programme.',
+   tags:['LVS','physics','synthesis','english'],
+   file:'solutions/P01_lvs_theory/LVS_Master_Synthesis.md',
+   content:null
+  },
   {id:'wu-P01-itfromfix',
    title:'It from Fix: Why Reality Might Be a Fixed Point',
    type:'essay', sol:'P01', solName:'LVS Theory', date:'2024', status:'draft',
@@ -1796,9 +1932,9 @@ function mdToHtml(md){
     // Images
     .replace(/!\[([^\]]*)\]\(([^)]+)\)/g,'<img src="$2" alt="$1">')
     // Paragraphs (lines not already tagged)
-    .replace(/^(?!<[huplbio]|<li|<hr|<pre|<block)(.+)$/gm,'<p>$1</p>')
+    .replace(/^(-!<[huplbio]|<li|<hr|<pre|<block)(.+)$/gm,'<p>$1</p>')
     // Wrap consecutive <li> in <ul>
-    .replace(/(<li>.*<\/li>\n?)+/g,m=>`<ul>${m}</ul>`);
+    .replace(/(<li>.*<\/li>\n-)+/g,m=>`<ul>${m}</ul>`);
   // LaTeX blocks
   html=html.replace(/\$\$([^$]+)\$\$/g,'<div class="katex-render" data-display="true" data-tex="$1"></div>');
   html=html.replace(/\$([^$]+)\$/g,'<span class="katex-render" data-tex="$1"></span>');
